@@ -38,8 +38,6 @@ import org.waveprotocol.wave.util.logging.Log;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author yurize@apache.org (Yuri Zelikov)
@@ -55,7 +53,7 @@ public class MemoryPerUserWaveViewHandlerImpl implements PerUserWaveViewHandler 
    */
   private static final int PER_USER_WAVES_VIEW_CACHE_MINUTES = 5;
 
-  /** The computing map that holds wave viev per each online user.*/
+  /** The loading cache that holds wave viev per each online user.*/
   public LoadingCache<ParticipantId, Multimap<WaveId, WaveletId>> explicitPerUserWaveViews;
 
   @Inject
