@@ -581,6 +581,7 @@ public class ServerRpcProvider {
       this.websocketMaxMessageSize = websocketMaxMessageSize;
     }
 
+    @SuppressWarnings("cast")
     @Override
     public void configure(WebSocketServletFactory factory) {
       if (websocketMaxIdleTime != 0) {
