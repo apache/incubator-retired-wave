@@ -24,6 +24,7 @@ import com.google.common.base.Preconditions;
 
 import com.mongodb.DB;
 import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
 import com.mongodb.MongoException;
 
 import org.waveprotocol.box.server.persistence.PersistenceStartException;
@@ -56,7 +57,7 @@ public class MongoDbProvider {
   private static final String DATABASE_NAME_PROPERTY = "mongoDbDatabase";
 
   /**
-   * Our {@link Mongo} instance, should be accessed by getMongo unless during
+   * Our {@link MongoClient} instance, should be accessed by getMongo unless during
    * start().
    */
   private Mongo mongo;
@@ -71,6 +72,11 @@ public class MongoDbProvider {
    */
   private MongoDbStore mongoDbStore;
 
+  /**
+   * Separated store for Deltas {@link MongoDbDeltaStore}
+   */
+  private MongoDbDeltaStore mongoDbDeltaStore;
+  
   /** Stores whether we have successfully setup a live {@link Mongo} instance. */
   private boolean isRunning;
 
@@ -94,7 +100,8 @@ public class MongoDbProvider {
     String host = properties.getProperty(HOST_PROPERTY);
     int port = Integer.parseInt(properties.getProperty(PORT_PROPERTY));
     try {
-      mongo = new Mongo(host, port);
+      // New MongoDB Client, see http://docs.mongodb.org/manual/release-notes/drivers-write-concern/
+      mongo = new MongoClient(host, port);
     } catch (UnknownHostException e) {
       throw new PersistenceStartException("Unable to resolve the MongoDb hostname", e);
     }
@@ -182,4 +189,18 @@ public class MongoDbProvider {
     }
     return mongoDbStore;
   }
+  
+  /**
+   * Returns a {@link MongoDbDeltaStore} instance created from the settings in this 
+   * provider.
+   */
+  public MongoDbDeltaStore provideMongoDbDeltaStore() {
+    if (mongoDbDeltaStore == null) {
+      mongoDbDeltaStore = new MongoDbDeltaStore(getDatabase());
+    }
+    
+    return mongoDbDeltaStore;
+    
+  }
+  
 }

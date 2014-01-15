@@ -139,6 +139,9 @@ public class PersistenceModule extends AbstractModule {
       bind(DeltaStore.class).to(MemoryDeltaStore.class).in(Singleton.class);
     } else if (deltaStoreType.equalsIgnoreCase("file")) {
       bind(DeltaStore.class).to(FileDeltaStore.class).in(Singleton.class);
+    } else if (deltaStoreType.equalsIgnoreCase("mongodb")) {
+      MongoDbProvider mongoDbProvider = getMongoDbProvider();
+      bind(DeltaStore.class).toInstance(mongoDbProvider.provideMongoDbDeltaStore());
     } else {
       throw new RuntimeException("Invalid delta store type: '" + deltaStoreType + "'");
     }
