@@ -19,9 +19,10 @@
 
 package org.waveprotocol.box.server.waveserver;
 
-import com.google.common.base.Function;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.HashMultimap;
-import com.google.common.collect.MapMaker;
 import com.google.common.collect.Multimap;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
@@ -35,7 +36,7 @@ import org.waveprotocol.wave.model.wave.ParticipantId;
 import org.waveprotocol.wave.util.logging.Log;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -52,18 +53,18 @@ public class MemoryPerUserWaveViewHandlerImpl implements PerUserWaveViewHandler 
    */
   private static final int PER_USER_WAVES_VIEW_CACHE_MINUTES = 5;
 
-  /** The computing map that holds wave viev per each online user.*/
-  public ConcurrentMap<ParticipantId, Multimap<WaveId, WaveletId>> explicitPerUserWaveViews;
+  /** The loading cache that holds wave viev per each online user.*/
+  public LoadingCache<ParticipantId, Multimap<WaveId, WaveletId>> explicitPerUserWaveViews;
 
   @Inject
   public MemoryPerUserWaveViewHandlerImpl(final WaveMap waveMap) {
     // Let the view expire if it not accessed for some time.
     explicitPerUserWaveViews =
-        new MapMaker().expireAfterAccess(PER_USER_WAVES_VIEW_CACHE_MINUTES, TimeUnit.MINUTES)
-            .makeComputingMap(new Function<ParticipantId, Multimap<WaveId, WaveletId>>() {
+        CacheBuilder.newBuilder().expireAfterAccess(PER_USER_WAVES_VIEW_CACHE_MINUTES, TimeUnit.MINUTES)
+            .<ParticipantId, Multimap<WaveId, WaveletId>>build(new CacheLoader<ParticipantId, Multimap<WaveId, WaveletId>>() {
 
               @Override
-              public Multimap<WaveId, WaveletId> apply(final ParticipantId user) {
+              public Multimap<WaveId, WaveletId> load(final ParticipantId user) {
                 Multimap<WaveId, WaveletId> userView = HashMultimap.create();
 
                 // Create initial per user waves view by looping over all waves
@@ -93,8 +94,8 @@ public class MemoryPerUserWaveViewHandlerImpl implements PerUserWaveViewHandler 
 
   @Override
   public ListenableFuture<Void> onParticipantAdded(WaveletName waveletName, ParticipantId user) {
-    if (explicitPerUserWaveViews.containsKey(user)) {
-      Multimap<WaveId, WaveletId> perUserView = explicitPerUserWaveViews.get(user);
+    Multimap<WaveId, WaveletId> perUserView = explicitPerUserWaveViews.getIfPresent(user);
+    if (perUserView != null) {
       if (!perUserView.containsEntry(waveletName.waveId, waveletName.waveletId)) {
         perUserView.put(waveletName.waveId, waveletName.waveletId);
         if(LOG.isFineLoggable()) {
@@ -110,8 +111,8 @@ public class MemoryPerUserWaveViewHandlerImpl implements PerUserWaveViewHandler 
 
   @Override
   public ListenableFuture<Void> onParticipantRemoved(WaveletName waveletName, ParticipantId user) {
-    if (explicitPerUserWaveViews.containsKey(user)) {
-      Multimap<WaveId, WaveletId> perUserView = explicitPerUserWaveViews.get(user);
+    Multimap<WaveId, WaveletId> perUserView = explicitPerUserWaveViews.getIfPresent(user);
+    if (perUserView != null) {
       if (perUserView.containsEntry(waveletName.waveId, waveletName.waveletId)) {
         perUserView.remove(waveletName.waveId, waveletName.waveletId);
         LOG.fine("Removed wavelet: " + waveletName
@@ -125,7 +126,11 @@ public class MemoryPerUserWaveViewHandlerImpl implements PerUserWaveViewHandler 
 
   @Override
   public Multimap<WaveId, WaveletId> retrievePerUserWaveView(ParticipantId user) {
-    return explicitPerUserWaveViews.get(user);
+    try {
+      return explicitPerUserWaveViews.get(user);
+    } catch (ExecutionException ex) {
+      throw new RuntimeException(ex);
+    }
   }
 
   @Override

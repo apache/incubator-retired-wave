@@ -56,17 +56,6 @@ public class WebSocketChannelTest extends TestCase {
         this.sequenceNumber = sequenceNo;
         this.savedMessage = message;
       }
-
-      @Override
-      public void unknown(int sequenceNo, final String messageType,
-          final UnknownFieldSet message) {
-        fail("unknown");
-      }
-
-      @Override
-      public void unknown(int sequenceNo, final String messageType, final String message) {
-        fail("unknown");
-      }
     }
 
   @Override

@@ -19,10 +19,11 @@
 
 package org.waveprotocol.box.server.waveserver;
 
-import com.google.common.base.Function;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.MapMaker;
 import com.google.common.collect.Sets;
 import com.google.inject.Inject;
 import com.google.protobuf.ByteString;
@@ -40,9 +41,9 @@ import org.waveprotocol.wave.model.version.HashedVersion;
 import org.waveprotocol.wave.model.wave.data.ReadableWaveletData;
 import org.waveprotocol.wave.util.logging.Log;
 
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Forwards wave notifications to wave bus subscribers and remote wave servers.
@@ -84,14 +85,13 @@ class WaveletNotificationDispatcher implements WaveBus, WaveletNotificationSubsc
       new CopyOnWriteArraySet<WaveBus.Subscriber>();
 
   /** Maps remote domains to wave server stubs for those domains. */
-  private final Map<String, WaveletFederationListener> federationHosts =
-      new MapMaker().makeComputingMap(
-          new Function<String, WaveletFederationListener>() {
-            @Override
-            public WaveletFederationListener apply(String domain) {
-              return federationHostFactory.listenerForDomain(domain);
-            }
-          });
+  private final LoadingCache<String, WaveletFederationListener> federationHosts =
+      CacheBuilder.newBuilder().build(new CacheLoader<String, WaveletFederationListener>() {
+    @Override
+    public WaveletFederationListener load(String domain) {
+      return federationHostFactory.listenerForDomain(domain);
+    }
+  });
 
   /**
    * Constructor.
@@ -134,8 +134,12 @@ class WaveletNotificationDispatcher implements WaveBus, WaveletNotificationSubsc
     if (!remoteDomainsToNotify.isEmpty()) {
       ImmutableList<ByteString> serializedAppliedDeltas = serializedAppliedDeltasOf(deltas);
       for (String domain : remoteDomainsToNotify) {
-        federationHosts.get(domain).waveletDeltaUpdate(WaveletDataUtil.waveletNameOf(wavelet),
-            serializedAppliedDeltas, federationCallback("delta update"));
+        try {
+          federationHosts.get(domain).waveletDeltaUpdate(WaveletDataUtil.waveletNameOf(wavelet),
+              serializedAppliedDeltas, federationCallback("delta update"));
+        } catch (ExecutionException ex) {
+          throw new RuntimeException(ex);
+        }
       }
     }
   }
@@ -155,8 +159,12 @@ class WaveletNotificationDispatcher implements WaveBus, WaveletNotificationSubsc
     if (!remoteDomainsToNotify.isEmpty()) {
       ProtocolHashedVersion serializedVersion = CoreWaveletOperationSerializer.serialize(version);
       for (String domain : remoteDomainsToNotify) {
-        federationHosts.get(domain).waveletCommitUpdate(
-            waveletName, serializedVersion, federationCallback("commit notice"));
+        try {
+          federationHosts.get(domain).waveletCommitUpdate(
+              waveletName, serializedVersion, federationCallback("commit notice"));
+        } catch (ExecutionException ex) {
+          throw new RuntimeException(ex);
+        }
       }
     }
   }

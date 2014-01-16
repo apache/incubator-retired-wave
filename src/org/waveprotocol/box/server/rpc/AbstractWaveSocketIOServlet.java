@@ -18,26 +18,17 @@
  */
 package org.waveprotocol.box.server.rpc;
 
-import com.google.inject.Inject;
 
 import com.glines.socketio.server.AnnotationTransportHandlerProvider;
-import com.glines.socketio.server.ClasspathTransportDiscovery;
 import com.glines.socketio.server.ServletBasedSocketIOConfig;
 import com.glines.socketio.server.SocketIOConfig;
 import com.glines.socketio.server.SocketIOInbound;
 import com.glines.socketio.server.SocketIOServlet;
 import com.glines.socketio.server.SocketIOSessionManager;
 import com.glines.socketio.server.Transport;
-import com.glines.socketio.server.TransportDiscovery;
 import com.glines.socketio.server.TransportHandlerProvider;
 import com.glines.socketio.server.TransportInitializationException;
 import com.glines.socketio.server.TransportType;
-import com.glines.socketio.server.transport.FlashSocketTransport;
-import com.glines.socketio.server.transport.HTMLFileTransport;
-import com.glines.socketio.server.transport.JSONPPollingTransport;
-import com.glines.socketio.server.transport.XHRMultipartTransport;
-import com.glines.socketio.server.transport.XHRPollingTransport;
-import com.glines.socketio.server.transport.jetty.JettyWebSocketTransport;
 import com.glines.socketio.util.IO;
 
 import java.io.IOException;

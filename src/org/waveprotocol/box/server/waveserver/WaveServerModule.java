@@ -163,7 +163,7 @@ public class WaveServerModule extends AbstractModule {
   static ListenableFuture<DeltaStoreBasedWaveletState> loadWaveletState(Executor executor,
       final DeltaStore deltaStore, final WaveletName waveletName, final Executor persistExecutor) {
     ListenableFutureTask<DeltaStoreBasedWaveletState> task =
-        new ListenableFutureTask<DeltaStoreBasedWaveletState>(
+        ListenableFutureTask.<DeltaStoreBasedWaveletState>create(
             new Callable<DeltaStoreBasedWaveletState>() {
               @Override
               public DeltaStoreBasedWaveletState call() throws PersistenceException {

@@ -20,11 +20,8 @@
 package org.waveprotocol.box.server.rpc;
 
 import com.google.protobuf.Message;
-import com.google.protobuf.UnknownFieldSet;
 
 public interface ProtoCallback {
   public void message(int sequenceNo, Message message);
-  public void unknown(int sequenceNo, String messageType, UnknownFieldSet message);
-  public void unknown(int sequenceNo, String messageType, String message);
 }
 

@@ -189,7 +189,7 @@ public class LucenePerUserWaveViewHandlerImpl implements PerUserWaveViewHandler,
     Preconditions.checkNotNull(waveletName);
     Preconditions.checkNotNull(participant);
 
-    ListenableFutureTask<Void> task = new ListenableFutureTask<Void>(new Callable<Void>() {
+    ListenableFutureTask<Void> task = ListenableFutureTask.<Void>create(new Callable<Void>() {
 
       @Override
       public Void call() throws Exception {
@@ -214,7 +214,7 @@ public class LucenePerUserWaveViewHandlerImpl implements PerUserWaveViewHandler,
     Preconditions.checkNotNull(waveletName);
     Preconditions.checkNotNull(participant);
 
-    ListenableFutureTask<Void> task = new ListenableFutureTask<Void>(new Callable<Void>() {
+    ListenableFutureTask<Void> task = ListenableFutureTask.<Void>create(new Callable<Void>() {
 
       @Override
       public Void call() throws Exception {
@@ -245,7 +245,7 @@ public class LucenePerUserWaveViewHandlerImpl implements PerUserWaveViewHandler,
   public ListenableFuture<Void> onWaveInit(final WaveletName waveletName) {
     Preconditions.checkNotNull(waveletName);
 
-    ListenableFutureTask<Void> task = new ListenableFutureTask<Void>(new Callable<Void>() {
+    ListenableFutureTask<Void> task = ListenableFutureTask.<Void>create(new Callable<Void>() {
 
       @Override
       public Void call() throws Exception {

@@ -41,6 +41,7 @@ import org.xmpp.packet.Packet;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Tests for {@link XmppFederationHostForDomain}.
@@ -237,7 +238,7 @@ public class XmppFederationHostForDomainTest extends TestCase {
    * Confirm that there is one outstanding disco request to REMOTE_DOMAIN, and
    * force its success.
    */
-  private void successDiscoRequest() {
+  private void successDiscoRequest() throws ExecutionException {
     assertEquals(1, disco.pending.size());
     PendingMockDisco v = disco.pending.get(REMOTE_DOMAIN);
     assertEquals(REMOTE_DOMAIN, v.remoteDomain);
@@ -250,7 +251,7 @@ public class XmppFederationHostForDomainTest extends TestCase {
    * Confirm that there is one outstanding disco request to REMOTE_DOMAIN, and
    * force its failure.
    */
-  private void failDiscoRequest() {
+  private void failDiscoRequest() throws ExecutionException {
     assertEquals(1, disco.pending.size());
     PendingMockDisco v = disco.pending.get(REMOTE_DOMAIN);
     assertEquals(REMOTE_DOMAIN, v.remoteDomain);

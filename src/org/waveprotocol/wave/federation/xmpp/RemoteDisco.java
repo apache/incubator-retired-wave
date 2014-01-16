@@ -22,6 +22,9 @@ package org.waveprotocol.wave.federation.xmpp;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.MapMaker;
 import com.google.common.collect.Sets;
 
@@ -40,9 +43,11 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.Nullable;
@@ -84,20 +89,18 @@ public class RemoteDisco {
 
   // These two values are used for tracking success and failure counts.
   // Not yet exposed in the fedone waveserver.
-  public static final Map<String, AtomicLong> statDiscoSuccess =
-      new MapMaker().makeComputingMap(
-          new Function<String, AtomicLong>() {
+  public static final LoadingCache<String, AtomicLong> statDiscoSuccess =
+      CacheBuilder.newBuilder().build(new CacheLoader<String, AtomicLong>() {
             @Override
-            public AtomicLong apply(String domain) {
+            public AtomicLong load(String domain) {
               return new AtomicLong();
             }
           });
 
-  public static final Map<String, AtomicLong> statDiscoFailed =
-      new MapMaker().makeComputingMap(
-          new Function<String, AtomicLong>() {
+  public static final LoadingCache<String, AtomicLong> statDiscoFailed =
+      CacheBuilder.newBuilder().build(new CacheLoader<String, AtomicLong>() {
             @Override
-            public AtomicLong apply(String domain) {
+            public AtomicLong load(String domain) {
               return new AtomicLong();
             }
           });
@@ -400,16 +403,21 @@ public class RemoteDisco {
     }
 
     // Set either the result JID or error state.
-    if (jid != null) {
-      this.remoteJid = jid;
-      LOG.info("Discovered remote JID: " + jid + " for " + remoteDomain);
-      statDiscoSuccess.get(remoteDomain).incrementAndGet();
-    } else if (error != null) {
-      this.error = error;
-      LOG.info("Could not discover remote JID: " + error + " for " + remoteDomain);
-      statDiscoFailed.get(remoteDomain).incrementAndGet();
-    } else {
-      throw new IllegalArgumentException("At least one of jid/error must be set");
+
+    try {
+      if (jid != null) {
+        this.remoteJid = jid;
+        LOG.info("Discovered remote JID: " + jid + " for " + remoteDomain);
+          statDiscoSuccess.get(remoteDomain).incrementAndGet();
+      } else if (error != null) {
+        this.error = error;
+        LOG.info("Could not discover remote JID: " + error + " for " + remoteDomain);
+        statDiscoFailed.get(remoteDomain).incrementAndGet();
+      } else {
+        throw new IllegalArgumentException("At least one of jid/error must be set");
+      }
+    } catch (ExecutionException ex) {
+      throw new RuntimeException(ex);
     }
 
     // Complete all available callbacks.

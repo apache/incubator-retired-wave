@@ -34,7 +34,7 @@ import org.waveprotocol.box.server.robots.register.RobotRegistrar;
 import org.waveprotocol.box.server.robots.register.RobotRegistrarImpl;
 import org.waveprotocol.box.server.rpc.ProtoSerializer;
 import org.waveprotocol.box.server.rpc.ServerRpcProvider;
-import org.waveprotocol.box.server.rpc.WebSocketServerChannel;
+import org.waveprotocol.box.server.rpc.WebSocketChannel;
 import org.waveprotocol.box.server.waveserver.LookupExecutor;
 import org.waveprotocol.box.server.waveserver.WaveServerImpl;
 import org.waveprotocol.box.server.waveserver.WaveServerModule;
@@ -111,7 +111,7 @@ public class ServerModule extends AbstractModule {
 
     bind(RobotRegistrar.class).to(RobotRegistrarImpl.class);
 
-    requestStaticInjection(WebSocketServerChannel.class);
+    requestStaticInjection(WebSocketChannel.class);
   }
 
   @Provides

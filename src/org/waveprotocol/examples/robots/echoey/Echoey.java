@@ -20,7 +20,7 @@
 package org.waveprotocol.examples.robots.echoey;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.MapMaker;
+import com.google.common.cache.CacheBuilder;
 import com.google.wave.api.AbstractRobot;
 import com.google.wave.api.Annotation;
 import com.google.wave.api.Blip;
@@ -47,7 +47,7 @@ public class Echoey extends AbstractRobot {
   private final Map<String, String> shadowBlipMap;
 
   public Echoey() {
-    shadowBlipMap = new MapMaker().expireAfterWrite(1, TimeUnit.HOURS).makeMap();
+    shadowBlipMap = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.HOURS).<String, String>build().asMap();
   }
 
   @Override

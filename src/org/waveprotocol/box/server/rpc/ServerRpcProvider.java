@@ -35,7 +35,6 @@ import com.google.protobuf.Descriptors.MethodDescriptor;
 import com.google.protobuf.Message;
 import com.google.protobuf.RpcCallback;
 import com.google.protobuf.Service;
-import com.google.protobuf.UnknownFieldSet;
 
 import com.glines.socketio.server.SocketIOInbound;
 import com.glines.socketio.server.Transport;
@@ -47,28 +46,14 @@ import com.glines.socketio.server.transport.XHRPollingTransport;
 import com.glines.socketio.server.transport.jetty.JettyWebSocketTransport;
 
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.jetty.http.ssl.SslContextFactory;
-import org.eclipse.jetty.server.ssl.SslSelectChannelConnector;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.nio.SelectChannelConnector;
 import org.eclipse.jetty.server.session.HashSessionManager;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.servlets.GzipFilter;
 import org.eclipse.jetty.util.resource.ResourceCollection;
 import org.eclipse.jetty.webapp.WebAppContext;
-import org.eclipse.jetty.websocket.WebSocket;
-import org.eclipse.jetty.websocket.WebSocketServlet;
-import org.waveprotocol.box.common.comms.WaveClientRpc.ProtocolAuthenticate;
-import org.waveprotocol.box.common.comms.WaveClientRpc.ProtocolAuthenticationResult;
-import org.waveprotocol.box.server.CoreSettings;
-import org.waveprotocol.box.server.authentication.SessionManager;
-import org.waveprotocol.box.server.persistence.file.FileUtils;
-import org.waveprotocol.box.server.util.NetUtils;
-import org.waveprotocol.wave.model.util.Pair;
-import org.waveprotocol.wave.model.wave.ParticipantId;
-import org.waveprotocol.wave.util.logging.Log;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -93,6 +78,24 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
+import org.eclipse.jetty.websocket.servlet.ServletUpgradeRequest;
+import org.eclipse.jetty.websocket.servlet.ServletUpgradeResponse;
+import org.eclipse.jetty.websocket.servlet.WebSocketCreator;
+import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
+import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
+
+import org.waveprotocol.box.common.comms.WaveClientRpc.ProtocolAuthenticate;
+import org.waveprotocol.box.common.comms.WaveClientRpc.ProtocolAuthenticationResult;
+import org.waveprotocol.box.server.CoreSettings;
+import org.waveprotocol.box.server.authentication.SessionManager;
+import org.waveprotocol.box.server.persistence.file.FileUtils;
+import org.waveprotocol.box.server.util.NetUtils;
+import org.waveprotocol.wave.model.util.Pair;
+import org.waveprotocol.wave.model.wave.ParticipantId;
+import org.waveprotocol.wave.util.logging.Log;
 
 /**
  * ServerRpcProvider can provide instances of type Service over an incoming
@@ -143,11 +146,11 @@ public class ServerRpcProvider {
   }
 
   static class WebSocketConnection extends Connection {
-    private final WebSocketServerChannel socketChannel;
+    private final WebSocketChannel socketChannel;
 
     WebSocketConnection(ParticipantId loggedInUser, ServerRpcProvider provider) {
       super(loggedInUser, provider);
-      socketChannel = new WebSocketServerChannel(this);
+      socketChannel = new WebSocketChannelImpl(this);
       LOG.info("New websocket connection set up for user " + loggedInUser);
       expectMessages(socketChannel);
     }
@@ -157,7 +160,7 @@ public class ServerRpcProvider {
       socketChannel.sendMessage(sequenceNo, message);
     }
 
-    public WebSocketServerChannel getWebSocketServerChannel() {
+    public WebSocketChannel getWebSocketServerChannel() {
       return socketChannel;
     }
   }
@@ -291,20 +294,6 @@ public class ServerRpcProvider {
             "Got expected but unknown message  (" + message + ") for sequence: " + sequenceNo);
       }
     }
-
-    @Override
-    public void unknown(int sequenceNo, String messageType, UnknownFieldSet message) {
-      throw new IllegalStateException(
-          "Got unknown message (type: " + messageType + ", " + message + ") for sequence: "
-              + sequenceNo);
-    }
-
-    @Override
-    public void unknown(int sequenceNo, String messageType, String message) {
-      throw new IllegalStateException(
-          "Got unknown message (type: " + messageType + ", " + message + ") for sequence: "
-              + sequenceNo);
-    }
   }
 
   /**
@@ -359,11 +348,11 @@ public class ServerRpcProvider {
   public void startWebSocketServer(final Injector injector) {
     httpServer = new Server();
 
-    List<SelectChannelConnector> connectors = getSelectChannelConnectors(httpAddresses);
+    List<Connector> connectors = getSelectChannelConnectors(httpAddresses);
     if (connectors.isEmpty()) {
       LOG.severe("No valid http end point address provided!");
     }
-    for (SelectChannelConnector connector : connectors) {
+    for (Connector connector : connectors) {
       httpServer.addConnector(connector);
     }
     final WebAppContext context = new WebAppContext();
@@ -401,6 +390,11 @@ public class ServerRpcProvider {
       context.addEventListener(contextListener);
       context.addFilter(GuiceFilter.class, "/*", EnumSet.allOf(DispatcherType.class));
       context.addFilter(GzipFilter.class, "/webclient/*", EnumSet.allOf(DispatcherType.class));
+      String[] hosts = new String[httpAddresses.length];
+      for (int i=0; i < httpAddresses.length; i++) {
+        hosts[i] = httpAddresses[i].getHostName();
+      }
+      context.addVirtualHosts(hosts);
       httpServer.setHandler(context);
 
       httpServer.start();
@@ -430,13 +424,14 @@ public class ServerRpcProvider {
     // TODO(zamfi): fix to let messages span frames.
     wsholder.setInitParameter("bufferSize", "" + BUFFER_SIZE);
 
-    // Servlet where the websocket connection is served from.
-    ServletHolder sioholder = addServlet("/socket.io/*", WaveSocketIOServlet.class );
-    // TODO(zamfi): fix to let messages span frames.
-    sioholder.setInitParameter("bufferSize", "" + BUFFER_SIZE);
     // Set flash policy server parameters
     String flashPolicyServerHost = "localhost";
     StringBuilder flashPolicyAllowedPorts = new StringBuilder();
+
+    // Servlet where the socketio connection is served from.
+    // TODO(akaplanov): add servlet when https://github.com/vjrj/Socket.IO-Java will updated to Jetty v9.
+    // https://issues.apache.org/jira/browse/WAVE-405
+
     /*
      * Loop through addresses, collect list of ports, and determine if we are to use "localhost"
      * of the AnyHost wildcard.
@@ -451,14 +446,6 @@ public class ServerRpcProvider {
         flashPolicyServerHost = "0.0.0.0";
       }
     }
-    sioholder.setInitParameter(FlashSocketTransport.PARAM_FLASHPOLICY_SERVER_HOST,
-        flashPolicyServerHost);
-    sioholder.setInitParameter(FlashSocketTransport.PARAM_FLASHPOLICY_SERVER_PORT,
-        ""+flashsocketPolicyPort);
-    // TODO: Change to use the public http address and all other bound addresses.
-    sioholder.setInitParameter(FlashSocketTransport.PARAM_FLASHPOLICY_DOMAIN, "*");
-    sioholder.setInitParameter(FlashSocketTransport.PARAM_FLASHPOLICY_PORTS,
-        flashPolicyAllowedPorts.toString());
 
     // Serve the static content and GWT web client with the default servlet
     // (acts like a standard file-based web server).
@@ -523,9 +510,9 @@ public class ServerRpcProvider {
    * @return a list of {@link SelectChannelConnector} each bound to a host:port
    *         pair form the list addresses.
    */
-  private List<SelectChannelConnector> getSelectChannelConnectors(
+  private List<Connector> getSelectChannelConnectors(
       InetSocketAddress[] httpAddresses) {
-    List<SelectChannelConnector> list = Lists.newArrayList();
+    List<Connector> list = Lists.newArrayList();
     String[] excludeCiphers = {"SSL_RSA_EXPORT_WITH_RC4_40_MD5", "SSL_RSA_EXPORT_WITH_DES40_CBC_SHA",
                                "SSL_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA", "SSL_RSA_WITH_DES_CBC_SHA",
                                "SSL_DHE_RSA_WITH_DES_CBC_SHA", "TLS_DHE_RSA_WITH_AES_128_CBC_SHA",
@@ -540,7 +527,7 @@ public class ServerRpcProvider {
 
       sslContextFactory = new SslContextFactory(sslKeystorePath);
       sslContextFactory.setKeyStorePassword(sslKeystorePassword);
-      sslContextFactory.setAllowRenegotiate(false);
+      sslContextFactory.setRenegotiationAllowed(false);
       sslContextFactory.setExcludeCipherSuites(excludeCiphers);
 
       // Note: we only actually needed client auth for AuthenticationServlet.
@@ -550,15 +537,15 @@ public class ServerRpcProvider {
     }
 
     for (InetSocketAddress address : httpAddresses) {
-      SelectChannelConnector connector;
+      ServerConnector connector;
       if (sslEnabled) {
-        connector = new SslSelectChannelConnector(sslContextFactory);
+        connector = new ServerConnector(httpServer, sslContextFactory);
       } else {
-        connector = new SelectChannelConnector();
+        connector = new ServerConnector(httpServer);
       }
-      connector.setHost(address.getAddress().getHostAddress());
+      connector.setHost(address.getHostName());
       connector.setPort(address.getPort());
-      connector.setMaxIdleTime(0);
+      connector.setIdleTimeout(0);
       list.add(connector);
     }
 
@@ -569,21 +556,36 @@ public class ServerRpcProvider {
   @Singleton
   public static class WaveWebSocketServlet extends WebSocketServlet {
 
-    ServerRpcProvider provider;
+    final ServerRpcProvider provider;
+    final int websocketMaxIdleTime;
+    final int websocketMaxMessageSize;
 
     @Inject
-    public WaveWebSocketServlet(ServerRpcProvider provider) {
+    public WaveWebSocketServlet(ServerRpcProvider provider,
+        @Named(CoreSettings.WEBSOCKET_MAX_IDLE_TIME) int websocketMaxIdleTime,
+        @Named(CoreSettings.WEBSOCKET_MAX_MESSAGE_SIZE) int websocketMaxMessageSize) {
       super();
       this.provider = provider;
+      this.websocketMaxIdleTime= websocketMaxIdleTime;
+      this.websocketMaxMessageSize = websocketMaxMessageSize;
     }
 
+    @SuppressWarnings("cast")
     @Override
-    public WebSocket doWebSocketConnect(HttpServletRequest request, String protocol) {
-      ParticipantId loggedInUser =
-          provider.sessionManager.getLoggedInUser(request.getSession(false));
+    public void configure(WebSocketServletFactory factory) {
+      if (websocketMaxIdleTime != 0) {
+        factory.getPolicy().setIdleTimeout(websocketMaxIdleTime);
+      }
+      factory.getPolicy().setMaxTextMessageSize(websocketMaxMessageSize * 1024 * 1024);
+      factory.setCreator(new WebSocketCreator() {
+        @Override
+        public Object createWebSocket(ServletUpgradeRequest req, ServletUpgradeResponse resp) {
+          ParticipantId loggedInUser =
+              provider.sessionManager.getLoggedInUser((HttpSession)req.getSession());
 
-      WebSocketConnection connection = new WebSocketConnection(loggedInUser, provider);
-      return connection.getWebSocketServerChannel();
+          return new WebSocketConnection(loggedInUser, provider).getWebSocketServerChannel();
+        }
+      });
     }
   }
 
@@ -637,7 +639,7 @@ public class ServerRpcProvider {
     if (httpServer == null) {
       return null;
     } else {
-      Connector c = httpServer.getConnectors()[0];
+      ServerConnector c = (ServerConnector)httpServer.getConnectors()[0];
       return new InetSocketAddress(c.getHost(), c.getLocalPort());
     }
   }

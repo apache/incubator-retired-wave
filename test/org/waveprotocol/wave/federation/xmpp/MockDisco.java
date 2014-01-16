@@ -20,11 +20,17 @@
 package org.waveprotocol.wave.federation.xmpp;
 
 import com.google.common.base.Function;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Lists;
 import com.google.common.collect.MapMaker;
 
 import java.util.Map;
 import java.util.Queue;
+import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Tiny MockDisco class that wraps XmppDisco.
@@ -56,10 +62,10 @@ public class MockDisco extends XmppDisco {
     }
   }
 
-  public Map<String, PendingMockDisco> pending = new MapMaker().makeComputingMap(
-      new Function<String, PendingMockDisco>() {
+  public LoadingCache<String, PendingMockDisco> pending = CacheBuilder.newBuilder()
+      .build(new CacheLoader<String, PendingMockDisco>() {
         @Override
-        public PendingMockDisco apply(String domain) {
+        public PendingMockDisco load(String domain) {
           return new PendingMockDisco(domain);
         }
       });
@@ -71,7 +77,11 @@ public class MockDisco extends XmppDisco {
       // below, but since this is only used in tests, we can probably ignore it.
       super.discoverRemoteJid(remoteDomain, callback);
     } else {
-      pending.get(remoteDomain).addCallback(callback);
+      try {
+        pending.get(remoteDomain).addCallback(callback);
+      } catch (ExecutionException ex) {
+        throw new RuntimeException(ex);
+      }
     }
   }
 

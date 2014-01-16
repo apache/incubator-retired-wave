@@ -21,6 +21,7 @@ package org.waveprotocol.box.server.robots.dataapi;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
+import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.MapMaker;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -76,9 +77,11 @@ public final class DataApiTokenContainer {
     this.tokenGenerator = tokenGenerator;
 
     requestTokenAccessors =
-        new MapMaker().expireAfterWrite(REQUEST_TOKEN_EXPIRATION, TimeUnit.MINUTES).makeMap();
+        CacheBuilder.newBuilder().expireAfterWrite(REQUEST_TOKEN_EXPIRATION, TimeUnit.MINUTES)
+        .<String, OAuthAccessor>build().asMap();
     accessTokenAccessors =
-        new MapMaker().expireAfterWrite(ACCESS_TOKEN_EXPIRATION, TimeUnit.MINUTES).makeMap();
+        CacheBuilder.newBuilder().expireAfterWrite(ACCESS_TOKEN_EXPIRATION, TimeUnit.MINUTES)
+        .<String, OAuthAccessor>build().asMap();
   }
 
   /**

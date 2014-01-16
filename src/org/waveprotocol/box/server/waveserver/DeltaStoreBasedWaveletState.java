@@ -468,12 +468,12 @@ class DeltaStoreBasedWaveletState implements WaveletState {
           latestVersionToPersist = version;
         }
         if (nextPersistTask == null) {
-          nextPersistTask = new ListenableFutureTask<Void>(persisterTask);
+          nextPersistTask = ListenableFutureTask.<Void>create(persisterTask);
         }
         return nextPersistTask;
       } else {
         latestVersionToPersist = version;
-        ListenableFutureTask<Void> resultTask = new ListenableFutureTask<Void>(persisterTask);
+        ListenableFutureTask<Void> resultTask = ListenableFutureTask.<Void>create(persisterTask);
         persistExecutor.execute(resultTask);
         return resultTask;
       }

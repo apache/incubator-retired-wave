@@ -38,6 +38,7 @@ import org.xmpp.packet.PacketError;
 import org.joda.time.DateTimeUtils;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -101,10 +102,17 @@ public class XmppDiscoTest extends TestCase {
   private SuccessFailCallback<String, String> discoCallback;
   private static final int DISCO_FAIL_EXPIRY_SECS = 5 * 60;
   private static final int DISCO_SUCCESS_EXPIRY_SECS = 2 * 60 * 60;
-  private AtomicLong counterStarted = XmppDisco.statDiscoStarted.get(REMOTE_DOMAIN);
-  private AtomicLong counterSuccess = RemoteDisco.statDiscoSuccess.get(REMOTE_DOMAIN);
-  private AtomicLong counterFailed = RemoteDisco.statDiscoFailed.get(REMOTE_DOMAIN);
 
+  private final AtomicLong counterStarted;
+  private final AtomicLong counterSuccess;
+  private final AtomicLong counterFailed;
+
+  public XmppDiscoTest() throws ExecutionException {
+    counterStarted = XmppDisco.statDiscoStarted.get(REMOTE_DOMAIN);
+    counterSuccess = RemoteDisco.statDiscoSuccess.get(REMOTE_DOMAIN);
+    counterFailed = RemoteDisco.statDiscoFailed.get(REMOTE_DOMAIN);
+  }
+  
   @Override
   protected void setUp() throws Exception {
     super.setUp();
@@ -191,7 +199,7 @@ public class XmppDiscoTest extends TestCase {
    * Tests that starting disco sends a disco#items to the remote server, and no
    * subsequent disco requests start after we get a successful reply.
    */
-  public void testDiscoNoRetransmitsAfterReply() {
+  public void testDiscoNoRetransmitsAfterReply() throws ExecutionException {
     XmppUtil.fakeUniqueId = DISCO_ITEMS_ID;
     disco.discoverRemoteJid(REMOTE_DOMAIN, discoCallback);
     checkAndResetStats(1, 0, 0);  // started

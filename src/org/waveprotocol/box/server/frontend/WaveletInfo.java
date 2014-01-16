@@ -19,10 +19,11 @@
 
 package org.waveprotocol.box.server.frontend;
 
-import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.MapMaker;
 import com.google.common.collect.Sets;
 
 import org.waveprotocol.box.common.DeltaSequence;
@@ -37,9 +38,9 @@ import org.waveprotocol.wave.model.wave.ParticipantId;
 import org.waveprotocol.wave.model.wave.data.ReadableWaveletData;
 import org.waveprotocol.wave.util.logging.Log;
 
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Provides services to manage and track wavelet participants and wavelet
@@ -74,8 +75,8 @@ public class WaveletInfo {
     }
   }
 
-  private final Map<ParticipantId, UserManager> perUser;
-  private final Map<WaveId, Map<WaveletId, PerWavelet>> perWavelet;
+  private final LoadingCache<ParticipantId, UserManager> perUser;
+  private final LoadingCache<WaveId, LoadingCache<WaveletId, PerWavelet>> perWavelet;
   private final WaveletProvider waveletProvider;
 
   /**
@@ -92,23 +93,23 @@ public class WaveletInfo {
   WaveletInfo(final HashedVersionFactory hashedVersionFactory, WaveletProvider waveletProvider) {
     this.waveletProvider = waveletProvider;
     perWavelet =
-        new MapMaker().makeComputingMap(new Function<WaveId, Map<WaveletId, PerWavelet>>() {
+        CacheBuilder.newBuilder().build(new CacheLoader<WaveId, LoadingCache<WaveletId, PerWavelet>>() {
+      @Override
+      public LoadingCache<WaveletId, PerWavelet> load(final WaveId waveId) {
+        return CacheBuilder.newBuilder().build(new CacheLoader<WaveletId, PerWavelet>() {
           @Override
-          public Map<WaveletId, PerWavelet> apply(final WaveId waveId) {
-            return new MapMaker().makeComputingMap(new Function<WaveletId, PerWavelet>() {
-              @Override
-              public PerWavelet apply(WaveletId waveletId) {
-                WaveletName waveletName = WaveletName.of(waveId, waveletId);
-                return new PerWavelet(waveletName, hashedVersionFactory
-                    .createVersionZero(waveletName));
-              }
-            });
+          public PerWavelet load(WaveletId waveletId) {
+            WaveletName waveletName = WaveletName.of(waveId, waveletId);
+            return new PerWavelet(waveletName, hashedVersionFactory
+                .createVersionZero(waveletName));
           }
         });
+      }
+    });
 
-    perUser = new MapMaker().makeComputingMap(new Function<ParticipantId, UserManager>() {
+    perUser = CacheBuilder.newBuilder().build(new CacheLoader<ParticipantId, UserManager>() {
       @Override
-      public UserManager apply(ParticipantId from) {
+      public UserManager load(ParticipantId from) {
         return new UserManager();
       }
     });
@@ -121,8 +122,12 @@ public class WaveletInfo {
   public Set<WaveletId> visibleWaveletsFor(WaveViewSubscription subscription,
       ParticipantId loggedInUser) throws WaveServerException {
     Set<WaveletId> visible = Sets.newHashSet();
-    Set<Entry<WaveletId, PerWavelet>> entrySet =
-        perWavelet.get(subscription.getWaveId()).entrySet();
+    Set<Entry<WaveletId, PerWavelet>> entrySet;
+    try {
+      entrySet = perWavelet.get(subscription.getWaveId()).asMap().entrySet();
+    } catch (ExecutionException ex) {
+      throw new RuntimeException(ex);
+    }
     for (Entry<WaveletId, PerWavelet> entry : entrySet) {
       WaveletName waveletName = WaveletName.of(subscription.getWaveId(), entry.getKey());
       if (subscription.includes(entry.getKey())
@@ -141,21 +146,25 @@ public class WaveletInfo {
       LOG.fine("frontend initialiseWave(" + waveId +")");
     }
 
-    if (!perWavelet.containsKey(waveId)) {
-      Map<WaveletId, PerWavelet> wavelets = perWavelet.get(waveId);
-      for (WaveletId waveletId : waveletProvider.getWaveletIds(waveId)) {
-        ReadableWaveletData wavelet =
-            waveletProvider.getSnapshot(WaveletName.of(waveId, waveletId)).snapshot;
-        // Wavelets is a computing map, so get() initializes the entry.
-        PerWavelet waveletInfo = wavelets.get(waveletId);
-        synchronized (waveletInfo) {
-          waveletInfo.currentVersion = wavelet.getHashedVersion();
-          if(LOG.isFineLoggable()) {
-            LOG.fine("frontend wavelet " + waveletId + " @" + wavelet.getHashedVersion().getVersion());
+    try {
+      if (perWavelet.getIfPresent(waveId) == null) {
+        LoadingCache<WaveletId, PerWavelet> wavelets = perWavelet.get(waveId);
+        for (WaveletId waveletId : waveletProvider.getWaveletIds(waveId)) {
+          ReadableWaveletData wavelet =
+              waveletProvider.getSnapshot(WaveletName.of(waveId, waveletId)).snapshot;
+          // Wavelets is a computing map, so get() initializes the entry.
+          PerWavelet waveletInfo = wavelets.get(waveletId);
+          synchronized (waveletInfo) {
+            waveletInfo.currentVersion = wavelet.getHashedVersion();
+            if(LOG.isFineLoggable()) {
+              LOG.fine("frontend wavelet " + waveletId + " @" + wavelet.getHashedVersion().getVersion());
+            }
+            waveletInfo.explicitParticipants.addAll(wavelet.getParticipants());
           }
-          waveletInfo.explicitParticipants.addAll(wavelet.getParticipants());
         }
       }
+    } catch (ExecutionException ex) {
+      throw new RuntimeException(ex);
     }
   }
 
@@ -182,7 +191,11 @@ public class WaveletInfo {
    * Returns {@link UserManager} for the participant.
    */
   public UserManager getUserManager(ParticipantId participantId) {
-    return perUser.get(participantId);
+    try {
+      return perUser.get(participantId);
+    } catch (ExecutionException ex) {
+      throw new RuntimeException(ex);
+    }
   }
 
   /**
@@ -264,6 +277,10 @@ public class WaveletInfo {
   }
 
   private PerWavelet getWavelet(WaveletName name) {
-    return perWavelet.get(name.waveId).get(name.waveletId);
+    try {
+      return perWavelet.get(name.waveId).get(name.waveletId);
+    } catch (ExecutionException ex) {
+      throw new RuntimeException(ex);
+    }
   }
 }

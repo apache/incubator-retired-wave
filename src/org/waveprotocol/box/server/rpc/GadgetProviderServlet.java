@@ -18,15 +18,16 @@
  */
 package org.waveprotocol.box.server.rpc;
 
-import com.google.common.base.Function;
-import com.google.common.collect.MapMaker;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 
 import org.waveprotocol.box.server.persistence.file.FileAccountStore;
 import org.waveprotocol.box.server.persistence.file.FileUtils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,9 +46,10 @@ public class GadgetProviderServlet extends HttpServlet {
 
   private static final Logger LOG = Logger.getLogger(FileAccountStore.class.getName());
 
-  private final ConcurrentMap<String, String> jsonCache = new MapMaker().expireAfterWrite(5,
-      TimeUnit.MINUTES).makeComputingMap(new Function<String, String>() {
-    public String apply(String key) {
+  private final LoadingCache<String, String> jsonCache = CacheBuilder.newBuilder().expireAfterWrite(5,
+      TimeUnit.MINUTES).build(new CacheLoader<String, String>() {
+
+    public String load(String key) {
       String jsonString = "";
       try {
         jsonString = FileUtils.getStringFromFile("jsongadgets.json");
@@ -60,14 +62,18 @@ public class GadgetProviderServlet extends HttpServlet {
 
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String jsonString = jsonCache.get("");
-    if (jsonString.equals("")) {
-      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-          "Error loading json data from file");
-    } else {
-      PrintWriter out = response.getWriter();
-      out.print(jsonCache.get(""));
-      out.flush();
+    try {
+      String jsonString = jsonCache.get("");
+      if (jsonString.equals("")) {
+        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+            "Error loading json data from file");
+      } else {
+        PrintWriter out = response.getWriter();
+        out.print(jsonCache.get(""));
+        out.flush();
+      }
+    } catch (ExecutionException ex) {
+      throw new IOException(ex);
     }
   }
 }

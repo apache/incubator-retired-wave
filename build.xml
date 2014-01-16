@@ -544,10 +544,18 @@
       <fileset dir="${lib.runtime}">
         <include name="*/*.jar"/>
       </fileset>
+    </unzip>
+    <copy todir="${web.default.staging.dir}" preservelastmodified="true">
+      <fileset file="${web.default}"/>
+    </copy>
+    <unzip dest="${staging.dir}">
       <fileset dir="${lib.codegen}">
          <include name="gwt/gwt-user.jar"/>
          <include name="gwt/gwt-dev.jar"/>
       </fileset>
+      <patternset>
+        <exclude name="javax/servlet/**/*"/>
+      </patternset>
     </unzip>
     <copy todir="${staging.dir}" preservelastmodified="true">
       <fileset dir="${build.src.dir}"/>

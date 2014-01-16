@@ -19,6 +19,8 @@
 
 package org.waveprotocol.box.server.rpc;
 
+import org.waveprotocol.wave.util.logging.Log;
+
 import com.google.common.base.Preconditions;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
@@ -26,19 +28,15 @@ import com.google.protobuf.Descriptors.MethodDescriptor;
 import com.google.protobuf.Message;
 import com.google.protobuf.RpcCallback;
 import com.google.protobuf.RpcController;
-import com.google.protobuf.UnknownFieldSet;
 
-import com.sixfire.websocket.WebSocket;
-
-import org.waveprotocol.wave.util.logging.Log;
+import org.eclipse.jetty.websocket.client.ClientUpgradeRequest;
+import org.eclipse.jetty.websocket.client.WebSocketClient;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -48,7 +46,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class WebSocketClientRpcChannel implements ClientRpcChannel {
   private static final Log LOG = Log.get(WebSocketClientRpcChannel.class);
 
-  private final MessageExpectingChannel protoChannel;
+  private final WebSocketClient socketClient;
+  private final WebSocketChannel clientChannel;
   private final AtomicInteger lastSequenceNumber = new AtomicInteger();
   private final BiMap<Integer, ClientRpcController> activeMethodMap = HashBiMap.create();
 
@@ -57,9 +56,8 @@ public class WebSocketClientRpcChannel implements ClientRpcChannel {
    * address.
    *
    * @param serverAddress the target server address
-   * @param threadPool threadpool for performing async reads.
    */
-  public WebSocketClientRpcChannel(SocketAddress serverAddress, ExecutorService threadPool)
+  public WebSocketClientRpcChannel(SocketAddress serverAddress)
       throws IOException {
     Preconditions.checkNotNull(serverAddress, "null serverAddress");
 
@@ -82,41 +80,13 @@ public class WebSocketClientRpcChannel implements ClientRpcChannel {
           controller.response(message);
         }
       }
-
-      private void unknown(long sequenceNo, String messageType) {
-        final ClientRpcController controller;
-        synchronized (activeMethodMap) {
-          controller = activeMethodMap.get(sequenceNo);
-        }
-        controller.failure("Client RPC got unknown message: " + messageType);
-      }
-
-      @Override
-      public void unknown(int sequenceNo, String messageType, UnknownFieldSet message) {
-        unknown(sequenceNo, messageType);
-      }
-
-      @Override
-      public void unknown(int sequenceNo, String messageType, String message) {
-        unknown(sequenceNo, messageType);
-      }
     };
-
-    WebSocket websocket = openWebSocket((InetSocketAddress) serverAddress);
-    protoChannel = new WebSocketClientChannel(websocket, callback, threadPool);
-    protoChannel.expectMessage(Rpc.RpcFinished.getDefaultInstance());
-    protoChannel.startAsyncRead();
+    clientChannel = new WebSocketChannelImpl(callback);
+    socketClient = openWebSocket(clientChannel, (InetSocketAddress) serverAddress);
+    clientChannel.expectMessage(Rpc.RpcFinished.getDefaultInstance());
     LOG.fine("Opened a new WebSocketClientRpcChannel to " + serverAddress);
   }
-
-  /**
-   * Create a new WebSocketClientRpcChannel backed onto a new single thread
-   * executor.
-   */
-  public WebSocketClientRpcChannel(SocketAddress serverAddress) throws IOException {
-    this(serverAddress, Executors.newSingleThreadExecutor());
-  }
-
+  
   @Override
   public RpcController newRpcController() {
     return new ClientRpcController(this);
@@ -142,7 +112,7 @@ public class WebSocketClientRpcChannel implements ClientRpcChannel {
             .getExtension(Rpc.isStreamingRpc), callback, new Runnable() {
           @Override
           public void run() {
-            protoChannel.sendMessage(sequenceNo, Rpc.CancelRpc.getDefaultInstance());
+            clientChannel.sendMessage(sequenceNo, Rpc.CancelRpc.getDefaultInstance());
           }
         });
     controller.configure(rpcStatus);
@@ -150,13 +120,14 @@ public class WebSocketClientRpcChannel implements ClientRpcChannel {
       activeMethodMap.put(sequenceNo, controller);
     }
     LOG.fine("Calling a new RPC (seq " + sequenceNo + "), method " + method.getFullName() + " for "
-        + protoChannel);
+        + clientChannel);
 
     // Kick off the RPC by sending the request to the server end-point.
-    protoChannel.sendMessage(sequenceNo, request, responsePrototype);
+    clientChannel.sendMessage(sequenceNo, request, responsePrototype);
   }
 
-  private WebSocket openWebSocket(InetSocketAddress inetAddress) throws IOException {
+  private WebSocketClient openWebSocket(WebSocketChannel clientChannel,
+      InetSocketAddress inetAddress) throws IOException {
     URI uri;
     try {
       uri = new URI("ws", null, inetAddress.getHostName(), inetAddress.getPort(), "/socket",
@@ -165,8 +136,18 @@ public class WebSocketClientRpcChannel implements ClientRpcChannel {
       LOG.severe("Unable to create ws:// uri from given address (" + inetAddress + ")", e);
       throw new IllegalStateException(e);
     }
-    WebSocket websocket = new WebSocket(uri);
-    websocket.connect();
-    return websocket;
+    WebSocketClient client = new WebSocketClient();
+    try {
+      client.start();
+    } catch (Exception ex) {
+      throw new RuntimeException(ex);
+    }
+    ClientUpgradeRequest request = new ClientUpgradeRequest();
+    try {
+      client.connect(clientChannel, uri, request).get();
+    } catch (Exception ex) {
+      throw new IOException(ex);
+    }
+    return client;
   }
 }

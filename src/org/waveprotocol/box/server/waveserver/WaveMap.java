@@ -19,10 +19,11 @@
 
 package org.waveprotocol.box.server.waveserver;
 
-import com.google.common.base.Function;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.MapMaker;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListenableFutureTask;
 import com.google.inject.Inject;
@@ -38,7 +39,7 @@ import org.waveprotocol.wave.model.id.WaveletName;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 
 /**
@@ -55,7 +56,7 @@ public class WaveMap {
   private static ListenableFuture<ImmutableSet<WaveletId>> lookupWavelets(
       final WaveId waveId, final WaveletStore<?> waveletStore, Executor lookupExecutor) {
     ListenableFutureTask<ImmutableSet<WaveletId>> task =
-        new ListenableFutureTask<ImmutableSet<WaveletId>>(
+        ListenableFutureTask.<ImmutableSet<WaveletId>>create(
             new Callable<ImmutableSet<WaveletId>>() {
               @Override
               public ImmutableSet<WaveletId> call() throws PersistenceException {
@@ -66,7 +67,7 @@ public class WaveMap {
     return task;
   }
 
-  private final ConcurrentMap<WaveId, Wave> waves;
+  private final LoadingCache<WaveId, Wave> waves;
   private final WaveletStore<?> store;
 
   @Inject
@@ -80,9 +81,9 @@ public class WaveMap {
     // NOTE(anorth): DeltaAndSnapshotStore is more specific than necessary, but
     // helps Guice out.
     this.store = waveletStore;
-    waves = new MapMaker().makeComputingMap(new Function<WaveId, Wave>() {
+    waves = CacheBuilder.newBuilder().build(new CacheLoader<WaveId, Wave>() {
       @Override
-      public Wave apply(WaveId waveId) {
+      public Wave load(WaveId waveId) {
         ListenableFuture<ImmutableSet<WaveletId>> lookedupWavelets =
             lookupWavelets(waveId, waveletStore, lookupExecutor);
         return new Wave(waveId, lookedupWavelets, notifiee, localFactory, remoteFactory,
@@ -114,48 +115,66 @@ public class WaveMap {
    * @throws WaveletStateException if storage access fails.
    */
   public void unloadAllWavelets() throws WaveletStateException {
-    waves.clear();
+    waves.asMap().clear();
   }
 
   /**
    * Returns defensive copy of the map that holds waves.
    */
   Map<WaveId, Wave> getWaves() {
-    return ImmutableMap.copyOf(waves);
+    return ImmutableMap.copyOf(waves.asMap());
   }
 
   public ExceptionalIterator<WaveId, WaveServerException> getWaveIds() {
-    Iterator<WaveId> inner = waves.keySet().iterator();
+    Iterator<WaveId> inner = waves.asMap().keySet().iterator();
     return ExceptionalIterator.FromIterator.create(inner);
   }
 
   public ImmutableSet<WaveletId> lookupWavelets(WaveId waveId) throws WaveletStateException {
-    ListenableFuture<ImmutableSet<WaveletId>> future = waves.get(waveId).getLookedupWavelets();
     try {
+      ListenableFuture<ImmutableSet<WaveletId>> future = waves.get(waveId).getLookedupWavelets();
       return FutureUtil.getResultOrPropagateException(future, PersistenceException.class);
     } catch (PersistenceException e) {
       throw new WaveletStateException("Failed to look up wave " + waveId, e);
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
       throw new WaveletStateException("Interrupted while looking up wave " + waveId, e);
+    } catch (ExecutionException ex) {
+      throw new RuntimeException(ex);
     }
   }
 
   public LocalWaveletContainer getLocalWavelet(WaveletName waveletName)
       throws WaveletStateException {
-    return waves.get(waveletName.waveId).getLocalWavelet(waveletName.waveletId);
+    try {
+      return waves.get(waveletName.waveId).getLocalWavelet(waveletName.waveletId);
+    } catch (ExecutionException ex) {
+      throw new RuntimeException(ex);
+    }
   }
 
   public RemoteWaveletContainer getRemoteWavelet(WaveletName waveletName)
       throws WaveletStateException {
-    return waves.get(waveletName.waveId).getRemoteWavelet(waveletName.waveletId);
+    try {
+      return waves.get(waveletName.waveId).getRemoteWavelet(waveletName.waveletId);
+    } catch (ExecutionException ex) {
+      throw new RuntimeException(ex);
+    }
   }
 
   public LocalWaveletContainer getOrCreateLocalWavelet(WaveletName waveletName) {
-    return waves.get(waveletName.waveId).getOrCreateLocalWavelet(waveletName.waveletId);
+    try {
+      return waves.get(waveletName.waveId).getOrCreateLocalWavelet(waveletName.waveletId);
+    } catch (ExecutionException ex) {
+      throw new RuntimeException(ex);
+    }
   }
 
   public RemoteWaveletContainer getOrCreateRemoteWavelet(WaveletName waveletName) {
-    return waves.get(waveletName.waveId).getOrCreateRemoteWavelet(waveletName.waveletId);
+    try {
+      return waves.get(waveletName.waveId).getOrCreateRemoteWavelet(waveletName.waveletId);
+    } catch (ExecutionException ex) {
+      throw new RuntimeException(ex);
+    }
   }
 }

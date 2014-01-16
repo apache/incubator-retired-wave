@@ -26,6 +26,7 @@ package waveserver;
 
 option java_package = "org.waveprotocol.box.common.comms";
 option java_outer_classname = "WaveClientRpc";
+option java_generic_services = true;
 
 /**
  * Provides streaming wave views.

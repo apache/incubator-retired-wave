@@ -130,7 +130,7 @@ public final class PasswordRobot extends AbstractCliRobotAgent {
   private void verifyCredentials(String password, ParticipantId participantId)
       throws LoginException {
     MultiMap<String> parameters = new MultiMap<String>();
-    parameters.putAll(ImmutableMap.of("password", password, "address", participantId.getAddress()));
+    parameters.putAllValues(ImmutableMap.of("password", password, "address", participantId.getAddress()));
     CallbackHandler callbackHandler = new HttpRequestBasedCallbackHandler(parameters);
     LoginContext context = new LoginContext("Wave", new Subject(), callbackHandler, configuration);
     // If authentication fails, login() will throw a LoginException.

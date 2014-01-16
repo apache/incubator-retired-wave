@@ -23,6 +23,8 @@ import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Key;
+import com.google.inject.name.Names;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.RpcCallback;
 import com.google.protobuf.RpcController;
@@ -46,6 +48,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import org.waveprotocol.box.server.CoreSettings;
 
 /**
  * Test case for ClientRpcChannelImpl and ServerRpcProvider.
@@ -76,6 +79,8 @@ public class RpcTest extends TestCase {
       @Override
       protected void configure() {
         bind(ServerRpcProvider.class).toInstance(server);
+        bind(Key.get(Integer.class, Names.named(CoreSettings.WEBSOCKET_MAX_IDLE_TIME))).toInstance(0);
+        bind(Key.get(Integer.class, Names.named(CoreSettings.WEBSOCKET_MAX_MESSAGE_SIZE))).toInstance(2);
       }
     });
     server.startWebSocketServer(injector);

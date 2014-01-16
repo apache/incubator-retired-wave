@@ -19,12 +19,13 @@
 
 package org.waveprotocol.box.server.waveserver;
 
-import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Iterators;
-import com.google.common.collect.MapMaker;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import org.waveprotocol.box.server.persistence.PersistenceException;
@@ -34,7 +35,7 @@ import org.waveprotocol.wave.model.id.WaveletName;
 import org.waveprotocol.wave.util.logging.Log;
 
 import java.util.Iterator;
-import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ExecutionException;
 
 /**
  * The wavelets in a wave.
@@ -44,7 +45,7 @@ import java.util.concurrent.ConcurrentMap;
 final class Wave implements Iterable<WaveletContainer> {
   private static final Log LOG = Log.get(Wave.class);
 
-  private class WaveletCreator<T extends WaveletContainer> implements Function<WaveletId, T> {
+  private class WaveletCreator<T extends WaveletContainer> extends CacheLoader<WaveletId, T> {
     private final WaveletContainer.Factory<T> factory;
 
     private final String waveDomain;
@@ -55,7 +56,7 @@ final class Wave implements Iterable<WaveletContainer> {
     }
 
     @Override
-    public T apply(WaveletId waveletId) {
+    public T load(WaveletId waveletId) {
       return factory.create(notifiee, WaveletName.of(waveId, waveletId), waveDomain);
     }
   }
@@ -63,8 +64,8 @@ final class Wave implements Iterable<WaveletContainer> {
   private final WaveId waveId;
   /** Future providing already-existing wavelets in storage. */
   private final ListenableFuture<ImmutableSet<WaveletId>> lookedupWavelets;
-  private final ConcurrentMap<WaveletId, LocalWaveletContainer> localWavelets;
-  private final ConcurrentMap<WaveletId, RemoteWaveletContainer> remoteWavelets;
+  private final LoadingCache<WaveletId, LocalWaveletContainer> localWavelets;
+  private final LoadingCache<WaveletId, RemoteWaveletContainer> remoteWavelets;
   private final WaveletNotificationSubscriber notifiee;
 
   /**
@@ -79,16 +80,17 @@ final class Wave implements Iterable<WaveletContainer> {
     this.waveId = waveId;
     this.lookedupWavelets = lookedupWavelets;
     this.notifiee = notifiee;
-    this.localWavelets = new MapMaker().makeComputingMap(
+
+    this.localWavelets = CacheBuilder.newBuilder().build(
         new WaveletCreator<LocalWaveletContainer>(localFactory, waveDomain));
-    this.remoteWavelets = new MapMaker().makeComputingMap(
+    this.remoteWavelets = CacheBuilder.newBuilder().build(
         new WaveletCreator<RemoteWaveletContainer>(remoteFactory, waveDomain));
   }
 
   @Override
   public Iterator<WaveletContainer> iterator() {
     return Iterators.unmodifiableIterator(
-        Iterables.concat(localWavelets.values(), remoteWavelets.values()).iterator());
+        Iterables.concat(localWavelets.asMap().values(), remoteWavelets.asMap().values()).iterator());
   }
 
   LocalWaveletContainer getLocalWavelet(WaveletId waveletId)
@@ -102,15 +104,23 @@ final class Wave implements Iterable<WaveletContainer> {
   }
 
   LocalWaveletContainer getOrCreateLocalWavelet(WaveletId waveletId) {
-    return localWavelets.get(waveletId);
+    try {
+      return localWavelets.get(waveletId);
+    } catch (ExecutionException ex) {
+      throw new RuntimeException(ex);
+    }
   }
 
   RemoteWaveletContainer getOrCreateRemoteWavelet(WaveletId waveletId) {
-    return remoteWavelets.get(waveletId);
+    try {
+      return remoteWavelets.get(waveletId);
+    } catch (ExecutionException ex) {
+      throw new RuntimeException(ex);
+    }
   }
 
   private <T extends WaveletContainer> T getWavelet(WaveletId waveletId,
-      ConcurrentMap<WaveletId, T> waveletsMap) throws WaveletStateException {
+      LoadingCache<WaveletId, T> waveletsMap) throws WaveletStateException {
     ImmutableSet<WaveletId> storedWavelets;
     try {
       storedWavelets =
@@ -129,21 +139,26 @@ final class Wave implements Iterable<WaveletContainer> {
         if(storedWavelets.contains(waveletId)) {
           LOG.fine("Wavelet is in storedWavelets");
         }
-        if(waveletsMap.containsKey(waveletId)) {
+        if(waveletsMap.getIfPresent(waveletId) != null) {
           LOG.fine("Wavelet is in wavletsMap");
         }
       }
     }
 
-    // Since waveletsMap is a computing map, we must call containsKey(waveletId)
+    // Since waveletsMap is a computing map, we must call getIfPresent(waveletId)
     // to tell if waveletId is mapped, we cannot test if get(waveletId) returns null.
     if (storedWavelets != null && !storedWavelets.contains(waveletId)
-        && !waveletsMap.containsKey(waveletId)) {
+        && waveletsMap.getIfPresent(waveletId) == null) {
       return null;
     } else {
-      T wavelet = waveletsMap.get(waveletId);
-      Preconditions.checkNotNull(wavelet, "computingMap returned null");
-      return wavelet;
+      try {
+        T wavelet = waveletsMap.get(waveletId);
+        return wavelet;
+      } catch (CacheLoader.InvalidCacheLoadException ex) {
+        return null;
+      } catch (ExecutionException ex) {
+        throw new RuntimeException(ex);
+      }
     }
   }
 

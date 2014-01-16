@@ -19,8 +19,9 @@
 
 package org.waveprotocol.wave.federation.xmpp;
 
-import com.google.common.base.Function;
-import com.google.common.collect.MapMaker;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.google.protobuf.ByteString;
@@ -42,7 +43,7 @@ import org.waveprotocol.wave.model.id.URIEncoderDecoder.EncodingException;
 import org.xmpp.packet.IQ;
 
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
 
 /**
@@ -63,14 +64,13 @@ public class XmppFederationHost implements WaveletFederationListener.Factory {
   // A map of update listeners. There is one per remote domain we are sending updates to.
   // The name 'listener' refers to them listening for updates from the waveserver to send to the
   // network.
-  private final Map<String, WaveletFederationListener> listeners =
-      new MapMaker().softValues().makeComputingMap(
-          new Function<String, WaveletFederationListener>() {
-            @Override
-            public WaveletFederationListener apply(String domain) {
-              return new XmppFederationHostForDomain(domain, manager, disco, jid);
-            }
-          });
+  private final LoadingCache<String, WaveletFederationListener> listeners =
+      CacheBuilder.newBuilder().build(new CacheLoader<String, WaveletFederationListener>() {
+    @Override
+    public WaveletFederationListener load(String domain) {
+      return new XmppFederationHostForDomain(domain, manager, disco, jid);
+    }
+  });
 
   /**
    * Constructor. Note that {@link #setManager} must be called before this class
@@ -442,8 +442,12 @@ public class XmppFederationHost implements WaveletFederationListener.Factory {
 
   @Override
   public WaveletFederationListener listenerForDomain(String domain) {
-    // TODO(thorogood): Kick off disco here instead of inside
-    // XmppFederationHostForDomain.
-    return listeners.get(domain);
+    try {
+      // TODO(thorogood): Kick off disco here instead of inside
+      // XmppFederationHostForDomain.
+      return listeners.get(domain);
+    } catch (ExecutionException ex) {
+      throw new RuntimeException(ex);
+    }
   }
 }

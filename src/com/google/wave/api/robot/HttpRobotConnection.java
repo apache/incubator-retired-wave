@@ -21,6 +21,7 @@ package com.google.wave.api.robot;
 
 import com.google.common.base.Charsets;
 import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.JdkFutureAdapters;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import org.apache.commons.httpclient.HttpClient;
@@ -65,7 +66,7 @@ public class HttpRobotConnection implements RobotConnection {
 
   @Override
   public ListenableFuture<String> asyncGet(final String url) {
-    return Futures.makeListenable(executor.submit(new Callable<String>() {
+    return JdkFutureAdapters.listenInPoolThread(executor.submit(new Callable<String>() {
       @Override
       public String call() throws RobotConnectionException {
         return get(url);
@@ -88,7 +89,7 @@ public class HttpRobotConnection implements RobotConnection {
 
   @Override
   public ListenableFuture<String> asyncPostJson(final String url, final String body) {
-    return Futures.makeListenable(executor.submit(new Callable<String>() {
+    return JdkFutureAdapters.listenInPoolThread(executor.submit(new Callable<String>() {
       @Override
       public String call() throws RobotConnectionException {
         return postJson(url, body);

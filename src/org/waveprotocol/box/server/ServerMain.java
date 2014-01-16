@@ -30,8 +30,6 @@ import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 
 import org.apache.commons.configuration.ConfigurationException;
-import org.eclipse.jetty.servlets.ProxyServlet;
-import org.waveprotocol.box.common.comms.WaveClientRpc.ProtocolWaveClientRpc;
 import org.waveprotocol.box.server.authentication.AccountStoreHolder;
 import org.waveprotocol.box.server.authentication.SessionManager;
 import org.waveprotocol.box.server.frontend.ClientFrontend;
@@ -93,6 +91,8 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
+import org.eclipse.jetty.proxy.ProxyServlet;
+import org.waveprotocol.box.common.comms.WaveClientRpc.ProtocolWaveClientRpc;
 import org.waveprotocol.box.server.rpc.LocaleServlet;
 
 /**
@@ -118,8 +118,9 @@ public class ServerMain {
         @Named(CoreSettings.GADGET_SERVER_PORT) int gadgetServerPort){
 
       LOG.info("Starting GadgetProxyServlet for " + gadgetServerHostname + ":" + gadgetServerPort);
-      proxyServlet = new ProxyServlet.Transparent("/gadgets", "http", gadgetServerHostname,
-          gadgetServerPort,"/gadgets");
+      proxyServlet = new ProxyServlet.Transparent(
+          "http://" + gadgetServerHostname + ":" + gadgetServerPort + "/gadgets",
+          "/gadgets");      
     }
 
     @Override

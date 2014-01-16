@@ -22,22 +22,26 @@ package org.waveprotocol.wave.federation.xmpp;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.MapMaker;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
-import org.dom4j.Element;
-import org.waveprotocol.wave.federation.FederationErrors;
-import org.waveprotocol.wave.federation.FederationSettings;
-import org.waveprotocol.wave.federation.FederationErrorProto.FederationError;
-import org.xmpp.packet.IQ;
-
 import java.util.Map;
-import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.dom4j.Element;
+import org.xmpp.packet.IQ;
+
+import org.waveprotocol.wave.federation.FederationErrorProto.FederationError;
+import org.waveprotocol.wave.federation.FederationErrors;
+import org.waveprotocol.wave.federation.FederationSettings;
 
 /**
  * Implementation of XMPP Discovery. Provides public methods to respond to incoming disco requests
@@ -55,16 +59,15 @@ public class XmppDisco {
   static final String DISCO_INFO_TYPE = "google-wave";
 
   // This tracks the number of disco attempts started.
-  public static final Map<String, AtomicLong> statDiscoStarted =
-      new MapMaker().makeComputingMap(
-          new Function<String, AtomicLong>() {
+  public static final LoadingCache<String, AtomicLong> statDiscoStarted =
+      CacheBuilder.newBuilder().build(new CacheLoader<String, AtomicLong>() {
             @Override
-            public AtomicLong apply(String domain) {
+            public AtomicLong load(String domain) {
               return new AtomicLong();
             }
           });
 
-  private final ConcurrentMap<String, RemoteDisco> discoRequests;
+  private final LoadingCache<String, RemoteDisco> discoRequests;
   private final String serverDescription;
 
   private XmppManager manager = null;
@@ -89,14 +92,16 @@ public class XmppDisco {
     this.successExpirySecs = successExpirySecs;
 
     discoRequests =
-        new MapMaker().expireAfterWrite(DISCO_EXPIRATION_HOURS, TimeUnit.HOURS).makeComputingMap(
-            new Function<String, RemoteDisco>() {
-              @Override
-              public RemoteDisco apply(String domain) {
-                statDiscoStarted.get(domain).incrementAndGet();
-                return new RemoteDisco(manager, domain, failExpirySecs, successExpirySecs);
-              }
-            });
+        CacheBuilder.newBuilder().expireAfterWrite(
+        DISCO_EXPIRATION_HOURS, TimeUnit.HOURS).build(
+        new CacheLoader<String, RemoteDisco>() {
+
+          @Override
+          public RemoteDisco load(String domain) throws Exception {
+            statDiscoStarted.get(domain).incrementAndGet();
+            return new RemoteDisco(manager, domain, failExpirySecs, successExpirySecs);
+          }
+        });
   }
 
   /**
@@ -152,18 +157,23 @@ public class XmppDisco {
    */
   public void discoverRemoteJid(String remoteDomain, SuccessFailCallback<String, String> callback) {
     Preconditions.checkNotNull("Must call setManager first", manager);
-    if (discoRequests.containsKey(remoteDomain)) {
+    RemoteDisco disco = discoRequests.getIfPresent(remoteDomain);
+    if (disco != null) {
       // This is a race condition, but we don't care if we lose it, because the ttl timestamp
       // won't be exceeded in that case.
-      if (discoRequests.get(remoteDomain).ttlExceeded()) {
+      if (disco.ttlExceeded()) {
         if (LOG.isLoggable(Level.FINE)) {
           LOG.info("discoverRemoteJid for " + remoteDomain + ": result ttl exceeded.");
         }
         // TODO(arb): should we expose the disco cache somehow for debugging?
-        discoRequests.remove(remoteDomain);
+        discoRequests.invalidate(remoteDomain);
       }
     }
-    discoRequests.get(remoteDomain).discoverRemoteJID(callback);
+    try {
+      discoRequests.get(remoteDomain).discoverRemoteJID(callback);
+    } catch (ExecutionException ex) {
+      throw new RuntimeException(ex);
+    }
   }
 
   /**
@@ -180,8 +190,9 @@ public class XmppDisco {
     if (jid == null) {
       error = FederationErrors.badRequest("Fake injected error");
     }
-    Preconditions.checkState(
-        discoRequests.putIfAbsent(domain, new RemoteDisco(domain, jid, error)) == null);
+    RemoteDisco disco = discoRequests.getIfPresent(domain);
+    Preconditions.checkState(disco == null);
+    discoRequests.put(domain, new RemoteDisco(domain, jid, error));
   }
 
   /**
@@ -191,8 +202,9 @@ public class XmppDisco {
    * @return true/false
    */
   @VisibleForTesting
-  boolean isDiscoRequestPending(String domain) {
-    return discoRequests.containsKey(domain) && discoRequests.get(domain).isRequestPending();
+  boolean isDiscoRequestPending(String domain) throws ExecutionException {
+    RemoteDisco disco = discoRequests.getIfPresent(domain);
+    return disco != null && disco.isRequestPending();
   }
 
   /**
@@ -204,7 +216,6 @@ public class XmppDisco {
    */
   @VisibleForTesting
   boolean isDiscoRequestAvailable(String domain) {
-    return discoRequests.containsKey(domain);
+    return discoRequests.getIfPresent(domain) != null;
   }
-
 }

@@ -22,7 +22,7 @@ package org.waveprotocol.box.server.robots.dataapi;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
-import com.google.common.collect.MapMaker;
+import com.google.common.cache.CacheBuilder;
 import com.google.gxp.base.GxpContext;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -104,7 +104,10 @@ public class DataApiOAuthServlet extends HttpServlet {
     this.tokenContainer = tokenContainer;
     this.sessionManager = sessionManager;
     this.tokenGenerator = tokenGenerator;
-    this.xsrfTokens = new MapMaker().expireAfterWrite(XSRF_TOKEN_TIMEOUT_HOURS, TimeUnit.HOURS).makeMap();
+    this.xsrfTokens =
+        CacheBuilder.newBuilder()
+          .expireAfterWrite(XSRF_TOKEN_TIMEOUT_HOURS, TimeUnit.HOURS)
+          .<ParticipantId, String>build().asMap();
   }
 
   @Override

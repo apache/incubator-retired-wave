@@ -24,7 +24,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
-import org.eclipse.jetty.util.log.Log;
 import org.waveprotocol.box.common.ExceptionalIterator;
 import org.waveprotocol.box.server.CoreSettings;
 import org.waveprotocol.box.server.persistence.PersistenceException;
@@ -33,6 +32,7 @@ import org.waveprotocol.wave.model.id.WaveId;
 import org.waveprotocol.wave.model.id.WaveletId;
 import org.waveprotocol.wave.model.id.WaveletName;
 import org.waveprotocol.wave.model.version.HashedVersion;
+import org.waveprotocol.wave.util.logging.Log;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -54,6 +54,7 @@ import java.util.NoSuchElementException;
  * @author josephg@gmail.com (Joseph Gentle)
  */
 public class FileDeltaStore implements DeltaStore {
+  private static final Log LOG = Log.get(FileDeltaStore.class);
   /**
    * The directory in which the wavelets are stored
    */
@@ -108,7 +109,7 @@ public class FileDeltaStore implements DeltaStore {
       try {
         deltas.close();
       } catch (IOException e) {
-        Log.info("Failed to close deltas file " + name, e);
+        LOG.info("Failed to close deltas file " + name, e);
       }
     }
 

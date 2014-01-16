@@ -19,11 +19,12 @@
 
 package org.waveprotocol.box.server.frontend;
 
-import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import com.google.common.collect.MapMaker;
 import com.google.common.collect.Sets;
 
 import org.waveprotocol.box.common.DeltaSequence;
@@ -37,7 +38,9 @@ import org.waveprotocol.wave.util.logging.Log;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * A client's subscription to a wave view.
@@ -75,13 +78,13 @@ final class WaveViewSubscription {
   private final IdFilter waveletIdFilter;
   private final ClientFrontend.OpenListener openListener;
   private final String channelId;
-  private final ConcurrentMap<WaveletId, WaveletChannelState> channels =
-      new MapMaker().makeComputingMap(new Function<WaveletId, WaveletChannelState>() {
-        @Override
-        public WaveletChannelState apply(WaveletId id) {
-          return new WaveletChannelState();
-        }
-      });
+  private final LoadingCache<WaveletId, WaveletChannelState> channels =
+      CacheBuilder.newBuilder().build(new CacheLoader<WaveletId, WaveletChannelState>() {
+    @Override
+    public WaveletChannelState load(WaveletId id) {
+      return new WaveletChannelState();
+    }
+  });
 
   public WaveViewSubscription(WaveId waveId, IdFilter waveletIdFilter, String channelId,
       ClientFrontend.OpenListener openListener) {
@@ -118,7 +121,12 @@ final class WaveViewSubscription {
   /** This client sent a submit request */
   public synchronized void submitRequest(WaveletName waveletName) {
     // A given client can only have one outstanding submit per wavelet.
-    WaveletChannelState state = channels.get(waveletName.waveletId);
+    WaveletChannelState state;
+    try {
+      state = channels.get(waveletName.waveletId);
+    } catch (ExecutionException ex) {
+      throw new RuntimeException(ex);
+    }
     Preconditions.checkState(!state.hasOutstandingSubmit,
         "Received overlapping submit requests to subscription %s", this);
     LOG.info("Submit oustandinding on channel " + channelId);
@@ -132,7 +140,12 @@ final class WaveViewSubscription {
   public synchronized void submitResponse(WaveletName waveletName, HashedVersion version) {
     Preconditions.checkNotNull(version, "Null delta application version");
     WaveletId waveletId = waveletName.waveletId;
-    WaveletChannelState state = channels.get(waveletId);
+    WaveletChannelState state;
+    try {
+      state = channels.get(waveletId);
+    } catch (ExecutionException ex) {
+      throw new RuntimeException(ex);
+    }
     Preconditions.checkState(state.hasOutstandingSubmit);
     state.submittedEndVersions.add(version.getVersion());
     state.hasOutstandingSubmit = false;
@@ -155,7 +168,12 @@ final class WaveViewSubscription {
    */
   public synchronized void onUpdate(WaveletName waveletName, DeltaSequence deltas) {
     Preconditions.checkArgument(!deltas.isEmpty());
-    WaveletChannelState state = channels.get(waveletName.waveletId);
+    WaveletChannelState state;
+    try {
+      state = channels.get(waveletName.waveletId);
+    } catch (ExecutionException ex) {
+      throw new RuntimeException(ex);
+    }
     checkUpdateVersion(waveletName, deltas, state);
     state.lastVersion = deltas.getEndVersion();
     if (state.hasOutstandingSubmit) {
