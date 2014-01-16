@@ -430,18 +430,7 @@ public class ServerRpcProvider {
 
     // Servlet where the socketio connection is served from.
     // TODO(akaplanov): add servlet when https://github.com/vjrj/Socket.IO-Java will updated to Jetty v9.
-    // Issue https://issues.apache.org/jira/browse/WAVE-405.
-    //   ServletHolder sioholder = addServlet("/socket.io/*", WaveSocketIOServlet.class );
-    //   // TODO(zamfi): fix to let messages span frames.
-    //   sioholder.setInitParameter("bufferSize", "" + BUFFER_SIZE);
-    // sioholder.setInitParameter(FlashSocketTransport.PARAM_FLASHPOLICY_SERVER_HOST,
-    //     flashPolicyServerHost);
-    // sioholder.setInitParameter(FlashSocketTransport.PARAM_FLASHPOLICY_SERVER_PORT,
-    //     ""+flashsocketPolicyPort);
-    // // TODO: Change to use the public http address and all other bound addresses.
-    // sioholder.setInitParameter(FlashSocketTransport.PARAM_FLASHPOLICY_DOMAIN, "*");
-    // sioholder.setInitParameter(FlashSocketTransport.PARAM_FLASHPOLICY_PORTS,
-    //     flashPolicyAllowedPorts.toString());
+    // https://issues.apache.org/jira/browse/WAVE-405
 
     /*
      * Loop through addresses, collect list of ports, and determine if we are to use "localhost"
@@ -587,7 +576,7 @@ public class ServerRpcProvider {
       if (websocketMaxIdleTime != 0) {
         factory.getPolicy().setIdleTimeout(websocketMaxIdleTime);
       }
-      factory.getPolicy().setMaxTextMessageSize(websocketMaxMessageSize*1024*1024);
+      factory.getPolicy().setMaxTextMessageSize(websocketMaxMessageSize * 1024 * 1024);
       factory.setCreator(new WebSocketCreator() {
         @Override
         public Object createWebSocket(ServletUpgradeRequest req, ServletUpgradeResponse resp) {
