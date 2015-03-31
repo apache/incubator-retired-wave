@@ -1,3 +1,7 @@
+Summary since 0.4.0-RC6
+======================
+- Bug Fixes.
+
 Summary since 0.4.0-RC5
 ======================
 - Added option to use Solr as a search provider - this enables filtering waves by keywords.
@@ -5,7 +9,7 @@ Summary since 0.4.0-RC5
 
 Summary since 0.4.0-RC4
 =====================
-- Added MongoDB based deltas store and migration tool for deltas migration from file to mongob based store. 
+- Added MongoDB based deltas store and migration tool for deltas migration from file to mongob based store.
 - Added client/server profiling.
 - Added Atmosphere framework as replacement of Socket.IO.
 - Added alternative - Gmail style initials avatars.
@@ -24,6 +28,59 @@ Summary since 0.4.0-RC3
   been removed to give the codebase a nice clean feel.
 - Many changes to the code licensing have been made, and all third-party
   dependencies are now downloaded.
+commit 33bca8fba301af053cbd5122d9925c264f825773
+Author: vjrj <vjrj@ourproject.org>
+Date:   Sat Mar 14 19:25:17 2015 +0100
+
+    updated to solr 4.9.1 (4.9.0 is not available)
+
+commit da1bdbe3d5c88aa37a2d4027c9df4899ab768f69
+Author: Vicente J. Ruiz Jurado <vjrj@ourproject.org>
+Date:   Sat Dec 13 19:01:27 2014 +0100
+
+    Fix superdev classpath issue with jetty and Profiling inherits
+
+commit f698cd9a1f783a3d6f30017aa9646d5f80a7c3dc
+Author: Denis Konovalchik <dyukon@gmail.com>
+Date:   Fri Sep 12 19:12:19 2014 +0600
+
+    Text marked as deleted keeps the style properties of the source text.
+
+commit 74a91efe2c2c0878bc9eb786d85058788c473233
+Author: Andrew Kaplanov <akaplanov@gmail.com>
+Date:   Wed Sep 10 23:30:23 2014 +0600
+
+    Fixed checking the running condition of statistic dialog.
+
+commit d886dad25843f3bbecdb09c8b8cc9650bd1df60e
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Aug 30 10:54:31 2014 +0300
+
+    Adds enable_profiling flag to the config template with default value as enabled.
+
+commit 4f986cd9eaeef3f2aa6eab256ed6f6c79e5bf859
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Fri Aug 29 14:53:48 2014 +0300
+
+    Changes version on master to 0.4.0.
+
+commit f16464aa52ca07bfd51002737beb3bfb8fb1aa87
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Thu Aug 28 23:14:39 2014 +0300
+
+    Formats the version number according to Sematic versioning.
+
+commit b9128c4676ecc7d927ff80c3806133410dd77712
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Thu Aug 28 22:30:10 2014 +0300
+
+    Updates my GPG key.
+
+commit 95166fe49c12bad6b9919a72fb821cb01ac30e86
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Thu Aug 28 21:21:05 2014 +0300
+
+    Updates CHANGES for RC6.
 
 commit 7d017eefca414d91d9aff987bd1dbff95aed3a9e
 Author: Yuri Zelikov <yurize@apache.org>
