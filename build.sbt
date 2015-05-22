@@ -31,7 +31,9 @@ unmanagedSourceDirectories in Compile += baseDirectory.value / "gen" / "messages
 
 unmanagedJars in Compile := (baseDirectory.value / "third_party" / "runtime" ** "*.jar").classpath
 
-unmanagedJars in Test := (baseDirectory.value / "third_party" / "test" ** "*.jar").classpath
+unmanagedJars in Compile ++= (baseDirectory.value / "third_party" / "test" ** "*.jar").classpath
+
+//unmanagedJars in Test := (baseDirectory.value / "third_party" / "test" ** "*.jar").classpath
 
 libraryDependencies += "com.google.gwt" % "gwt-user" % "2.7.0"
 
@@ -39,6 +41,14 @@ libraryDependencies += "com.google.gwt" % "gwt-dev" % "2.7.0"
 
 libraryDependencies += "com.google.gwt" % "gwt-codeserver" % "2.7.0"
 
+libraryDependencies += "com.novocode" % "junit-interface" % "0.11" % "test"
 
+mainClass in (Compile, run) := Some("org.waveprotocol.box.server.ServerMain")
 
+mainClass in (Compile, packageBin) := Some("org.waveprotocol.box.server.ServerMain")
 
+javaOptions in run += "-Djava.security.auth.login.config=jaas.config"
+
+javaOptions in run += "-Dorg.eclipse.jetty.LEVEL=DEBUG"
+
+fork in run := true

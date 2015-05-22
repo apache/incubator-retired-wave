@@ -393,29 +393,6 @@
     </uptodate>
   </target>
 
-  <target name="compile-gwt-demo" depends="compile, compile-gwt-dev-dep"
-       description="GWT compile to a 'demo' production JavaScript with remote logging enabled."
-       unless="skip.compile-gwt-dev">
-     <java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler">
-       <classpath>
-         <pathelement location="${src.dir}"/>
-         <pathelement location="${gen.dir}/messages"/>
-         <path refid="libpath"/>
-         <path refid="test.libpath"/>
-       </classpath>
-       <jvmarg value="-Xmx1024M"/>
-       <!-- Human-readable JS. -->
-       <arg line="-style PRETTY"/>
-       <!-- Assertions on. -->
-       <arg line="-ea"/>
-       <arg line="${gwt.args}"/>
-       <arg value="org.waveprotocol.box.webclient.WebClientDemo"/>
-     </java>
-     <!-- Only one GWT compile output is valid at any one time. -->
-     <delete file="${dep}/compile-gwt"/>
-     <touch file="${dep}/compile-gwt-dev"/>
-   </target>
-
   <target name="compile-gwt-dev" depends="compile, compile-gwt-dev-dep"
       description="GWT compile of a restricted set of permutations suitable for development."
       unless="skip.compile-gwt-dev">
