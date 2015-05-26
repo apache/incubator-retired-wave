@@ -947,9 +947,9 @@
   <target name="get-third-party-codegen" description="Download code generating third party dependencies">
     <get dest="${lib.codegen}" usetimestamp="true" skipexisting="true">
       <url url="http://www.antlr3.org/download/antlr-3.2.jar" />
-      <url url="http://central.maven.org/maven2/com/google/gwt/gwt-dev/2.6.1/gwt-dev-2.6.1.jar" />
-      <url url="http://central.maven.org/maven2/com/google/gwt/gwt-user/2.6.1/gwt-user-2.6.1.jar" />
-      <url url="http://central.maven.org/maven2/com/google/gwt/gwt-codeserver/2.6.1/gwt-codeserver-2.6.1.jar" />
+      <url url="http://central.maven.org/maven2/com/google/gwt/gwt-dev/2.7.0/gwt-dev-2.7.0.jar" />
+      <url url="http://central.maven.org/maven2/com/google/gwt/gwt-user/2.7.0/gwt-user-2.7.0.jar" />
+      <url url="http://central.maven.org/maven2/com/google/gwt/gwt-codeserver/2.7.0/gwt-codeserver-2.7.0.jar" />
       <url url="http://repo1.maven.org/maven2/javax/validation/validation-api/1.1.0.Final/validation-api-1.1.0.Final.jar" />
       <url url="http://repo1.maven.org/maven2/javax/validation/validation-api/1.1.0.Final/validation-api-1.1.0.Final-sources.jar" />
       <url url="https://archive.apache.org/dist/velocity/engine/1.6.3/velocity-1.6.3.jar" />
