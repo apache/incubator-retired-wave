@@ -20,15 +20,11 @@ unmanagedSourceDirectories in Compile += baseDirectory.value / "gen" / "gxp"
 
 unmanagedSourceDirectories in Compile += baseDirectory.value / "gen" / "messages"
 
-unmanagedSourceDirectories in Compile += baseDirectory.value / "gen" / "messages"
-
-
 unmanagedJars in Compile := (baseDirectory.value / "third_party" / "runtime" ** "*.jar").classpath
 
 unmanagedJars in Compile ++= (baseDirectory.value / "third_party" / "test" ** "*.jar").classpath
 
 unmanagedJars in Compile ++= (baseDirectory.value / "third_party" / "codegen" ** "*.jar").classpath
-
 
 libraryDependencies += "com.novocode" % "junit-interface" % "0.11" % "test"
 

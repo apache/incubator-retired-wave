@@ -1015,6 +1015,7 @@
       <url url="https://archive.apache.org/dist/commons/fileupload/source/commons-fileupload-1.2.2-src.zip" />
       <url url="http://central.maven.org/maven2/commons-cli/commons-cli/1.2/commons-cli-1.2.jar" />
       <url url="http://central.maven.org/maven2/commons-codec/commons-codec/1.4/commons-codec-1.4.jar" />
+      <url url="http://central.maven.org/maven2/commons-io/commons-io/2.4/commons-io-2.4.jar" />
       <url url="https://archive.apache.org/dist/commons/codec/source/commons-codec-1.4-src.zip" />
       <url url="http://central.maven.org/maven2/commons-collections/commons-collections/3.2.1/commons-collections-3.2.1.jar" />
       <url url="http://central.maven.org/maven2/commons-configuration/commons-configuration/1.6/commons-configuration-1.6.jar" />
@@ -1053,6 +1054,7 @@
       <url url="http://archiva.comunes.org/repository/comunes-snapshots/cc/kune/gwt-initials-avatars-shared/1.0-SNAPSHOT/gwt-initials-avatars-shared-1.0-20140324.102812-16-sources.jar" />
       <url url="http://archiva.comunes.org/repository/comunes-snapshots/cc/kune/gwt-initials-avatars-server/1.0-SNAPSHOT/gwt-initials-avatars-server-1.0-20140324.102825-10.jar" />
       <url url="http://central.maven.org/maven2/com/typesafe/config/1.2.1/config-1.2.1.jar" />
+      <url url="http://central.maven.org/maven2/xerces/xerces/2.4.0/xerces-2.4.0.jar" />
     </get>
     <get dest="${lib.runtime}/whack_1_0_0.zip" usetimestamp="true" skipexisting="true">
       <url url="http://www.igniterealtime.org/downloadServlet?filename=whack/whack_1_0_0.zip" />

@@ -23,8 +23,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Maps;
 import com.google.common.util.concurrent.SettableFuture;
-import com.google.gwt.thirdparty.guava.common.collect.Maps;
 
 import org.mockito.Mock;
 import org.waveprotocol.wave.model.id.WaveId;

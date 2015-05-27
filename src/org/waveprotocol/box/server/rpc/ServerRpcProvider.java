@@ -44,7 +44,6 @@ import org.atmosphere.util.IOUtils;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
-import org.eclipse.jetty.server.nio.SelectChannelConnector;
 import org.eclipse.jetty.server.session.HashSessionManager;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -482,7 +481,7 @@ public class ServerRpcProvider {
   }
 
   /**
-   * @return a list of {@link SelectChannelConnector} each bound to a host:port
+   * @return a list of {@link Connector} each bound to a host:port
    *         pair form the list addresses.
    */
   private List<Connector> getSelectChannelConnectors(

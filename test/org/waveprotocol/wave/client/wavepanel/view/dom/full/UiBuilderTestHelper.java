@@ -19,14 +19,7 @@
 
 package org.waveprotocol.wave.client.wavepanel.view.dom.full;
 
-import org.waveprotocol.wave.client.wavepanel.view.dom.full.i18n.ReplyBoxMessages;
-import org.waveprotocol.wave.client.wavepanel.view.dom.full.i18n.BlipMessages;
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.fail;
-
 import com.google.gwt.resources.client.CssResource;
-
 import org.apache.xerces.jaxp.DocumentBuilderFactoryImpl;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
@@ -37,11 +30,16 @@ import org.waveprotocol.wave.client.common.safehtml.SafeHtmlBuilder;
 import org.waveprotocol.wave.client.uibuilder.BuilderHelper.Component;
 import org.waveprotocol.wave.client.uibuilder.HtmlClosure;
 import org.waveprotocol.wave.client.uibuilder.UiBuilder;
+import org.waveprotocol.wave.client.wavepanel.view.dom.full.i18n.BlipMessages;
+import org.waveprotocol.wave.client.wavepanel.view.dom.full.i18n.ReplyBoxMessages;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -49,9 +47,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+import static junit.framework.Assert.*;
 
 /**
  * Utility function for testing ui builder implementation.
