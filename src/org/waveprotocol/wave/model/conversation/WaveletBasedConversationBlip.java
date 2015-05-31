@@ -59,7 +59,7 @@ final class WaveletBasedConversationBlip implements ObservableConversationBlip,
   /**
    * Receives events on a conversation blip.
    */
-  interface Listener {
+  public interface Listener {
     /**
      * Notifies this listener that a reply thread has been added to this blip.
      *

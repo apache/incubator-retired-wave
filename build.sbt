@@ -12,7 +12,9 @@ javaSource in Test := baseDirectory.value / "test"
 
 //includeFilter in Test := "*Test"
 
-//excludeFilter in Test :=  "**/*GwtTest" || "**/*LargeTest" || "**/server/persistence/**"
+excludeFilter in Test :=  "*GwtTest*" || "*LargeTest*" || "**/server/persistence/**"
+
+//excludeFilter in (Compile, unmanagedSources)  :=  "*GwtTest*" || "*LargeTest*" || "**/server/persistence/**"
 
 unmanagedSourceDirectories in Compile += baseDirectory.value / "proto_src"
 
@@ -22,7 +24,7 @@ unmanagedSourceDirectories in Compile += baseDirectory.value / "gen" / "messages
 
 unmanagedJars in Compile := (baseDirectory.value / "third_party" / "runtime" ** "*.jar").classpath
 
-unmanagedJars in Compile ++= (baseDirectory.value / "third_party" / "test" ** "*.jar").classpath
+unmanagedJars in Test ++= (baseDirectory.value / "third_party" / "test" ** "*.jar").classpath
 
 unmanagedJars in Compile ++= (baseDirectory.value / "third_party" / "codegen" ** "*.jar").classpath
 
@@ -37,3 +39,5 @@ javaOptions in run += "-Djava.security.auth.login.config=jaas.config"
 javaOptions in run += "-Dorg.eclipse.jetty.LEVEL=DEBUG"
 
 fork in run := true
+
+//parallelExecution in Test := false

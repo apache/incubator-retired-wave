@@ -33,7 +33,7 @@ import com.google.wave.api.data.ApiView;
 import org.waveprotocol.box.server.robots.OperationContext;
 import org.waveprotocol.box.server.robots.OperationContextImpl;
 import org.waveprotocol.box.server.robots.RobotsTestBase;
-import org.waveprotocol.box.server.robots.testing.OperationServiceHelper;
+import org.waveprotocol.box.server.robots.operations.testing.OperationServiceHelper;
 import org.waveprotocol.box.server.robots.util.ConversationUtil;
 import org.waveprotocol.wave.model.conversation.ConversationBlip;
 import org.waveprotocol.wave.model.conversation.ObservableConversation;

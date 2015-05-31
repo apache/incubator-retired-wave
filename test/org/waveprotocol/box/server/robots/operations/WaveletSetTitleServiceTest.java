@@ -26,7 +26,7 @@ import com.google.wave.api.OperationRequest.Parameter;
 import com.google.wave.api.OperationType;
 
 import org.waveprotocol.box.server.robots.RobotsTestBase;
-import org.waveprotocol.box.server.robots.testing.OperationServiceHelper;
+import org.waveprotocol.box.server.robots.operations.testing.OperationServiceHelper;
 import org.waveprotocol.wave.model.conversation.ObservableConversationBlip;
 import org.waveprotocol.wave.model.conversation.TitleHelper;
 import org.waveprotocol.wave.model.document.util.LineContainers;

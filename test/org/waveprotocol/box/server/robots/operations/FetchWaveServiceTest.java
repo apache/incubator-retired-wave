@@ -30,7 +30,7 @@ import com.google.wave.api.OperationType;
 
 import org.waveprotocol.box.server.robots.OperationContextImpl;
 import org.waveprotocol.box.server.robots.RobotsTestBase;
-import org.waveprotocol.box.server.robots.testing.OperationServiceHelper;
+import org.waveprotocol.box.server.robots.operations.testing.OperationServiceHelper;
 import org.waveprotocol.box.server.waveserver.WaveletProvider;
 import org.waveprotocol.wave.model.conversation.ObservableConversation;
 

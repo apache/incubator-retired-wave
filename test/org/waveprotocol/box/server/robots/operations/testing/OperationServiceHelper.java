@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.waveprotocol.box.server.robots.testing;
+package org.waveprotocol.box.server.robots.operations.testing;
 
 import static org.mockito.Mockito.mock;
 

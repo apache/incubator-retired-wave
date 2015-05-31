@@ -39,7 +39,7 @@ import com.google.wave.api.impl.DocumentModifyAction.ModifyHow;
 import com.google.wave.api.impl.DocumentModifyQuery;
 
 import org.waveprotocol.box.server.robots.RobotsTestBase;
-import org.waveprotocol.box.server.robots.testing.OperationServiceHelper;
+import org.waveprotocol.box.server.robots.operations.testing.OperationServiceHelper;
 import org.waveprotocol.wave.model.conversation.ObservableConversationBlip;
 import org.waveprotocol.wave.model.document.Document;
 import org.waveprotocol.wave.model.document.util.LineContainers;
