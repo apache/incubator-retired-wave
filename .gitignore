@@ -34,5 +34,5 @@ war/WEB-INF
 *.iml
 *.eml
 .settings/
-project/
+project/target
 target/

@@ -41,3 +41,15 @@ javaOptions in run += "-Dorg.eclipse.jetty.LEVEL=DEBUG"
 fork in run := true
 
 //parallelExecution in Test := false
+
+//import net.thunderklaus.GwtPlugin._
+
+seq(gwtSettings :_*)
+
+//seq(ScriptedPlugin.scriptedSettings: _*)
+
+libraryDependencies += "org.mortbay.jetty" % "jetty" % "6.1.22" % "container"
+
+gwtVersion := "2.7.0"
+
+gwtModules := List("org.waveprotocol.box.webclient.WebClientProd")

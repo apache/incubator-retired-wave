@@ -98,15 +98,6 @@ public class DataApiOAuthServletTest extends TestCase {
       stringWriter.close();
       closed = true;
     }
-
-    @Override
-    public boolean isReady() {
-      return true;
-    }
-
-    @Override
-    public void setWriteListener(WriteListener wl) {
-    }
   }
 
   private static final String FAKE_TOKEN = "fake_token";
