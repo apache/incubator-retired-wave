@@ -162,7 +162,7 @@
   <target name="dist-pst-dep">
     <uptodate targetfile="${dep}/dist-pst" property="skip.dist-pst">
       <srcfiles dir="${lib.dir}"/>
-      <srcfiles dir="${src.dir}" includes="org/waveprotocol/pst/**/*.java"/>
+      <srcfiles dir="${src.pst.dir}" includes="org/waveprotocol/pst/**/*.java"/>
     </uptodate>
   </target>
 
@@ -170,27 +170,28 @@
       unless="skip.dist-pst" description="Builds the PST tool">
     <delete dir="${build.dir}/pst"/>
     <mkdir dir="${build.dir}/pst"/>
-    <javac srcdir="${src.dir}" destdir="${build.dir}/pst" includes="org/waveprotocol/pst/**/*">
+    <javac srcdir="${src.pst.dir}" destdir="${build.dir}/pst" includes="org/waveprotocol/pst/**/*">
       <classpath>
         <path refid="libpath"/>
         <path location="${build.proto.dir}/"/>
+        <path location="${src.pst.dir}/"/>
       </classpath>
     </javac>
     <copy todir="${build.dir}/pst">
-      <fileset dir="${src.dir}">
+      <fileset dir="${src.pst.dir}">
         <include name="org/waveprotocol/pst/**/*.st"/>
         <include name="org/waveprotocol/pst/**/properties"/>
       </fileset>
     </copy>
-    <jar destfile="${dist.dir}/pst.jar" basedir="${build.dir}/pst"/>
+    <jar destfile="${basedir}/lib/pst.jar" basedir="${build.dir}/pst"/>
     <touch file="${dep}/dist-pst"/>
   </target>
 
   <target name="gen-messages-dep">
     <uptodate targetfile="${dep}/gen-messages" property="skip.gen-messages">
-      <srcfiles dir="${src.dir}" includes="org/waveprotocol/pst/**/*.st"/>
+      <srcfiles dir="${src.pst.dir}" includes="org/waveprotocol/pst/**/*.st"/>
       <srcfiles dir="${lib.dir}"/>
-      <srcfiles dir="${dist.dir}" includes="pst.jar"/>
+      <srcfiles dir="${basedir}/lib/" includes="pst.jar"/>
       <srcfiles dir="${build.proto.dir}"/>
     </uptodate>
   </target>
@@ -594,8 +595,8 @@
 
   <target name="dist-proto" depends="compile-proto" description="Builds the proto jar">
     <jar destfile="${dist.dir}/proto.jar" basedir="${build.proto.dir}"/>
-    <jar destfile="${dist.dir}/proto-src.jar" basedir="${src.proto.dir}"/>
-    <jar destfile="${dist.dir}/proto-msg.jar" basedir="${gen.dir}/messages"/>
+    <jar destfile="/lib/proto-src.jar" basedir="${src.proto.dir}"/>
+    <jar destfile="/lib/proto-msg.jar" basedir="${gen.dir}/messages"/>
   </target>
 
   <target name="dist-libraries" depends="compile, dist-proto, dist-pst" description="Builds the distribution libraries">
