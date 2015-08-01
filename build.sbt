@@ -210,8 +210,119 @@ lazy val wave = (project in file(".")).
     },
     compileMessages := {
       // write function to automate the passing of the class file
+      def runpst(protoClass:String): Unit = {
+        "java -classpath " +
+          "third_party/runtime/annotation-detector-3.0.0.jar:" +
+          "third_party/runtime/aopalliance-1.0.jar:" +
+          "third_party/runtime/atmosphere-guice-0.8.3.jar:" +
+          "third_party/runtime/atmosphere-runtime-2.1.0.jar:" +
+          "third_party/runtime/bcprov-jdk16-1.45.jar:" +
+          "third_party/runtime/commons-cli-1.2.jar:" +
+          "third_party/runtime/commons-codec-1.4.jar:" +
+          "third_party/runtime/commons-collections-3.2.1.jar:" +
+          "third_party/runtime/commons-configuration-1.6.jar:" +
+          "third_party/runtime/commons-fileupload-1.2.2.jar:" +
+          "third_party/runtime/commons-httpclient-3.1.jar:" +
+          "third_party/runtime/commons-io-2.4.jar:" +
+          "third_party/runtime/commons-lang-2.5.jar:" +
+          "third_party/runtime/commons-logging-1.1.1-api.jar:" +
+          "third_party/runtime/commons-logging-1.1.1.jar:" +
+          "third_party/runtime/config-1.2.1.jar:" +
+          "third_party/runtime/dom4j-1.6.1.jar:" +
+          "third_party/runtime/google-gxp-0.2.4-beta.jar:" +
+          "third_party/runtime/gson-2.2.4.jar:" +
+          "third_party/runtime/guava-15.0.jar:" +
+          "third_party/runtime/guava-gwt-15.0.jar:" +
+          "third_party/runtime/guice-3.0.jar:" +
+          "third_party/runtime/guice-assistedinject-3.0.jar:" +
+          "third_party/runtime/guice-servlet-3.0.jar:" +
+          "third_party/runtime/gwt-initials-avatars-server-1.0-20140324.102825-10.jar:" +
+          "third_party/runtime/gwt-initials-avatars-shared-1.0-20140324.102812-16-sources.jar:" +
+          "third_party/runtime/gwt-initials-avatars-shared-1.0-20140324.102812-16.jar:" +
+          "third_party/runtime/javax.inject-1.jar:" +
+          "third_party/runtime/jdo2-api-2.2.jar:" +
+          "third_party/runtime/jdom-1.1.3.jar:" +
+          "third_party/runtime/jetty-annotations-9.1.1.v20140108.jar:" +
+          "third_party/runtime/jetty-client-9.1.1.v20140108.jar:" +
+          "third_party/runtime/jetty-continuation-9.1.1.v20140108.jar:" +
+          "third_party/runtime/jetty-http-9.1.1.v20140108.jar:" +
+          "third_party/runtime/jetty-io-9.1.1.v20140108.jar:" +
+          "third_party/runtime/jetty-proxy-9.1.1.v20140108.jar:" +
+          "third_party/runtime/jetty-security-9.1.1.v20140108.jar:" +
+          "third_party/runtime/jetty-server-9.1.1.v20140108.jar:" +
+          "third_party/runtime/jetty-servlet-9.1.1.v20140108.jar:" +
+          "third_party/runtime/jetty-servlets-9.1.1.v20140108.jar:" +
+          "third_party/runtime/jetty-util-9.1.1.v20140108.jar:" +
+          "third_party/runtime/jetty-webapp-9.1.1.v20140108.jar:" +
+          "third_party/runtime/jetty-xml-9.1.1.v20140108.jar:" +
+          "third_party/runtime/jline-0.9.94.jar:" +
+          "third_party/runtime/joda-time-1.6.jar:" +
+          "third_party/runtime/jsr305-2.0.1.jar:" +
+          "third_party/runtime/libidn-1.15.jar:" +
+          "third_party/runtime/lucene-core-3.5.0.jar:" +
+          "third_party/runtime/mongo-java-driver-2.11.2.jar:" +
+          "third_party/runtime/oauth-20100527.jar:" +
+          "third_party/runtime/oauth-consumer-20100527.jar:" +
+          "third_party/runtime/oauth-provider-20100527-sources.jar:" +
+          "third_party/runtime/oauth-provider-20100527.jar:" +
+          "third_party/runtime/protobuf-format-java-1.1.jar:" +
+          "third_party/runtime/protobuf-java-2.5.0.jar:" +
+          "third_party/runtime/servlet-api-3.1.jar:" +
+          "third_party/runtime/slf4j-api-1.6.1.jar:" +
+          "third_party/runtime/slf4j-simple-1.6.1.jar:" +
+          "third_party/runtime/tinder-1.2.1.jar:" +
+          "third_party/runtime/websocket-api-9.1.1.v20140108.jar:" +
+          "third_party/runtime/websocket-client-9.1.1.v20140108.jar:" +
+          "third_party/runtime/websocket-common-9.1.1.v20140108.jar:" +
+          "third_party/runtime/websocket-server-9.1.1.v20140108.jar:" +
+          "third_party/runtime/websocket-servlet-9.1.1.v20140108.jar:" +
+          "third_party/runtime/whack.jar:" +
+          "third_party/runtime/xerces-2.4.0.jar:" +
+          "third_party/runtime/xpp3-1.1.4c.jar:" +
+          "third_party/runtime/xpp3_xpath-1.1.4c.jar:" +
+          "third_party/codegen/antlr-3.2.jar:" +
+          "third_party/codegen/gwt-codeserver-2.6.1.jar:" +
+          "third_party/codegen/gwt-dev-2.6.1.jar:" +
+          "third_party/codegen/gwt-user-2.6.1.jar:" +
+          "third_party/codegen/validation-api-1.1.0.Final-sources.jar:" +
+          "third_party/codegen/validation-api-1.1.0.Final.jar:" +
+          "third_party/codegen/velocity-1.6.3-dep.jar:" +
+          "third_party/codegen/velocity-1.6.3.jar:" +
+          "third_party/test/ant-junit-1.7.0.jar:" +
+          "third_party/test/asm-3.2.jar:" +
+          "third_party/test/cglib-2.2.jar:" +
+          "third_party/test/emma-2.0.5312.jar:" +
+          "third_party/test/emma_ant-2.1.5320.jar:" +
+          "third_party/test/hamcrest-all-1.2.jar:" +
+          "third_party/test/jmock-2.6.0.jar:" +
+          "third_party/test/jmock-junit3-2.6.0.jar:" +
+          "third_party/test/junit-4.10.jar:" +
+          "third_party/test/mockito-all-1.9.5.jar:" +
+          "lib/pst.jar:" +
+          "build/proto " +
+          "org.waveprotocol.pst.PstMain " +
+          "-s pst -d gen/messages -f " + protoClass +
+          " src/pst/java/org/waveprotocol/pst/templates/api/api.st " +
+          "src/pst/java/org/waveprotocol/pst/templates/builder/builder.st " +
+          "src/pst/java/org/waveprotocol/pst/templates/pojo/pojo.st " +
+          "src/pst/java/org/waveprotocol/pst/templates/jso/jso.st " +
+          "src/pst/java/org/waveprotocol/pst/templates/util/util.st " +
+          "src/pst/java/org/waveprotocol/pst/templates/gson/gson.st " +
+          "src/pst/java/org/waveprotocol/pst/templates/proto/proto.st" !
+      }
       // create list of class file's
+      val protoClasses = Array(
+        "/org/waveprotocol/box/common/comms/WaveClientRpc.class",
+        "/org/waveprotocol/box/search/SearchProto.class",
+        "/org/waveprotocol/box/profile/ProfilesProto.class",
+        "/org/waveprotocol/box/server/rpc/Rpc.class",
+        "/org/waveprotocol/box/attachment/AttachmentProto.class",
+        "/org/waveprotocol/wave/federation/Proto.class",
+        "/org/waveprotocol/wave/concurrencycontrol/ClientServer.class",
+        "/org/waveprotocol/wave/diff/Diff.class"
+      )
       // loop through and process them
+      protoClasses.foreach(runpst)
     }
   )
 
