@@ -24,13 +24,13 @@
     <attribute name="proto" description="Protocol buffer class file"/>
     <sequential>
       <runpst proto="@{proto}"
-        templates='"${src.dir}/org/waveprotocol/pst/templates/api/api.st"
-                   "${src.dir}/org/waveprotocol/pst/templates/builder/builder.st"
-                   "${src.dir}/org/waveprotocol/pst/templates/pojo/pojo.st"
-                   "${src.dir}/org/waveprotocol/pst/templates/jso/jso.st"
-                   "${src.dir}/org/waveprotocol/pst/templates/util/util.st"
-                   "${src.dir}/org/waveprotocol/pst/templates/gson/gson.st"
-                   "${src.dir}/org/waveprotocol/pst/templates/proto/proto.st"'
+        templates='"${src.pst.dir}/org/waveprotocol/pst/templates/api/api.st"
+                   "${src.pst.dir}/org/waveprotocol/pst/templates/builder/builder.st"
+                   "${src.pst.dir}/org/waveprotocol/pst/templates/pojo/pojo.st"
+                   "${src.pst.dir}/org/waveprotocol/pst/templates/jso/jso.st"
+                   "${src.pst.dir}/org/waveprotocol/pst/templates/util/util.st"
+                   "${src.pst.dir}/org/waveprotocol/pst/templates/gson/gson.st"
+                   "${src.pst.dir}/org/waveprotocol/pst/templates/proto/proto.st"'
         outputdir="${gen.dir}/messages"/>
     </sequential>
   </macrodef>
@@ -45,7 +45,7 @@
       <java failonerror="true" fork="true" classname="org.waveprotocol.pst.PstMain">
         <classpath>
           <path refid="libpath"/>
-          <path location="${dist.dir}/pst.jar"/>
+          <path location="${basedir}/lib/pst.jar"/>
           <path location="${build.proto.dir}"/>
           <fileset dir="${lib.codegen}">
             <include name="*/*.jar"/>
