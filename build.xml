@@ -1121,11 +1121,11 @@
 
   <target name="get-third-party-solr-dep" depends="init" description="Download Solr third party dependencies.">
     <get dest="${lib.solr}" usetimestamp="true" skipexisting="true">
-      <url url="http://apache.spd.co.il/lucene/solr/4.9.1/solr-4.9.1.zip" />
+      <url url="http://apache.spd.co.il/lucene/solr/4.10.4/solr-4.10.4.zip" />
     </get>
-    <unzip src="${lib.solr}/solr-4.9.1.zip" dest="${lib.solr}">
+    <unzip src="${lib.solr}/solr-4.10.4.zip" dest="${lib.solr}">
       <patternset>
-        <include name="solr-4.9.1/example/"/>
+        <include name="solr-4.10.4/example/"/>
       </patternset>
     </unzip>
   </target>
