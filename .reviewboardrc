@@ -1,0 +1,4 @@
+REVIEWBOARD_URL = "https://reviews.apache.org/"
+REPOSITORY = "git://git.apache.org/incubator-wave.git"
+BRANCH = "master"
+LAND_DEST_BRANCH = "master"

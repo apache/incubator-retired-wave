@@ -1,0 +1,2968 @@
+Summary since 0.4.0-RC5
+======================
+- Added option to use Solr as a search provider - this enables filtering waves by keywords.
+- Bug Fixes.
+
+Summary since 0.4.0-RC4
+=====================
+- Added MongoDB based deltas store and migration tool for deltas migration from file to mongob based store. 
+- Added client/server profiling.
+- Added Atmosphere framework as replacement of Socket.IO.
+- Added alternative - Gmail style initials avatars.
+- Decreased number of permutations in dev compilation and added GWT superdev mode.
+- Upgraded the server to Jetty 9.1.1.
+- Added JDK 7 compatibility.
+
+Summary since 0.4.0-RC3
+=====================
+- Federation between multiple wave servers should now work again without
+  causing shiny's.
+- Translations to German and Chinese have been added to further expand our
+  international support.
+- User Avatars are now rendered by default rather than the user's name.
+- Some unused code (old export codebase, migration, some random helpers) have
+  been removed to give the codebase a nice clean feel.
+- Many changes to the code licensing have been made, and all third-party
+  dependencies are now downloaded.
+
+commit 7d017eefca414d91d9aff987bd1dbff95aed3a9e
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Wed Aug 27 21:23:56 2014 +0300
+
+    Sets project version to 0.4.0.
+
+commit c0b8ad1313fa5e4671da2e99bdea5b68fc98d6da
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Fri Aug 22 10:37:10 2014 +0300
+
+    Adds reference for Atmosphere in LICENSE.bin.
+
+commit eb5821999f6560dd09a5ce1efa4f915077707d93
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Fri Aug 22 10:25:50 2014 +0300
+
+    Removes reference to Socket.IO from LICENSE as we replaced SOCKET.IO with Atmosphere.
+
+commit 9bec8ca08eabf54e07fdf4158de2b2d4a078089e
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Fri Aug 8 11:53:17 2014 +0300
+
+    Adds license missing license header and updates NOTICE/LICENSE files.
+
+commit 7e3895da37d8911e7a833bbb6ac3c3adc4e7c74d
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Thu Aug 28 01:37:47 2014 +0300
+
+    Fixes tests - adds adds null pointer check.
+
+commit ed27695d102e55c924c6c90761fd9e3484905742
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Thu Aug 28 00:40:08 2014 +0300
+
+    Revert "Fixes tests"
+    
+    This reverts commit 45a07689423a32daafa25cd92ecba304f852c38f.
+
+commit 45a07689423a32daafa25cd92ecba304f852c38f
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Thu Aug 28 00:15:29 2014 +0300
+
+    Fixes tests
+
+commit 65653a59e4884f5f8d6d2cbffa07fbb6fdbbc2c6
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Wed Aug 27 20:54:22 2014 +0300
+
+    Re-adds mongodb default values.
+
+commit 3f4a57d3faf36cd44a348941d84be109cf5e7ce7
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Tue Aug 26 00:08:49 2014 +0300
+
+    WAVE-311 Adds profiling to Solr search/update methods.
+
+commit 1f15189683ab26148ec8e89842a27a52af930149
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sun Aug 24 21:54:11 2014 +0300
+
+    Fixes some typos in README.
+
+commit 4374cca22ad57902317ea33be5a7b788f09fb1f4
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sun Aug 24 21:49:44 2014 +0300
+
+    Renames README into README.md
+
+commit 2e86453b8228dbd04a9bd86758ddca2b81e23abc
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sun Aug 24 21:47:35 2014 +0300
+
+    WAVE-311 Updates README with instrctions on installing MongoDB and Solr.
+
+commit d8cc013529a6df858946018b6612b7b0613f293a
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sun Aug 24 21:44:04 2014 +0300
+
+    DEV-311 Adds Solr scripts to the  binary distribution.
+
+commit 17d5a64e48c4c5bce4e225cff8275fda23de1c70
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Fri Aug 22 01:16:10 2014 +0300
+
+    Refactors some Solr related code.
+
+commit 00a98a327f54ecfded31c95dc11179afa9652783
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Fri Aug 22 01:09:33 2014 +0300
+
+    WAVE-311 Updates solr scripts.
+
+commit 731f434e86099dd20957b7c8a85399284e3a9a57
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Thu Aug 21 22:07:44 2014 +0300
+
+    WAVE-311 WAVE-371 Ensures that search providers always include the user data wavelet for genenerating the digest.
+
+commit c180e4fed18c9b5b73e464e010551afc4b020161
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Thu Aug 21 21:34:38 2014 +0300
+
+    WAVE-311 Makes Solr base url and executor configurable.
+
+commit ef9a9a93e6de8c169e0510f454c10ad5828eee1b
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Thu Aug 21 21:29:44 2014 +0300
+
+    WAVE-311 Allows to download the Solr dependency via ant and run with run-solr.sh script.
+
+commit ca645a72322e4aae33c5aae909c956f814d38640
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Fri Aug 8 16:41:44 2014 +0300
+
+    Fixes NPE.
+
+commit 571c30663e802a9b34a66d79abdcb5724bdb19c3
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Apr 26 00:30:32 2014 +0300
+
+    WAVE-311 Refactors the Solr search related classes some more.
+
+commit 2c4a3504d002742ae91b6c5f4794c60aa2dac58f
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Fri Apr 25 23:59:59 2014 +0300
+
+    WAVE-311 Refactored title construction by adding getWavelet method to WaveMap and moving the code into base class.
+
+commit 6c7bc7a0564b01d2dded92ce9ed5d6db40c4515a
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Fri Apr 25 23:27:21 2014 +0300
+
+    WAVE-311 Updates Snippets.collatetextForOps to accept custom function to modify the result on new lines.
+
+commit deb185440a815fe6149a7083cac924d499d46e93
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Tue Apr 15 21:59:14 2014 +0300
+
+    WAVE-311 Refactors some more, ensures Solr search result include user data wavelet.
+
+commit d566b91dffd3554af7295b373458a097ad3555cb
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Tue Apr 15 12:32:08 2014 +0300
+
+    WAVE-311 Refactors some search related code.
+
+commit b45dc71ce2d38a2e542e7294d0ad151107aa9196
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Apr 12 11:58:13 2014 +0300
+
+    WAVE-311 Updates to allow user data wavelets into the Solr index.
+
+commit da20b429ad3356b9b4b610173dca3cc38de03aed
+Author: Frank R <renfeng.cn@gmail.com>
+Date:   Fri Apr 11 19:55:00 2014 +0300
+
+    WAVE-311 Applies full text search with Solr patch by Frank Ren https://reviews.apache.org/r/16322 but without SolrRobot.
+
+commit 20ae1d86c5e61b9cae11ed2340fefb41f732c45b
+Author: Ali Lown <al@apache.org>
+Date:   Mon Aug 25 21:43:49 2014 +0100
+
+    Revert to tinder 1.2.1, as 1.2.2 causes build failures
+
+commit 10db75ac7656fc26135ed8b3323fa55f51b219aa
+Author: Ali Lown <al@apache.org>
+Date:   Mon Aug 25 14:47:08 2014 +0100
+
+    Source Tinder and Whack from maven repositories.
+    
+    These were causing build failures as they could no longer be fetched
+    from my server.
+
+commit 0328b9a8ad5199a316d9d979ba3ddc33927be7c2
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Mon Aug 25 20:53:10 2014 +0300
+
+    Removes obsolete dependency on websocket.jar
+
+commit 0f16803731322f788621715c2bbe8089cff7e6a2
+Author: Antonio Tenorio-Fornés <antoniotenorio@ucm.es>
+Date:   Mon Aug 25 20:30:06 2014 +0300
+
+    Fixes WAVE-269  Gadgets are now inserted in the position of the cursor.
+
+commit 9161196008317a67b71a64ca8286095b38633a69
+Author: Pablo Ojanguren <pablojan@gmail.com>
+Date:   Mon Aug 25 19:40:18 2014 +0300
+
+    Fixes WAVE-416 - Delta signature verification fail with wildcard certificates.
+
+commit 3513be76adf05cde10046c4171c52fceba7a101d
+Author: Pablo Ojanguren <pablojan@gmail.com>
+Date:   Mon Aug 25 19:35:31 2014 +0300
+
+    Adds configuration for MongoDB store types
+
+commit 543c3cbfc6501a0536202d3b15e88f83fcec17f2
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Mon Aug 25 01:23:12 2014 +0300
+
+    Fixes WAVE-413 - Windows Server can only offer connections to localhost.
+
+commit 5b19ee5ea45baf41a1a2cb9cfdcd5b6277dc5b49
+Author: Andrew Kaplanov <akaplanov@gmail.com>
+Date:   Thu Aug 14 00:15:35 2014 +0600
+
+    Fix to https://issues.apache.org/jira/browse/WAVE-415
+
+commit bf6b20092ab98fa1e1c03e674dd8af4a03b41ca8
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Fri Jul 18 09:51:01 2014 +0300
+
+    Renames "rat" ant target into more descriptive "audit-licenses".
+
+commit b091fd479c96159fbd50ae8fadb078946234d5a3
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Fri Jul 18 09:49:43 2014 +0300
+
+    Moves artifact-sign.sh script under "release" folder.
+
+commit 18823c9715e4de99d37fc67f72743f4699746a06
+Author: Ali Lown <ali@lown.me.uk>
+Date:   Fri Jul 18 09:26:46 2014 +0300
+
+    Adds script to sign artifacts.
+
+commit 9433219ff20f4c872402ce3953b65c004a934b03
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Thu Jul 17 23:53:36 2014 +0300
+
+    Adds my gpg public key to KEYS.
+
+commit 117cd487dabdd510a7b45a59471afa5a2d663496
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Thu Jul 17 22:38:35 2014 +0300
+
+    Adds missing licenses accrording to Rat audit tool.
+
+commit a7bb1c782b934612f302680fff623503bbb96aad
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Thu Jul 17 20:31:20 2014 +0300
+
+    Makes changes for rc5.
+
+commit 0858e0c60b42e2cac38aed44d8b16f9e8bcb377a
+Author: Pablo Ojanguren <pablojan@gmail.com>
+Date:   Mon Jun 30 19:34:27 2014 +0300
+
+    Deltas migration tool from file to mongodb store https://reviews.apache.org/r/20371
+
+commit 5abfce6c7059e7abdb17c847687e9c1f6a93b689
+Author: Andrew Kaplanov <akaplanov@gmail.com>
+Date:   Wed Jul 9 21:08:19 2014 +0300
+
+    Improves/refactors profiling code. https://reviews.apache.org/r/23166/
+
+commit b77f7f5e06cba954b85f3deffbdb11885b9aa538
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Jun 28 20:21:17 2014 +0300
+
+    Fixes server.config generation for release-bin.
+
+commit 51e06f2965f73f6e6a245e29996649fe67e49491
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Jun 28 16:36:53 2014 +0300
+
+    Updates release-bin so it will auto generate default server.config and add to distribution.
+
+commit 08c31e3b6b45da071f4e1773e1096e5e88a795f4
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Jun 28 16:24:13 2014 +0300
+
+    Updates release-bin to run without tests and to include server-config.xml.
+
+commit 290fa7ea5ab8a32124325204695f2d57b31f7d5a
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Jun 28 16:23:16 2014 +0300
+
+    Adds .DS_Stire ti .gitignore.
+
+commit 9ea3be1d98595564fd96d43cad52a6fd023089e0
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Jun 28 15:33:24 2014 +0300
+
+    Fixes unstable test in RpcTest.
+
+commit 86fe1bd4eb76f4da64a6d6fe60efc12bb851c3e1
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Jun 28 15:32:31 2014 +0300
+
+    Fixes Eclipse classpath to use GWT 2.6.1 libraries.
+
+commit d8896276557c9387df97f76b2fab4331207017d6
+Author: Andrew Kaplanov <akaplanov@gmail.com>
+Date:   Sat Jun 28 13:27:30 2014 +0300
+
+    Adds Profiling. https://reviews.apache.org/r/22776
+
+commit 47cd2e99fd65c7278622d659b410b4941a8df91a
+Author: vjrj <vjrj@ourproject.org>
+Date:   Thu May 1 13:01:33 2014 +0200
+
+    Removing old dependency with socketio-java
+    
+    https://reviews.apache.org/r/20610/
+
+commit 2f2ec5ca8c203489364f949b7a129bb96adb2bdb
+Author: Vicente J. Ruiz Jurado <vjrj@ourproject.org>
+Date:   Wed Apr 23 16:57:41 2014 +0200
+
+    Added atmosphere to classpath
+
+commit 4c0d78ee8afdf92fc3a8ef6f7454726b790cc445
+Author: Vicente J. Ruiz Jurado <vjrj@ourproject.org>
+Date:   Wed Apr 23 16:14:02 2014 +0200
+
+    Added Atmosphere framework as replacement of Socket.IO by Pablo Ojanguren. Fix for #WAVE-405.
+    
+    https://reviews.apache.org/r/19355/
+
+commit ee6f996ebb5c5b64f019b9cfea93789f09e8cfb2
+Author: vjrj <vjrj@ourproject.org>
+Date:   Thu Apr 10 20:35:32 2014 +0200
+
+    Fix for gadget proxy request URI
+    
+    https://reviews.apache.org/r/20207/
+
+commit 43187a96d6d77e2d4e39e35ccd0bfcad828ae117
+Author: vjrj <vjrj@ourproject.org>
+Date:   Thu Apr 10 20:34:57 2014 +0200
+
+    Fix for missing dependency in dist-server
+    
+    https://reviews.apache.org/r/20209/
+
+commit 5e949d0a1f31b81b22e769f17cf8eb6cde317eb0
+Author: Vicente J. Ruiz Jurado <vjrj@ourproject.org>
+Date:   Tue Apr 1 17:45:40 2014 +0200
+
+    Profile fetcher selection and new initials avatars
+    
+    Review: https://reviews.apache.org/r/19116/
+
+commit 3682cf9146cfc975eeabc77757aeccde5389edcb
+Author: vjrj <vjrj@ourproject.org>
+Date:   Fri Mar 14 00:22:13 2014 +0100
+
+    Add GWT superdev mode for waveharness and editor
+    
+    Review: https://reviews.apache.org/r/18941/
+
+commit 285bee3be5132e946d36ebc11be175165014db95
+Author: vjrj <vjrj@ourproject.org>
+Date:   Tue Mar 11 22:38:16 2014 +0100
+
+    Decrease number of permutations in dev compilation
+    
+    https://reviews.apache.org/r/18908/
+
+commit d1dcdc7dd423f25383d280bc4bfba4aed47821c5
+Author: Yuri Zelikov <vega113@gmail.com>
+Date:   Fri Feb 21 21:30:33 2014 +0200
+
+    Fixes unit tests - adds back libdn.jar + fixes xml schema for test.
+
+commit d5e607397ce21f8740963d32e5967455600d0928
+Author: Pablo Ojanguren <pablojan@gmail.com>
+Date:   Tue Feb 18 22:07:50 2014 +0200
+
+    Added Journaled Write Concern for delta storage operations with MongoDB
+    https://reviews.apache.org/r/17942
+
+commit eced2256e3ec2843c67527e2d8ad7e57c90300e2
+Author: Yuri Zelikov <vega113@gmail.com>
+Date:   Fri Jan 24 21:37:48 2014 +0200
+
+    Removes back the Apache license from .project as it messes up the file.
+
+commit 23230d93965e9ef04d50104cc27bb4342f2301a8
+Author: Andrew Kaplanov <akaplanov@gmail.com>
+Date:   Tue Jan 21 23:59:23 2014 +0200
+
+    Improves settings of Jetty
+    https://reviews.apache.org/r/17143
+
+commit f2493f4352b12e767afba198b916509331148238
+Author: Yuri Zelikov <vega113@gmail.com>
+Date:   Mon Jan 20 20:37:59 2014 +0200
+
+    Removes the non licensed images.
+    https://reviews.apache.org/r/17105/
+
+commit ecf3e5cac03a899d8a881f9941f5e49e5ee33ca5
+Author: Yuri Zelikov <vega113@gmail.com>
+Date:   Sun Jan 19 22:27:16 2014 +0200
+
+    Updates README
+
+commit 0779067fef17f5bd033ad4ceed913e46f8060b9e
+Author: Yuri Zelikov <vega113@gmail.com>
+Date:   Sat Jan 18 23:38:49 2014 +0200
+
+    Updates the get-third-party script to download new jars.
+
+commit 284396a255d252ea3585ee90c1ccb7528e7bf538
+Merge: 0b55067 999be5e
+Author: Yuri Zelikov <vega113@gmail.com>
+Date:   Sat Jan 18 16:06:56 2014 +0200
+
+    Merge branch 'wave-0.4-release' into master
+    
+    Conflicts:
+    	.classpath
+    	.gitignore
+    	.project_template
+    	CHANGES
+    	NOTICE
+    	README
+    	build.properties
+    	build.xml
+    	jaas.config
+    	prosody.cfg.lua.example
+    	proto_src/org/waveprotocol/box/attachment/AttachmentProto.java
+    	proto_src/org/waveprotocol/box/server/persistence/protos/ProtoAccountStoreData.java
+    	run-server.bat
+    	server-config.xml
+    	server.federation.config
+    	src/com/google/gwt/build.xml
+    	src/com/google/gwt/websockets/WebSockets.gwt.xml
+    	src/com/google/wave/api/data/Data.gwt.xml
+    	src/com/google/wave/api/robot/Robot.gwt.xml
+    	src/org/waveprotocol/box/server/frontend/WaveletInfo.java
+    	src/org/waveprotocol/box/server/persistence/protos/delta-store.proto
+    	src/org/waveprotocol/box/server/waveserver/SimpleSearchProviderImpl.java
+    	src/org/waveprotocol/box/server/waveserver/Wave.java
+    	src/org/waveprotocol/box/webclient/search/i18n/SearchPresenterMessages_sl.properties
+    	src/org/waveprotocol/box/webclient/search/i18n/SearchWidgetMessages_sl.properties
+    	src/org/waveprotocol/box/webclient/search/mock/search.html
+    	src/org/waveprotocol/protobuf/build.xml
+    	src/org/waveprotocol/pst/templates/api/properties
+    	src/org/waveprotocol/pst/templates/builder/properties
+    	src/org/waveprotocol/pst/templates/gson/properties
+    	src/org/waveprotocol/pst/templates/jso/properties
+    	src/org/waveprotocol/pst/templates/pojo/properties
+    	src/org/waveprotocol/pst/templates/proto/properties
+    	src/org/waveprotocol/pst/templates/util/properties
+    	src/org/waveprotocol/wave/client/build.xml
+    	src/org/waveprotocol/wave/client/common/build.xml
+    	src/org/waveprotocol/wave/client/scheduler/build.xml
+    	src/org/waveprotocol/wave/client/wavepanel/impl/toolbar/color/ComplexColorPicker.css
+    	src/org/waveprotocol/wave/client/wavepanel/impl/toolbar/color/SimpleColorPicker.css
+    	src/org/waveprotocol/wave/client/wavepanel/impl/toolbar/color/i18n/ColorPickerMessages_en.properties
+    	src/org/waveprotocol/wave/client/wavepanel/impl/toolbar/color/i18n/ColorPickerMessages_es.properties
+    	src/org/waveprotocol/wave/client/wavepanel/impl/toolbar/i18n/LinkerMessages_fr.properties
+    	src/org/waveprotocol/wave/common/build.xml
+    	src/org/waveprotocol/wave/communication/build.xml
+    	src/org/waveprotocol/wave/concurrencycontrol/build.xml
+    	src/org/waveprotocol/wave/crypto/build.xml
+    	src/org/waveprotocol/wave/diff/build.xml
+    	src/org/waveprotocol/wave/federation/build.xml
+    	src/org/waveprotocol/wave/media/build.xml
+    	src/org/waveprotocol/wave/model/build.xml
+    	src/org/waveprotocol/wave/testing/build.xml
+    	src/org/waveprotocol/wave/util/build.xml
+    	src/python/api/__init__.py
+    	src/python/api/appengine_robot_runner.py
+    	src/python/api/blip.py
+    	src/python/api/blip_test.py
+    	src/python/api/commandline_robot_runner.py
+    	src/python/api/commandline_robot_runner_test.py
+    	src/python/api/django_oauth.py
+    	src/python/api/element.py
+    	src/python/api/element_test.py
+    	src/python/api/errors.py
+    	src/python/api/events.py
+    	src/python/api/module_test_runner.py
+    	src/python/api/ops.py
+    	src/python/api/ops_test.py
+    	src/python/api/robot.py
+    	src/python/api/robot_test.py
+    	src/python/api/run_unit_tests.py
+    	src/python/api/search.py
+    	src/python/api/search_test.py
+    	src/python/api/testdata.py
+    	src/python/api/util.py
+    	src/python/api/util_test.py
+    	src/python/api/wavelet.py
+    	src/python/api/wavelet_test.py
+    	src/python/api/waveservice.py
+    	src/python/api/waveservice_test.py
+    	test/org/waveprotocol/wave/concurrencycontrol/Tests.gwt.xml
+    	test/org/waveprotocol/wave/model/experimental/schema/bad1.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/bad10.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/bad11.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/bad12.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/bad13.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/bad14.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/bad15.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/bad16.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/bad17.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/bad18.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/bad19.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/bad2.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/bad20.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/bad21.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/bad22.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/bad23.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/bad24.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/bad3.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/bad4.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/bad5.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/bad6.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/bad7.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/bad8.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/bad9.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/good1.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/good10.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/good11.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/good12.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/good13.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/good14.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/good15.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/good16.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/good2.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/good3.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/good4.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/good5.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/good6.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/good7.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/good8.schema
+    	test/org/waveprotocol/wave/model/experimental/schema/good9.schema
+    	test/org/waveprotocol/wave/model/supplement/tests.gwt.xml
+    	test/org/waveprotocol/wave/model/tests.gwt.xml
+    	third_party/codegen/gwt/README.google
+    	third_party/codegen/gwt/gwt-dev.jar
+    	third_party/codegen/gwt/gwt-user.jar
+    	third_party/runtime/bouncycastle/LICENSE.html
+    	third_party/runtime/gson/LICENSE
+    	third_party/runtime/guava/README.google
+    	third_party/runtime/jetty/README.google
+    	third_party/runtime/libidn/LICENSE
+    	third_party/runtime/libidn/README.google
+    	third_party/runtime/libidn/libidn-1.26.jar
+    	third_party/runtime/mongo-driver/README.google
+    	third_party/runtime/protobuf/README.google
+    	third_party/test/jmock/README.google
+    	third_party/test/mockito/README.google
+    	third_party/test/mockito/mockito-all-1.9.5.jar
+    	tools/eclipse-launch/src.org.waveprotocol.wave.client.editor.examples.img.Img_Example-launch
+    	tools/eclipse-launch/src.org.waveprotocol.wave.client.editor.harness.EditorTest-launch
+    	war/.gitignore
+
+commit 0b550672da3c923fbc6be0a963d2bf54c735b783
+Author: Yuri Zelikov <vega113@gmail.com>
+Date:   Sat Jan 18 12:27:41 2014 +0200
+
+    Cleans up store related classes
+
+commit d9a968691912df974d16d438468fc2e5b12d0da3
+Merge: 0a315ef 053b041
+Author: Yuri Zelikov <vega113@gmail.com>
+Date:   Sat Jan 18 00:15:13 2014 +0200
+
+    Merges pull request https://github.com/apache/incubator-wave/pull/2
+
+commit 053b04130f5cc013e475059ce9220aa034367cdd
+Author: Yuri Zelikov <vega113@gmail.com>
+Date:   Sat Jan 18 00:14:35 2014 +0200
+
+    Updates README for Mongo driver.
+
+commit 0a315ef893d87e2fb9f79b0448680249f504d123
+Author: Yuri Zelikov <vega113@gmail.com>
+Date:   Fri Jan 17 21:59:40 2014 +0200
+
+    Formats/cleans up the mongo related files
+
+commit 98a4e1e921b77da5c481b5f42e28cca4b4bb2257
+Author: Yuri Zelikov <vega113@gmail.com>
+Date:   Fri Jan 17 21:34:53 2014 +0200
+
+    Updates Eclipse classpathx
+
+commit cf5a4e5016f48b07fd18a179dbbea99c9fb04958
+Author: pablojan <pablojan@pablojan@gmail.com>
+Date:   Wed Jan 15 17:33:29 2014 +0100
+
+    Fix WAVE-399 with Diff r2
+
+commit 56a9ccbed2512c597076a3100481dfd2b39de3ce
+Author: Yuri Zelikov <vega113@gmail.com>
+Date:   Fri Jan 17 22:35:38 2014 +0200
+
+    Adds log files to .gitignore
+
+commit 313618a0b1162fdd44d83f1384b966f006fa0158
+Author: Andrew Kaplanov <akaplanov@gmail.com>
+Date:   Fri Jan 17 12:49:28 2014 +0200
+
+    WebSocketChannelImpl sendMessageString() fix
+
+commit 19dcb9630a93317b12e8d41659f728ac3570a223
+Author: Yuri Zelikov <vega113@gmail.com>
+Date:   Thu Jan 16 21:48:38 2014 +0200
+
+    Updates Eclipse classpath to use new jars
+
+commit 011bdc31c794d5cf43b1fd9dd303295654e1d107
+Author: Andrew Kaplanov <akaplanov@gmail.com>
+Date:   Fri Jan 17 00:11:16 2014 +0600
+
+    Minor changes
+
+commit 2e979b6390ca52174e3328b1856050fd48421e2b
+Author: Andrew Kaplanov <akaplanov@gmail.com>
+Date:   Tue Jan 14 00:16:20 2014 +0600
+
+    Jetty 9.1.0 -> 9.1.1
+
+commit d8f460ce3ec865e822bcbfcf49b3aea9fced0293
+Merge: 4d5919e 63bc8ff
+Author: Andrew Kaplanov <akaplanov@gmail.com>
+Date:   Mon Jan 13 00:03:47 2014 +0600
+
+    Merge branch 'master' of https://github.com/jorkey/incubator-wave
+
+commit 63bc8ff5fd5cb34a56c10ad48ea389b421620dbc
+Author: Yuri Zelikov <vega113@gmail.com>
+Date:   Sun Jan 12 17:08:05 2014 +0200
+
+    Refactors SimpleSearchProvider
+    https://reviews.apache.org/r/16694/
+
+commit 4d5919e5fd2f44f611a851a9258d881e6a6b7d13
+Author: Andrew Kaplanov <akaplanov@gmail.com>
+Date:   Thu Jan 9 21:17:21 2014 +0600
+
+    Update of third party libraries
+
+commit 380f36a53613aa9365ff282feb08ed92271c3a04
+Author: Андрей <ak@mac-mini-andrej.dlink>
+Date:   Wed Jan 8 23:58:52 2014 +0600
+
+    Update of third party libraries
+
+commit 7cf0676208f9bc4bfacbb7d488e014e8a3e26fed
+Author: Андрей <ak@mac-mini-andrej.dlink>
+Date:   Mon Jan 6 17:34:26 2014 +0600
+
+    Update of third party libraries
+
+commit 848e8a8a8c9a02ee7eec74b3b0bdae1913edf808
+Author: Андрей <ak@mac-mini-andrej.dlink>
+Date:   Mon Jan 6 17:31:18 2014 +0600
+
+    Update of third party libraries
+
+commit 41841fc385fa4c1e4381af167147ff01e56ab38e
+Author: Андрей <ak@mac-mini-andrej.dlink>
+Date:   Mon Jan 6 16:36:10 2014 +0600
+
+    Update of third party libraries
+
+commit af10e491ed930bb6401314a9997240777e12c5a9
+Author: Андрей <ak@mac-mini-andrej.dlink>
+Date:   Mon Jan 6 16:20:35 2014 +0600
+
+    Update of third party libraries
+
+commit 29667c95ca1145084fb34a302c27b4a3af384858
+Author: Андрей <ak@mac-mini-andrej.dlink>
+Date:   Sun Jan 5 03:30:16 2014 +0600
+
+    Update of third party libraries
+
+commit 9d02cde0d05887944814954df1a2da77ba9c7241
+Merge: 36142ba 8e69335
+Author: Андрей <ak@mac-mini-andrej.dlink>
+Date:   Wed Jan 1 04:22:40 2014 +0600
+
+    Merge branch 'master' of https://git-wip-us.apache.org/repos/asf/incubator-wave
+
+commit 8e693353eaf0e9880dc6c5713c28429ca1011b44
+Author: Yuri Zelikov <vega113@gmail.com>
+Date:   Tue Dec 31 23:51:38 2013 +0200
+
+    Improves support of Java 7. By Andrew Kaplanov.
+    https://reviews.apache.org/r/16548
+
+commit 36142bacf44c2473ebbee2bdda4344248571dccc
+Author: Андрей <ak@mac-mini-andrej.dlink>
+Date:   Wed Jan 1 03:19:33 2014 +0600
+
+    Suppress Java 7 warnings in sources
+
+commit dc6ecc78c2a0bf5fa96501de55f0f6771f58477b
+Author: Yuri Zelikov <vega113@gmail.com>
+Date:   Tue Dec 31 18:16:39 2013 +0200
+
+    Adds JDK 7 compatability. By Andrew Kaplanov
+    https://reviews.apache.org/r/16538
+    Adds updated test related jars + updates Eclipse classpath
+    Removes -Werror flag from build
+
+commit 4490c700d52cb1cc2335e19a3a40edfd3a1ed45c
+Author: Yuri Zelikov <vega113@gmail.com>
+Date:   Sat Dec 21 19:41:57 2013 +0200
+
+    Adds formatter style for Eclipse
+    https://reviews.apache.org/r/16434/
+
+commit 7df7f380f0d9e15d622c9c47e845fda2ed3671b5
+Author: Yuri Zelikov <vega113@gmail.com>
+Date:   Sat Dec 21 19:22:00 2013 +0200
+
+    Adds *.old files to .gitignore
+
+commit 13f4cb2a9ddcd8ff11adccce94a0c1e38bd8755f
+Author: Ali Lown <al@apache.org>
+Date:   Sat Dec 21 15:44:38 2013 +0000
+
+    Move all annotation constants to their own class>
+    
+    https://reviews.apache.org/r/16435/
+
+commit 529f75e8ac0d289cea8882d322748b8373eba413
+Author: Yuri Zelikov <vega113@gmail.com>
+Date:   Sat Dec 21 08:57:03 2013 +0200
+
+    Adds gwt-unitCache and war/WEB-INF to .gitignore.
+
+commit 999be5e21a09b9d36fd399e8e4b6af71f08af58e
+Author: vjrj <vjrj@ourproject.org>
+Date:   Wed Dec 18 13:50:02 2013 +0100
+
+    Thumbnails updated (removed unused, resized, and create new ones for pdf & default)
+
+commit 48c3bc9086ca47716bfcf40bc5dfb178d5ea27a7
+Author: vjrj <vjrj@ourproject.org>
+Date:   Tue Dec 17 19:57:44 2013 +0100
+
+    Added Tango Desktop Project icons (Public Domain) as attachment thumbnails
+
+commit c2f96cf833fb925a9a01b163f53720f7af92c44e
+Author: vjrj <vjrj@ourproject.org>
+Date:   Tue Dec 17 18:53:17 2013 +0100
+
+    Revert "Added icons from the Humanity Icon Theme as thumbnails" because are GPL
+    
+    This reverts commit ed123859b0e5d4f27c0fafde5b4683f2126848f2.
+
+commit ed123859b0e5d4f27c0fafde5b4683f2126848f2
+Author: Vicente J. Ruiz Jurado <vjrj@apache.org>
+Date:   Sun Dec 15 18:58:26 2013 +0000
+
+    Added icons from the Humanity Icon Theme as thumbnails
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/branches/wave-0.4-release@1551037 13f79535-47bb-0310-9956-ffa450edef68
+
+commit de116fe1668f381507d0e39d993c3b77f67666be
+Author: Ali Lown <al@apache.org>
+Date:   Tue Dec 3 14:51:43 2013 +0000
+
+    RC4's license changes
+    
+    These are now fairly minimal.
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/branches/wave-0.4-release@1547413 13f79535-47bb-0310-9956-ffa450edef68
+
+commit a9c1b7370eb3d7662cea3ef5a350052602ff60c2
+Author: Ali Lown <al@apache.org>
+Date:   Fri Aug 30 20:29:15 2013 +0000
+
+    Some minor changes after previewing release
+    
+    - Include THANKS in binary release
+    - Fold DISCLAIMER at 80
+    - Use Maven central rather than repo1/repo2
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/branches/wave-0.4-release@1519074 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 1af5585417837f08d531152223ab4362dd346d98
+Author: Ali Lown <al@apache.org>
+Date:   Fri Aug 30 19:22:49 2013 +0000
+
+    Introduce a new CHANGES format
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/branches/wave-0.4-release@1519051 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 7e9b6bd5fadbd469481200f301b7537a1f33d6b4
+Author: Ali Lown <al@apache.org>
+Date:   Tue Aug 27 19:21:36 2013 +0000
+
+    Merge branch 'trunk-staging' into 0.4-release-staging
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/branches/wave-0.4-release@1517940 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 5458e2d75bbd194653117c2370e58ecbfc352807
+Author: Ali Lown <al@apache.org>
+Date:   Tue Aug 27 19:21:21 2013 +0000
+
+    Add a basic THANKS
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/branches/wave-0.4-release@1517939 13f79535-47bb-0310-9956-ffa450edef68
+
+commit c4c007de3b8e0eadfde0c878c59b2bdeead77fb8
+Author: Ali Lown <al@apache.org>
+Date:   Tue Aug 27 19:21:16 2013 +0000
+
+    Fold LICENSE.bin at 80chars
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/branches/wave-0.4-release@1517938 13f79535-47bb-0310-9956-ffa450edef68
+
+commit f664d1fc868c40d5fa9f6b315920ada59ff6336b
+Author: Ali Lown <al@apache.org>
+Date:   Tue Aug 27 19:21:12 2013 +0000
+
+    Add all required bin release license files
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/branches/wave-0.4-release@1517936 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 52efea6f9371178b8819a6d3bc85b5eb736ed04a
+Author: Ali Lown <al@apache.org>
+Date:   Tue Aug 27 19:21:06 2013 +0000
+
+    Seperate LICENSE+NOTICE to .src, .bin
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/branches/wave-0.4-release@1517935 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 1c50b848cb46a945fc63511882667dd1b3bb8f37
+Author: Ali Lown <al@apache.org>
+Date:   Tue Aug 27 19:20:58 2013 +0000
+
+    Remove remaining 'Copyright Google' messages
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/branches/wave-0.4-release@1517934 13f79535-47bb-0310-9956-ffa450edef68
+
+commit af7e45a900e87bd1bc346328da8239cac5b2a183
+Author: Ali Lown <al@apache.org>
+Date:   Tue Aug 27 19:20:45 2013 +0000
+
+    Add SimpleJSON license
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/branches/wave-0.4-release@1517933 13f79535-47bb-0310-9956-ffa450edef68
+
+commit b6f6f5059ccc7e291ec8ac9366975dc494b1f217
+Author: Ali Lown <al@apache.org>
+Date:   Tue Aug 27 19:20:37 2013 +0000
+
+    "Licensed under Apache" -> "Licensed to the ASF"
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/branches/wave-0.4-release@1517932 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 90ba06d02866d36298acbc5ceef15c6fa1bde41c
+Author: Ali Lown <al@apache.org>
+Date:   Tue Aug 27 19:19:03 2013 +0000
+
+    Finish work on third-party dependency sourcing.
+    
+    This also makes third_party/ a temporary folder than you make yourself.
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/branches/wave-0.4-release@1517931 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 443ef7c287b310f8a2a7d04738376099d29668c0
+Author: Ali Lown <al@apache.org>
+Date:   Tue Aug 27 19:18:57 2013 +0000
+
+    Put conditional around gxpc taskdef on third-party
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/branches/wave-0.4-release@1517930 13f79535-47bb-0310-9956-ffa450edef68
+
+commit cb1cb1dcec0d75f03b9a49e3d568a9e35b070a40
+Author: Ali Lown <al@apache.org>
+Date:   Tue Aug 27 19:18:51 2013 +0000
+
+    Remove third_party folder and all contents
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/branches/wave-0.4-release@1517929 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 7f56462b0331bb42ddc8f1c9a8c5756f8301d98f
+Author: Ali Lown <al@apache.org>
+Date:   Tue Aug 27 19:14:34 2013 +0000
+
+    Merge branch 'trunk' into 0.4-release-staging
+    
+    Conflicts:
+    	README
+    	src/org/waveprotocol/box/waveimport/WaveExport.java
+    	src/org/waveprotocol/box/waveimport/WaveImport.java
+    	src/org/waveprotocol/box/waveimport/google/RobotApi.java
+    	src/org/waveprotocol/box/waveimport/google/RobotSearchDigest.java
+    	src/org/waveprotocol/box/waveimport/google/RobotSearchDigestGsonImpl.java
+    	src/org/waveprotocol/box/waveimport/google/RobotSearchDigestImpl.java
+    	src/org/waveprotocol/box/waveimport/google/RobotSearchDigestUtil.java
+    	src/org/waveprotocol/box/waveimport/google/oauth/NeedNewOAuthTokenException.java
+    	src/org/waveprotocol/box/waveimport/google/oauth/OAuthCredentials.java
+    	src/org/waveprotocol/box/waveimport/google/oauth/OAuthRequestHelper.java
+    	src/org/waveprotocol/box/waveimport/google/oauth/OAuthedFetchService.java
+    	src/org/waveprotocol/box/waveimport/google/oauth/StableUserId.java
+    	src/org/waveprotocol/box/waveimport/google/oauth/UserContext.java
+    	src/org/waveprotocol/box/webclient/client/i18n/SessionMessages_es.properties
+    	src/org/waveprotocol/box/webclient/client/i18n/SessionMessages_fr.properties
+    	src/org/waveprotocol/box/webclient/client/i18n/WebClientMessages_es.properties
+    	src/org/waveprotocol/box/webclient/client/i18n/WebClientMessages_fr.properties
+    	src/org/waveprotocol/box/webclient/search/i18n/SearchPresenterMessages_sl.properties
+    	src/org/waveprotocol/box/webclient/search/i18n/SearchWidgetMessages_es.properties
+    	src/org/waveprotocol/box/webclient/search/i18n/SearchWidgetMessages_sl.properties
+    	src/org/waveprotocol/box/webclient/widget/error/i18n/ErrorMessages_es.properties
+    	src/org/waveprotocol/wave/client/wavepanel/impl/edit/i18n/ActionMessages_es.properties
+    	src/org/waveprotocol/wave/client/wavepanel/impl/menu/i18n/MenuMessages_fr.properties
+    	src/org/waveprotocol/wave/client/wavepanel/impl/menu/i18n/MenuMessages_sl.properties
+    	src/org/waveprotocol/wave/client/wavepanel/impl/toolbar/attachment/i18n/AttachmentMessages_fr.properties
+    	src/org/waveprotocol/wave/client/wavepanel/impl/toolbar/attachment/i18n/AttachmentMessages_sl.properties
+    	src/org/waveprotocol/wave/client/wavepanel/impl/toolbar/gadget/i18n/GadgetCategoryMessages_es.properties
+    	src/org/waveprotocol/wave/client/wavepanel/impl/toolbar/gadget/i18n/GadgetSelectorMessages_sl.properties
+    	src/org/waveprotocol/wave/client/wavepanel/impl/toolbar/i18n/LinkerMessages_es.properties
+    	src/org/waveprotocol/wave/client/wavepanel/impl/toolbar/i18n/LinkerMessages_fr.properties
+    	src/org/waveprotocol/wave/client/wavepanel/impl/toolbar/i18n/ToolbarMessages_fr.properties
+    	src/org/waveprotocol/wave/client/wavepanel/view/dom/full/i18n/ReplyBoxMessages_es.properties
+    	src/org/waveprotocol/wave/client/wavepanel/view/dom/full/i18n/ReplyBoxMessages_fr.properties
+    	src/org/waveprotocol/wave/client/widget/profile/i18n/ProfilePopupMessages_es.properties
+    	src/org/waveprotocol/wave/migration/build.xml
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/branches/wave-0.4-release@1517927 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 615d44352fccf53db12bc43829d7d7f2c2155410
+Author: Ali Lown <al@apache.org>
+Date:   Tue Aug 27 18:48:19 2013 +0000
+
+    Add socketio and oauth fetching to get-third-party
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/branches/wave-0.4-release@1517915 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 985cd57fbc08ca8dc9f332929d6d3c06399d20ea
+Author: Ali Lown <al@apache.org>
+Date:   Tue Aug 27 18:44:07 2013 +0000
+
+    Assorted fixes to re-enable federation
+    
+    https://reviews.apache.org/r/12725/
+    
+    Contains the following commits:
+    
+    commit 64024d5e781a6d0583d1ca32e609a2f659c8eb0c
+    Author: Ali Lown <al@apache.org>
+    Date:   Fri Aug 16 12:52:49 2013 +0100
+    
+        Address Yuri's comments on federation fixes.
+    
+    commit e4e8c32350e161edbe9f882e2d5ba85ceeff00df
+    Author: Ali Lown <al@apache.org>
+    Date:   Thu Jul 18 16:43:03 2013 +0100
+    
+        Collection of fixes to bring re-enable federation
+    
+        commit 252214fd13bee7f946118eba4df5b822b93f92dc
+        Author: Ali Lown <al@apache.org>
+        Date:   Wed Jul 17 22:13:19 2013 +0100
+    
+            Fix test-suite following these assorted fed fixes.
+    
+        commit 1a7078230b9ed8c84a91e4bf4a2fe9982f4cfca8
+        Author: Ali Lown <al@apache.org>
+        Date:   Sat Jun 8 20:54:14 2013 +0100
+    
+            Revert "Revert "Fixes WAVE-354: SimpleSearch.DigestProxy should update only the opened""
+    
+            This reverts commit 35313df5546622d9b10ac53b60b022317cebdeb6.
+    
+            Although this commit no longer causes shiny's with federated waves, it
+            seems to be making the search much 'laggier' than it used to be. So, it
+            looks like it needs looking in to some more.
+    
+        commit 8e8ca730c148269fa7107e1be7f3407b6f296645
+        Author: Ali Lown <al@apache.org>
+        Date:   Sat Jun 8 20:48:51 2013 +0100
+    
+            Fix Wavelet Root Conversation id generation
+    
+            Means that getRoot() works for federated waves now.
+    
+        commit a161dbf32bb6493742e4ac253e98c267bd83e5e1
+        Author: Ali Lown <al@apache.org>
+        Date:   Sat Jun 8 20:48:41 2013 +0100
+    
+            Undo debugging data
+    
+        commit 185a903d4b61803a72490985ef4234329a02978e
+        Author: Ali Lown <al@apache.org>
+        Date:   Sat Jun 8 16:08:12 2013 +0100
+    
+            Shiny fixing: Put title-fetching in TitleHelper.
+    
+        commit 8f3f07b8e65a4890a6eb184bcafb14d6d14dc65e
+        Author: Ali Lown <al@apache.org>
+        Date:   Sat Jun 8 14:49:24 2013 +0100
+    
+            Revert "Disable WindowTitleHandler (not federation capable)"
+    
+            This reverts commit 001356a30b485a857140f783b54e794be0190572.
+    
+        commit eba868a89419c904b58b2ac7b54905a5a4d6f1c5
+        Author: Ali Lown <al@apache.org>
+        Date:   Sat Jun 8 14:43:47 2013 +0100
+    
+            Notify listeners and try to sync anyway...
+    
+        commit 9805380864d0eeea3dcec634faa7afaa7a4fcabb
+        Author: Ali Lown <al@apache.org>
+        Date:   Sat Jun 8 14:17:27 2013 +0100
+    
+            Patch over a shiny from attempting to mark as read
+    
+            Occurs when the wave is not fully loaded before trying to change
+            supplemented state.
+    
+        commit 0de5a6fa02c14b06ba852ae2f7001590c9b83ea0
+        Author: Ali Lown <al@apache.org>
+        Date:   Mon Jun 3 23:35:06 2013 +0100
+    
+            Disable WindowTitleHandler (not federation capable)
+    
+        commit 014827117125a5d21b3068d4b9368a81b0a732ae
+        Author: Ali Lown <al@apache.org>
+        Date:   Mon Jun 3 22:17:47 2013 +0100
+    
+            No point calling the same function twice.
+    
+        commit 54c600c6a838878051b5383d9a8ca2754e881a8b
+        Author: Ali Lown <al@apache.org>
+        Date:   Mon Jun 3 12:54:48 2013 +0100
+    
+            During search, check remote wavelets first.
+    
+        commit 5683ba4a7b6832b994ef332a80f133e1c8817815
+        Author: Ali Lown <al@apache.org>
+        Date:   Mon Jun 3 12:52:05 2013 +0100
+    
+            Add extra logging for search+wavelet paths
+    
+        commit 1809e26db374d5d03ac2f0f48a68ac083355feac
+        Author: Ali Lown <al@apache.org>
+        Date:   Mon Jun 3 12:48:24 2013 +0100
+    
+            Fix copy-paste error?
+    
+        commit f2ac77df78d7ff5089197bf6d75459cc8f1b9b70
+        Author: Ali Lown <al@apache.org>
+        Date:   Sun Jun 2 22:15:08 2013 +0100
+    
+            Revert "Fixes WAVE-354: SimpleSearch.DigestProxy should update only the opened"
+    
+            This reverts commit bf760c93b77daa5893016f7ac8a4979728cfa0a5.
+    
+        commit 5dce24fde5e36452416ca7cf989784407866b300
+        Author: Ali Lown <al@apache.org>
+        Date:   Sun Jun 2 15:08:48 2013 +0100
+    
+            Add some more logging.
+    
+        commit abaa4e76548699501479270e0e97d33a94227eab
+        Author: Ali Lown <al@apache.org>
+        Date:   Sun Jun 2 15:08:37 2013 +0100
+    
+            Add NPE check to getCurrentVersion
+    
+        commit cab6e9cda4404d8181c1460ce885ec4bb5c2aa39
+        Author: Ali Lown <al@apache.org>
+        Date:   Sun Jun 2 15:07:55 2013 +0100
+    
+            Create wavelet, pass submit even if not fetched.
+    
+        commit 0ea2c20972f0b2cf5d3047ec456e4f4f5e19ebc3
+        Author: Ali Lown <al@apache.org>
+        Date:   Sun Jun 2 15:07:01 2013 +0100
+    
+            Wait for frontend loading before commit/update
+    
+        commit bc28198aeb47769b60e37cbbc56b965a6d25460a
+        Author: Ali Lown <al@apache.org>
+        Date:   Sun Jun 2 15:06:37 2013 +0100
+    
+            Track only largest pending commit
+    
+        commit 5a75628d3d6d10b8efb7cf097c523b9a38802172
+        Author: Ali Lown <al@apache.org>
+        Date:   Sun Jun 2 15:05:16 2013 +0100
+    
+            Don't allow update when frontend not initialized
+    
+        commit c2ea97c0e1069a8221486b62b73b58ef0d8fd8ab
+        Author: Ali Lown <al@apache.org>
+        Date:   Sun Jun 2 00:00:19 2013 +0100
+    
+            Track requested commits for not-yet-got versions.
+    
+        commit 34f35c598cb4e51e2365956db1a5b41e3c3bb248
+        Author: Ali Lown <al@apache.org>
+        Date:   Sat Jun 1 23:06:56 2013 +0100
+    
+            Ignore commit if not wavelet not yet up-to-date.
+    
+        commit 3d4ebc2415dd5e355a528066d1253a558a5c2300
+        Author: Ali Lown <al@apache.org>
+        Date:   Sat Jun 1 19:13:47 2013 +0100
+    
+            Prevent requested history:non-empty,non-contiguous
+    
+            This would cause a SEVERE, but doesn't seem to actually warant an extra
+            behaviour on the receivers part beyond simply requestingHistory which
+            already happened.
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1517913 13f79535-47bb-0310-9956-ffa450edef68
+
+commit ef08372cbd629be3853ff090e296cf7d26ffbb82
+Author: Ali Lown <al@apache.org>
+Date:   Tue Aug 6 20:18:31 2013 +0000
+
+    Remove migration test case following 1505140
+    
+    (I may have forgotten about these, until the build error'd)
+    Part of https://reviews.apache.org/r/12673/
+    
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1511113 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 6b521084ecec2a7a5a0073a5b2f3b1a4b0fe1127
+Author: Ali Lown <al@apache.org>
+Date:   Sat Jul 20 14:16:28 2013 +0000
+
+    Remove leftover migration helpers.
+    
+    https://reviews.apache.org/r/12673/
+    
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1505140 13f79535-47bb-0310-9956-ffa450edef68
+
+commit baafde99ca12c47c659565752dfad9e7cb5ea098
+Author: Ali Lown <al@apache.org>
+Date:   Sat Jul 20 14:13:25 2013 +0000
+
+    Actually remove the waveimport folder (now empty)
+    
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1505138 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 1ba5a58ecff5b05b48fa9e019e10bc5e92c15feb
+Author: Ali Lown <al@apache.org>
+Date:   Sat Jul 20 14:10:56 2013 +0000
+
+    Delete 'waveimport' folder. (Replaced by 'expimp')
+    
+    https://reviews.apache.org/r/12681/
+    
+    Should have been deleted as part of https://reviews.apache.org/r/7958
+    but definitely seems to still exist...
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1505136 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 12cb07696bafa0bd50641c24be0943a867378ddc
+Author: Vicente J. Ruiz Jurado <vjrj@apache.org>
+Date:   Thu Jul 18 17:27:06 2013 +0000
+
+    gwt updated to 2.5.1
+    
+    Review:
+    https://reviews.apache.org/r/12363/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1504556 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 7ae2c77962d47b66c81d0d9ffbc2930daee5f105
+Author: Vicente J. Ruiz Jurado <vjrj@apache.org>
+Date:   Thu Jul 18 17:00:39 2013 +0000
+
+    Sets default locale to English in selection box
+    
+    Review:
+    https://reviews.apache.org/r/12115/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1504525 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 3273eb11260542cef01d6eb29fbc825fb8740406
+Author: Ali Lown <al@apache.org>
+Date:   Thu Jul 18 16:46:42 2013 +0000
+
+    Remove jackson
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1504519 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 638e46bd6089c2a40f12547ab3270629c7e640af
+Author: Ali Lown <al@apache.org>
+Date:   Thu Jul 18 16:00:35 2013 +0000
+
+    Inline INDEX_WAVE_ID into single file of usage (test/)
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1504507 13f79535-47bb-0310-9956-ffa450edef68
+
+commit a81ebfedb4eccab711de6b5267b8cb8c8e643e10
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Wed Jul 17 18:58:39 2013 +0000
+
+    Summary:Adds versions info to exceptions thrown in
+    DeltaStoreBasedWaveletState
+    https://reviews.apache.org/r/12163/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1504235 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 0c1e94e5bc185359f65a883d3e0b7a8310a0a243
+Author: Ali Lown <al@apache.org>
+Date:   Mon Jul 15 16:48:49 2013 +0000
+
+    Add most libraries to get-third-party ant task (non-functional code!)
+    
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/branches/wave-0.4-release@1503330 13f79535-47bb-0310-9956-ffa450edef68
+
+commit e0fdeaec00c241ecabbee9060e22bd6d7da87b10
+Author: Ali Lown <al@apache.org>
+Date:   Mon Jul 15 16:46:19 2013 +0000
+
+    Add export notice to README
+    
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/branches/wave-0.4-release@1503326 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 997ee7b56df36fe047ad015818f7961ff65cf2bd
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Fri Jun 28 17:06:48 2013 +0000
+
+    Adds locale properties to Demo and Dev GWT configurations.
+    https://reviews.apache.org/r/10328/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1497849 13f79535-47bb-0310-9956-ffa450edef68
+
+commit d99f6113b5a2152d6feae6d313665b0c8b4535dd
+Author: Vicente J. Ruiz Jurado <vjrj@apache.org>
+Date:   Wed Jun 26 18:13:45 2013 +0000
+
+    Enable avatar rendering in participants list
+    
+    By Bruno Gonzalez (stenyak)
+    https://reviews.apache.org/r/11777/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1497030 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 0a667906d2abb9fef599d487db40ab2be2587ac2
+Author: Vicente J. Ruiz Jurado <vjrj@apache.org>
+Date:   Wed Jun 26 17:53:19 2013 +0000
+
+    Added translations to German and Chinese
+    
+    Thanks to Jeremy Lam and Janine Koark.
+    
+    Review: https://reviews.apache.org/r/11948/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1497025 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 14c68e78915964c7577943b55d1d55a0e693de64
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Jun 22 10:24:55 2013 +0000
+
+    Removes Apache License header from Eclipse .project
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1495703 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 087cd5f0b4e8c3aab520a32c65a145ad76221023
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Jun 22 09:54:46 2013 +0000
+
+    Fixes Eclipse project configuration by removing the Apache Header from
+    .classpath
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1495695 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 52859758b5800cce11839c6c19adb90bf4d0aac1
+Author: Vicente J. Ruiz Jurado <vjrj@apache.org>
+Date:   Tue Jun 18 15:59:20 2013 +0000
+
+    Fix for WAVE-392 (regression)
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1494183 13f79535-47bb-0310-9956-ffa450edef68
+
+commit d4c7e813bf43e641500d74ffaf9907cb7b75b997
+Author: Vicente J. Ruiz Jurado <vjrj@apache.org>
+Date:   Fri Jun 14 08:48:11 2013 +0000
+
+    Minor changes in Slovenian translation
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1492998 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 7286bac1b9195558bd1eb10bde2ac6a16614b03b
+Author: Vicente J. Ruiz Jurado <vjrj@apache.org>
+Date:   Fri Jun 14 08:42:10 2013 +0000
+
+    Line-through editor shortcut
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1492997 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 5d60ab1caa110c01201cd3f4a4cb4deca33a4b6b
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Jun 8 11:31:14 2013 +0000
+
+    Adds run-server.bat to provide Windows users an easier way to run the
+    server. The batch still misses handling of the debug parameters though.
+    https://reviews.apache.org/r/11746/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1490962 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 7fc62cea9a79b986f07c48a11decc0c6182ec73b
+Author: Ali Lown <al@apache.org>
+Date:   Sat Jun 8 11:27:02 2013 +0000
+
+    Remove libidn-1.15.jar that has reappeared.
+    
+    It looks like something got slightly confused during merging..
+    
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/branches/wave-0.4-release@1490960 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 1f13228cd93b7819f1a5972c05e26344cc413d22
+Author: Ali Lown <al@apache.org>
+Date:   Sat Jun 8 11:27:02 2013 +0000
+
+    Remove libidn-1.15.jar that has reappeared.
+    
+    It looks like something got slightly confused during merging..
+    
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1490960 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 6cae62e21790a2d5f5048e8a0d9f4e37784f3476
+Author: Ali Lown <al@apache.org>
+Date:   Sat Jun 8 11:06:48 2013 +0000
+
+    WAVE-270: Add color and backcolor buttons to edit toolbar
+    
+    By Vicente J. Ruiz Jurado
+    https://reviews.apache.org/r/9841/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1490957 13f79535-47bb-0310-9956-ffa450edef68
+
+commit de0281025e9120d3d40bcea4f560d686915c087b
+Author: Ali Lown <al@apache.org>
+Date:   Sat Jun 8 11:06:33 2013 +0000
+
+    Fix check-certificates script to use modern config
+    
+    By Bruno Gonzalez.
+    https://reviews.apache.org/r/11675/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1490956 13f79535-47bb-0310-9956-ffa450edef68
+
+commit ce4942532f4c96017181c4a9a4613796b0f5054b
+Author: Ali Lown <al@apache.org>
+Date:   Sat Jun 8 11:06:30 2013 +0000
+
+    Add prosody configuration generator.
+    
+    Can be found at 'ant prosody-config'
+    By Bruno Gonzalez.
+    https://reviews.apache.org/r/11669/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1490955 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 8f26c9a89bfa273b3e8c53074d4ecf216faabae2
+Author: Ali Lown <al@apache.org>
+Date:   Sat Jun 8 11:06:24 2013 +0000
+
+    Silence the welcome_wave_id warning on load.
+    
+    By Bruno Gonzalez.
+    https://reviews.apache.org/r/11676/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1490954 13f79535-47bb-0310-9956-ffa450edef68
+
+commit af624b6c3656f0f991ffb96c0ff8bf693eb710d7
+Author: Ali Lown <al@apache.org>
+Date:   Sat Jun 8 11:06:19 2013 +0000
+
+    Bump CHANGES
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1490953 13f79535-47bb-0310-9956-ffa450edef68
+
+commit d8b5860fff70fe61bcb432327eb0201aa390aa0f
+Author: Ali Lown <al@apache.org>
+Date:   Sat Jun 8 11:06:14 2013 +0000
+
+    Fix logo to fit in current WIAB position.
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1490952 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 8c00fef2f873990df89a76638e936822f3c53a6d
+Author: Ali Lown <al@apache.org>
+Date:   Sat Jun 8 11:06:09 2013 +0000
+
+    Manually fix the rest of the licenses
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1490951 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 13222c69d5486c1b574e3d46ec814d9662e07999
+Author: Ali Lown <al@apache.org>
+Date:   Sat Jun 8 11:05:40 2013 +0000
+
+    Rat a load more files
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1490950 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 395185b4560bd0e986952c5282957f587d3a120f
+Author: Ali Lown <al@apache.org>
+Date:   Sat Jun 8 11:04:12 2013 +0000
+
+    Add TM to logo, add some missing license headers
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1490949 13f79535-47bb-0310-9956-ffa450edef68
+
+commit b3a6ffe64dd5ce738c33ed520f7e35f3b1984a87
+Author: Ali Lown <al@apache.org>
+Date:   Sat Jun 8 11:04:00 2013 +0000
+
+    Update libidn to 1.26 (Apache licensed)
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1490948 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 349010fbf9cbbdb7f7bbaf59ab1127f5e9d68cbe
+Author: Ali Lown <al@apache.org>
+Date:   Sat Jun 8 11:03:54 2013 +0000
+
+    Update NOTICE to Apache style.
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1490947 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 990f30317540d70e4139fa50f8d72ea2e56389e7
+Author: Ali Lown <al@apache.org>
+Date:   Sat Jun 8 11:03:51 2013 +0000
+
+    Add thumbnail_patterns, and platforms to binary release.
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1490946 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 6eeda27314ce1bc61bea67240fa59fac88ee9155
+Author: Ali Lown <al@apache.org>
+Date:   Sat Jun 8 11:03:47 2013 +0000
+
+    Forgot build.properties needs to be in binary release.
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1490945 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 22f11eda113ba971f668e27677243d1437871eaa
+Author: Ali Lown <al@apache.org>
+Date:   Sat Jun 8 11:03:43 2013 +0000
+
+    Bump version number in build.properties
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1490944 13f79535-47bb-0310-9956-ffa450edef68
+
+commit f12ae281001065dcbb2adfea9491613d921421ff
+Author: Ali Lown <al@apache.org>
+Date:   Sat Jun 8 11:03:37 2013 +0000
+
+    Add CHANGES, RELEASE-NOTES for 0.4
+    
+    Also ensure they are included in the binary releases.
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1490943 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 4ed9288395b622941bf4db3ba34749c53b0bb4b1
+Author: Ali Lown <al@apache.org>
+Date:   Wed Jun 5 16:00:41 2013 +0000
+
+    Bump CHANGES
+    
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/branches/wave-0.4-release@1489939 13f79535-47bb-0310-9956-ffa450edef68
+
+commit daf10628b719fc6e06e4949e0ec4a6c19509177d
+Author: Ali Lown <al@apache.org>
+Date:   Wed Jun 5 15:58:51 2013 +0000
+
+    Fix logo to fit in current WIAB position.
+    
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/branches/wave-0.4-release@1489938 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 2a3ee8ae2336803943aee503cccc0ec3a73dd9a2
+Author: Ali Lown <al@apache.org>
+Date:   Wed Jun 5 10:42:03 2013 +0000
+
+    Add missing backslash following 11957.
+    
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1489803 13f79535-47bb-0310-9956-ffa450edef68
+
+commit c8263dc54853108b32820614bcded5edfab8cfac
+Author: Ali Lown <al@apache.org>
+Date:   Wed Jun 5 10:42:03 2013 +0000
+
+    Add missing backslash following 11957.
+    
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/branches/wave-0.4-release@1489803 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 1e284511b5bd394e44eeb49e44c7d930a686ce74
+Author: Ali Lown <al@apache.org>
+Date:   Wed Jun 5 09:17:07 2013 +0000
+
+    Manually fix the rest of the licenses
+    
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/branches/wave-0.4-release@1489761 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 2c2d7cc6184337cf4d792553c490ae03cb3876d4
+Author: Ali Lown <al@apache.org>
+Date:   Wed Jun 5 08:48:23 2013 +0000
+
+    Rat a load more files
+    
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/branches/wave-0.4-release@1489742 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 9af650f2568962c6c1437f9ecf34b3f2eede61b4
+Author: Ali Lown <al@apache.org>
+Date:   Wed Jun 5 08:31:41 2013 +0000
+
+    Add TM to logo, add some missing license headers
+    
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/branches/wave-0.4-release@1489740 13f79535-47bb-0310-9956-ffa450edef68
+
+commit ab96a3bc2d6aa51456c74a2cc0e3f36f83042c38
+Author: Ali Lown <al@apache.org>
+Date:   Tue Jun 4 10:04:41 2013 +0000
+
+    Remove some replicated(empty) third_party/runtime/third_party dirs
+    
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1489364 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 48c022b98f1ec84863312d628f6970f499787f09
+Author: Ali Lown <al@apache.org>
+Date:   Tue Jun 4 10:04:41 2013 +0000
+
+    Remove some replicated(empty) third_party/runtime/third_party dirs
+    
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/branches/wave-0.4-release@1489364 13f79535-47bb-0310-9956-ffa450edef68
+
+commit aafba4dded6343f343bf82369b0ef9690f8d7d65
+Author: Ali Lown <al@apache.org>
+Date:   Tue Jun 4 09:31:49 2013 +0000
+
+    Update libidn to 1.26 (Apache licensed)
+    
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/branches/wave-0.4-release@1489356 13f79535-47bb-0310-9956-ffa450edef68
+
+commit d59d48203f0114bca6dbd4836bce290130f322eb
+Author: Ali Lown <al@apache.org>
+Date:   Tue Jun 4 09:31:01 2013 +0000
+
+    Update NOTICE to Apache style.
+    
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/branches/wave-0.4-release@1489355 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 9baffd844b0a2896a23071efe1ae3b2388980bef
+Author: Ali Lown <al@apache.org>
+Date:   Tue Jun 4 08:26:57 2013 +0000
+
+    Add thumbnail_patterns, and platforms to binary release.
+    
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/branches/wave-0.4-release@1489329 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 29a08edd260a748e563f2aeee54f05bd9908abd6
+Merge: 65cf09e 2016524
+Author: Ali Lown <al@apache.org>
+Date:   Tue Jun 4 08:25:34 2013 +0000
+
+    Merge in logging improvements from trunk, add to release script.
+    
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/branches/wave-0.4-release@1489328 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 20165240eff54196be66252a74afd1617d4a15f2
+Author: Ali Lown <al@apache.org>
+Date:   Tue Jun 4 08:16:11 2013 +0000
+
+    Improve default logging configuration, through external file.
+    
+    Review: https://reviews.apache.org/r/11597. By Dave Ball.
+    
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1489321 13f79535-47bb-0310-9956-ffa450edef68
+
+commit b0c33de9bbff9421980bd26436b9bd5d9f13dbf9
+Author: Ali Lown <al@apache.org>
+Date:   Tue Jun 4 08:12:46 2013 +0000
+
+    Remove spec, whitepapers, request_codereview, issue_exporter from trunk.
+    
+    Follows on from discussion on list, and review:
+    https://reviews.apache.org/r/11609/
+    
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1489320 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 65cf09eb792a00fc4dfe9060a4d61b68d14746e0
+Author: Ali Lown <al@apache.org>
+Date:   Tue Jun 4 08:08:04 2013 +0000
+
+    Remove spec, whitepapers, request_codereview, issue_exporter from branch.
+    
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/branches/wave-0.4-release@1489315 13f79535-47bb-0310-9956-ffa450edef68
+
+commit d9285c80963c9f54a4deabf00a49da2d6779649a
+Author: Ali Lown <al@apache.org>
+Date:   Fri May 31 22:27:21 2013 +0000
+
+    Forgot build.properties needs to be in binary release.
+    
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/branches/wave-0.4-release@1488422 13f79535-47bb-0310-9956-ffa450edef68
+
+commit e2eb88f8b9993f4829595c12ea9f9c8dbb256e99
+Author: Ali Lown <al@apache.org>
+Date:   Fri May 31 20:33:21 2013 +0000
+
+    Bump version number in build.properties
+    
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/branches/wave-0.4-release@1488391 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 19b2530f91daae9c4b9e8b1add9cb5a5ddbaf2f1
+Author: Ali Lown <al@apache.org>
+Date:   Fri May 31 20:29:36 2013 +0000
+
+    Add CHANGES, RELEASE-NOTES for 0.4
+    
+    Also ensure they are included in the binary releases.
+    
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/branches/wave-0.4-release@1488388 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 60302514572170eb6c3675a96a3399583692f804
+Author: Ali Lown <al@apache.org>
+Date:   Fri May 31 19:55:04 2013 +0000
+
+    Creating wave-0.4-release branch
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/branches/wave-0.4-release@1488373 13f79535-47bb-0310-9956-ffa450edef68
+
+commit f621b491ce177ab84bffc09c96c6c1d2c6a774c6
+Author: Ali Lown <al@apache.org>
+Date:   Wed May 29 17:55:17 2013 +0000
+
+    Ensure all jars have correct MANIFEST data.
+    
+    - Adds attributes for specification+implementation.
+    - Adds LICENSE and NOTICE files to META-INF/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1487568 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 78546c8b1e743f06a57907a1226fd2777e89d58b
+Author: Ali Lown <al@apache.org>
+Date:   Tue May 28 19:05:25 2013 +0000
+
+    Remove trailing spaces from license file
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1487047 13f79535-47bb-0310-9956-ffa450edef68
+
+commit b5cf0af2362466654db8612bd05e139b27014bc1
+Author: Ali Lown <al@apache.org>
+Date:   Tue May 28 19:05:20 2013 +0000
+
+    Fix some trailing whitespaces
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1487046 13f79535-47bb-0310-9956-ffa450edef68
+
+commit d30e2b0c6c50d06f0cdaf3ad77b99ab4a227813e
+Author: Ali Lown <al@apache.org>
+Date:   Tue May 28 19:05:16 2013 +0000
+
+    Add release-bin/release-src scripting to build.xml
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1487045 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 9bb23257992052a118550556a4a94eba0e76b0c8
+Author: Ali Lown <al@apache.org>
+Date:   Tue May 28 19:05:11 2013 +0000
+
+    Move rest of licenses to LICENSE. Delete COPYING.
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1487044 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 05749e52680be4e84781f0c233704ac2912b5888
+Author: Ali Lown <al@apache.org>
+Date:   Tue May 28 19:05:06 2013 +0000
+
+    Change vendor to Apache
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1487043 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 9f8d9126cc202dffd805dc2705202560125a22c4
+Author: Ali Lown <al@apache.org>
+Date:   Tue May 28 19:05:01 2013 +0000
+
+    Make name compatible with requirements
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1487042 13f79535-47bb-0310-9956-ffa450edef68
+
+commit de80ff55a36f3797a6b3c1d2ff4289f869ae5eea
+Author: Ali Lown <al@apache.org>
+Date:   Tue May 28 19:04:55 2013 +0000
+
+    Add KEYS file to repositorY
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1487041 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 9e625ce4722ddf6b59e0dc23b9661f5eac8c2985
+Author: Ali Lown <al@apache.org>
+Date:   Fri May 24 10:44:13 2013 +0000
+
+    Add LICENSE, move NOTICES -> NOTICE.
+    
+    https://reviews.apache.org/r/11344/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1485998 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 58270efaeebc2fbe66e74bca675831cd17afef09
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sun Apr 7 18:23:10 2013 +0000
+
+    Replaces get_third_party script with ant target.
+    https://reviews.apache.org/r/9045/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1465440 13f79535-47bb-0310-9956-ffa450edef68
+
+commit be57c84800881c4b3a5106672978ddba0aeb470d
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Thu Apr 4 21:07:16 2013 +0000
+
+    Removes *.rej and *.orig files.
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1464766 13f79535-47bb-0310-9956-ffa450edef68
+
+commit adf8258965e28dae1965aa52f9952c5163a421a5
+Author: Vicente J. Ruiz Jurado <vjrj@apache.org>
+Date:   Sat Mar 16 23:12:41 2013 +0000
+
+    New gadget - Taskboardy+ (Thanks to Patricio Gonzalez Sevilla)
+    Review: https://reviews.apache.org/r/9877/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1457339 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 77330193f21b8f07b4f72d7509f74184bb541ac6
+Author: Vicente J. Ruiz Jurado <vjrj@apache.org>
+Date:   Sat Mar 16 23:06:04 2013 +0000
+
+    Wave client locale sent to gadgets.
+    Review: https://reviews.apache.org/r/9521/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1457333 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 71445cd8e1433cc754be0bfab5761e9d5b6cef29
+Author: Vicente J. Ruiz Jurado <vjrj@apache.org>
+Date:   Mon Feb 4 17:54:55 2013 +0000
+
+    Added title to output buttons
+    
+    Review: https://reviews.apache.org/r/9289/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1442205 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 6dba28b03f7ea3191f48ca707c8bf261e328bafa
+Author: Vicente J. Ruiz Jurado <vjrj@apache.org>
+Date:   Wed Jan 30 15:25:06 2013 +0000
+
+    Added translation to Spanish
+    
+    https://reviews.apache.org/r/9159/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1440462 13f79535-47bb-0310-9956-ffa450edef68
+
+commit a6ebe235f688a9ac6342adb32a9a8bb77d498329
+Author: Ali Lown <al@apache.org>
+Date:   Thu Jan 24 13:14:47 2013 +0000
+
+    Internationalization and partial localization
+    
+    Adds support for Russian, French and Slovenian languages.
+    By Andrew Kaplanov. https://reviews.apache.org/r/8916
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1437989 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 033267e10c9d20b0af510bb11e7d9cb82445c813
+Author: Vicente J. Ruiz Jurado <vjrj@apache.org>
+Date:   Wed Jan 16 16:19:07 2013 +0000
+
+    RegistrationUtil new checkNewUsername function.
+    https://reviews.apache.org/r/7903/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1434014 13f79535-47bb-0310-9956-ffa450edef68
+
+commit bf760c93b77daa5893016f7ac8a4979728cfa0a5
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Jan 12 20:23:03 2013 +0000
+
+    Fixes WAVE-354: SimpleSearch.DigestProxy should update only the opened
+    wave on changes. By rocklund
+    https://reviews.apache.org/r/7683
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1432503 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 3d6b9482ac8e680e56087c823de44fc3a9c2cf41
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Jan 12 20:01:51 2013 +0000
+
+    Adds the script to download emma and junit.
+    https://reviews.apache.org/r/8630
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1432497 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 1b075f340a354b2e7ca7d8b240f942c22c985f1d
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Jan 12 19:27:01 2013 +0000
+
+    Removes emma and junit jars from the project and adds a script to download
+    these from the internet.
+    https://reviews.apache.org/r/8630/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1432493 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 2ca201aa18e6da2646c6530b608ddb7b3e47ff1c
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Tue Dec 18 20:35:34 2012 +0000
+
+    Makes gadget borders invisibles. Fixes WAVE-334. By Nikolay Volnov.
+    https://reviews.apache.org/r/8327/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1423628 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 96a34f41d4e151789b76b8a0e9d35181d326c1b1
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sun Dec 16 22:29:48 2012 +0000
+
+    Removes empty file.
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1422703 13f79535-47bb-0310-9956-ffa450edef68
+
+commit d3c25fbaf806295aa8f4f24542ed1a68556eb3e9
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sun Dec 16 21:30:53 2012 +0000
+
+    Fixes eclipse classpath.
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1422695 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 267026345130798a6a4c3d27cd320a3738a203c3
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sun Dec 16 21:26:49 2012 +0000
+
+    Fixes failed tests in AttachmentStoreTest. By Nikolay Volnov
+    https://reviews.apache.org/r/8254
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1422694 13f79535-47bb-0310-9956-ffa450edef68
+
+commit ad38ab839a6972b18248bb9be2e428b35c0f8d98
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Dec 1 15:25:11 2012 +0000
+
+    Adds waves Export and Import. By Andrew Kaplanov
+    https://reviews.apache.org/r/7958
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1416008 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 478edef660f1528f53def7f3723a83daf6d0daef
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Dec 1 13:02:25 2012 +0000
+
+    Fixes GadgetWidget properly to save height and re-use it for faster wave
+    loading. By rocklund
+    https://reviews.apache.org/r/8008
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1415990 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 9d8460f389da023ac467360059e264730cb0b48a
+Author: Ali Lown <al@apache.org>
+Date:   Sun Nov 25 13:21:13 2012 +0000
+
+    Removes remaining Google headers, fixes existing
+    
+    Fixes javadoc issue in all Java code
+    Makes the Apache headers have consistent text-wrap and indentation
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1413353 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 093a53959b85aeb436c0105d79624a20f34856d6
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Nov 10 17:37:09 2012 +0000
+
+    Adds missing Apache license headers for the "new wave with participant"
+    patch.
+    https://reviews.apache.org/r/8007
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1407857 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 49b29e6409380642a5cad8c0c05eb6d5c1234005
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Fri Nov 9 07:57:32 2012 +0000
+
+    Adds ant script to migrate attachments to the newer version.
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1407372 13f79535-47bb-0310-9956-ffa450edef68
+
+commit de394c8841b9f268cd803fea854569b202ef3d47
+Author: Ali Lown <al@apache.org>
+Date:   Tue Nov 6 12:59:48 2012 +0000
+
+    Fix typos in server-config.xml. Review #7899
+    
+    https://reviews.apache.org/r/7899/
+    By Vincente J. Ruiz Jurado
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1406117 13f79535-47bb-0310-9956-ffa450edef68
+
+commit b8b27b3ec3b48c7b82e9d9aba54f9a5b35d19801
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Fri Nov 2 15:36:51 2012 +0000
+
+    Fixes issue with deadlock.
+    https://reviews.apache.org/r/7253
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1405010 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 3bdd8777ff2adeb8c02b537be8bf6f55fe1af71e
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Thu Nov 1 20:33:20 2012 +0000
+
+    Adds "New wave with the participants of the current wave" feature. By
+    rocklund.
+    https://reviews.apache.org/r/7353
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1404748 13f79535-47bb-0310-9956-ffa450edef68
+
+commit d71c940c2de3cc3eb5860b4bb6c24296ee691d36
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Thu Nov 1 20:13:12 2012 +0000
+
+    Fixes the name of thumbnails folder.
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1404744 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 79ce1d7035c21287414e5df06ec0372759fb1120
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Thu Nov 1 19:50:22 2012 +0000
+
+    Adds attachment thumbnails and makes attachments to use metadata. By
+    Andrew Kaplanov.
+    https://reviews.apache.org/r/7471
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1404734 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 466d175a1306c0b6cdbdda57b070f03b865a7528
+Author: Ali Lown <al@apache.org>
+Date:   Wed Oct 24 15:48:38 2012 +0000
+
+    Implement SSL Client Certificate Authentication.
+    
+    By Ali Lown.
+    https://reviews.apache.org/r/4994/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1401742 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 4466874c525a4adc07ffde69f3b2b5794398ef4b
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sun Oct 21 17:43:30 2012 +0000
+
+    Makes webclient to use socketio when websocket does not connect. By
+    Vicente J. Ruiz Jurado.
+    https://reviews.apache.org/r/7602/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1400686 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 4f00bdadc43de4dedb441737bc4020a58769cdad
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sun Oct 21 17:39:47 2012 +0000
+
+    Updates socketio - xhr-polling utf8 fix, and websocket disabled. By Vicente J. Ruiz Jurado
+    https://reviews.apache.org/r/7600/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1400684 13f79535-47bb-0310-9956-ffa450edef68
+
+commit aa4e11d6d52e535112cf164cd83d68c9f170e123
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Mon Oct 1 11:16:58 2012 +0000
+
+    Fixes release-robot-client-api ant target.
+    https://reviews.apache.org/r/7211
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1392278 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 28b816d0c22a3d97519a6a6c29ceaa49dc47a805
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Mon Oct 1 10:59:10 2012 +0000
+
+    Fixes the copy-paste issue in FF15. By Vicente J. Ruiz Jurado.
+    https://reviews.apache.org/r/7142
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1392275 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 8240bf44bad45c03645e5b7ab7185dcecfa15cbf
+Author: Ali Lown <al@apache.org>
+Date:   Tue Sep 25 12:28:16 2012 +0000
+
+    Set some timeout to webclient search requests
+    
+    By Vincente J. Ruiz Jurado (https://reviews.apache.org/r/6885/)
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1389831 13f79535-47bb-0310-9956-ffa450edef68
+
+commit e7c1d26acf58422bca9b51292950ba62e833f2a1
+Author: Ali Lown <al@apache.org>
+Date:   Tue Sep 25 12:23:30 2012 +0000
+
+    Make the presented websocket address configurable
+    
+    By Ali Lown (https://reviews.apache.org/r/7230/)
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1389830 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 41a2a66d2918e4367e54597e411499bd82197366
+Author: Ali Lown <al@apache.org>
+Date:   Tue Sep 25 12:13:50 2012 +0000
+
+    Add/update license headers
+    
+    By Angus Turner (https://reviews.apache.org/r/7077/)
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1389826 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 7fbb14138c374c1ff769e69ea3051c4ed73e081d
+Author: Ali Lown <al@apache.org>
+Date:   Sat Sep 1 19:36:50 2012 +0000
+
+    Assumes receivedTime = sentTime for blip display. https://reviews.apache.org/r/6777/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1379829 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 92c2367d4476e76cc3e5eead23a2c5dfc67906bc
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Thu Aug 30 19:46:22 2012 +0000
+
+    Makes websocket configurable in a different port and/or subdomain
+    (#WAVE-357). By Vicente J. Ruiz Jurado
+    https://reviews.apache.org/r/5375
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1379094 13f79535-47bb-0310-9956-ffa450edef68
+
+commit fe33dae18c91e33fc752162db43895f5c448b967
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Tue Aug 21 17:34:15 2012 +0000
+
+    Fixes WAVE-312 - Not saving editions when concurrent editions in same
+    wave.
+    https://reviews.apache.org/r/6474
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1375678 13f79535-47bb-0310-9956-ffa450edef68
+
+commit f34e33031801a1f2de4715a670a9c8c515c867d0
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Fri Aug 10 10:07:09 2012 +0000
+
+    Fixes WAVE-363 - number marks of unread blips dont changing in real time.
+    https://reviews.apache.org/r/6475/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1371635 13f79535-47bb-0310-9956-ffa450edef68
+
+commit c5b2b59e7705e2b38d56dcb077ba7d4f2fda7bb7
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Wed Aug 8 18:57:07 2012 +0000
+
+    Sets default gadget width to 100%. By Vicente J. Ruiz Jurado.
+    https://reviews.apache.org/r/6340
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1370894 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 447ce03ba54487d39275e46fe4f2dc91088d7f78
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Tue Aug 7 19:18:30 2012 +0000
+
+    Revert "Blip menu handles clicks instead of mouse down. By vjrj."
+    
+    This reverts commit 552d9b993172a73bcf04c06b83a4eaf0a6cb771f.
+    
+    Conflicts:
+    
+    	src/org/waveprotocol/wave/client/wavepanel/impl/menu/MenuController.java
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1370447 13f79535-47bb-0310-9956-ffa450edef68
+
+commit d8f1c6e26ef4cb96de6f62a20822b6ebc81fcaf5
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Fri Aug 3 11:16:10 2012 +0000
+
+    Adds  Done button to finish editing. By Vicente J. Ruiz Jurado.
+    https://reviews.apache.org/r/6336
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1368892 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 91a4e32fd55f2c7ec80bc03fb59fb2972b8459e4
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Thu Aug 2 21:15:10 2012 +0000
+
+    Improves usability and visibility of inline replies. By Vicente J. Ruiz
+    Jurado.
+    https://reviews.apache.org/r/5426
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1368708 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 43d97ecc84fbb29e2ca4c176ed18085d64f648f5
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Thu Aug 2 21:02:40 2012 +0000
+
+    Hightlights the current blip while editing. By Vicente J. Ruiz Jurado.
+    https://reviews.apache.org/r/5388
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1368705 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 35398b82cfda762f1f4f5bf9654811b25ec4733c
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Thu Aug 2 20:27:13 2012 +0000
+
+    Disables edition-mode when jumping to another blip. By Vicente J. Ruiz
+    Jurado.
+    https://reviews.apache.org/r/5569
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1368692 13f79535-47bb-0310-9956-ffa450edef68
+
+commit e2538eee9fa88e8e2c2dfce379b4838c5d8a07e9
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Thu Jul 26 20:51:56 2012 +0000
+
+    Adds blip deletion confirmation dialog. By Vicente J. Ruiz Jurado.
+    https://reviews.apache.org/r/6152
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1366196 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 0111b9458dd33bbb5dca0904a2c0611a724e0754
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Wed Jul 18 18:57:41 2012 +0000
+
+    Fixes WAVE-360 - Waves disappears from inbox when removing a user.
+    https://reviews.apache.org/r/6015/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1363045 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 89da3d3dca58a748a33db9887faaae3271b2fe12
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Mon Jun 25 19:25:35 2012 +0000
+
+    Make css not ophuscated in 'ant waveharness-hosted'. By Vicente J. Ruiz
+    Jurado.
+    https://reviews.apache.org/r/5425
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1353706 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 2981c4603988f263c8116cb09bdeabd854c51b73
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Mon Jun 25 17:29:30 2012 +0000
+
+    Disable buttons while editing (addresses part of WAVE-349). By Vicente J.
+    Ruiz Jurado.
+    https://reviews.apache.org/r/5377/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1353674 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 2fbdcb9200b972d87d3667211ed0ce5db3326f53
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Mon Jun 25 17:16:02 2012 +0000
+
+    Fix avatar flickering while editing in chrome. By Vicente J. Ruiz Jurado
+    https://reviews.apache.org/r/5257/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1353669 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 20b45273d2d8d44b00f8694a566dac23d6baccd1
+Author: Michael MacFadden <michael@apache.org>
+Date:   Mon Jun 18 15:10:40 2012 +0000
+
+    Fix long paste of text in waves (WAVE-352)
+    Patch By Vicente J. Ruiz Jurado
+    
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1351381 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 9dc306f82817d027f28a50b39e6a6c898f63de38
+Author: Michael MacFadden <michael@apache.org>
+Date:   Sun Jun 17 18:57:52 2012 +0000
+
+    Fixes deprecated org.eclipse.jetty.util.log.DEBUG usage.
+    Patch by Vincente J. Ruiz Jurado
+    
+    Code Review: https://reviews.apache.org/r/5376/
+    
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1351139 13f79535-47bb-0310-9956-ffa450edef68
+
+commit b5b42649a6470de9071e3b33698dd83a0ef99c46
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Jun 2 09:19:15 2012 +0000
+
+    Fixes the issue with wave title tool tip showing inside wave body.
+    https://reviews.apache.org/r/5327
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1345468 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 2028edb92c61d5e0c99b607b92eac41a35c4c373
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Tue May 29 17:20:13 2012 +0000
+
+    Remove useSocketIO configuration parameter. By Vicente J. Ruiz Jurado
+    https://reviews.apache.org/r/5258
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1343860 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 7a8f33259c43ac1970abbfcd7b934a52f486329e
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Mon May 28 19:49:16 2012 +0000
+
+    Removing the warnings of waveharness-hosted by Vicente J. Ruiz Jurado
+    https://reviews.apache.org/r/5252/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1343377 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 68c0cedc077415c4568e96575199fdfc81d8830a
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Wed May 23 18:09:46 2012 +0000
+
+    Blip menu handles clicks instead of mouse down. By vjrj.
+    https://reviews.apache.org/r/5180/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1341965 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 4be469a8c7caca42fb495bb6d4b36fb47d406c0d
+Author: Michael MacFadden <michael@apache.org>
+Date:   Mon May 21 03:17:33 2012 +0000
+
+    Patch Submitted by: Vicente J. Ruiz Jurado
+    
+    Code Review:  https://reviews.apache.org/r/5048/
+    
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1340886 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 04292a016e8d9610a674b8d146db14f9639ac072
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Tue May 15 17:24:12 2012 +0000
+
+    Adds eight more gadgets to the gadgets list + replaces one image URL. By
+    Jeremy
+    https://reviews.apache.org/r/5118/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1338804 13f79535-47bb-0310-9956-ffa450edef68
+
+commit dd6c1975f6a0423c4baf753212c0ece56684271e
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Mon May 14 18:35:03 2012 +0000
+
+    Fixes Waveharness - issue WAVE-346
+    https://reviews.apache.org/r/5068/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1338336 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 053f6a7561f87971a432bb838f5bcf83fae25dc6
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat May 5 20:42:40 2012 +0000
+
+    Adds template for generation of Google Analytics javascript snippet.
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1334496 13f79535-47bb-0310-9956-ffa450edef68
+
+commit c9e533eee617efe2d00a16b5f96bfe8223ac07f9
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat May 5 20:40:16 2012 +0000
+
+    Updates gadgets list with compatible gadgets from iGoogle.
+    By Jeremy
+    https://reviews.apache.org/r/5045/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1334495 13f79535-47bb-0310-9956-ffa450edef68
+
+commit bd49a7946bb382b0a1dc489af9fc6b1471e29cdc
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat May 5 20:39:06 2012 +0000
+
+    Adds Lucene based implementation of per user wave view provider.
+    https://reviews.apache.org/r/4774/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1334494 13f79535-47bb-0310-9956-ffa450edef68
+
+commit c99c8357164b280670b40bc93e9017413a585cc1
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Tue May 1 19:44:32 2012 +0000
+
+    Fixes breakage caused by a4f0b9433260f0496ab3156c904ab205538742f5
+    https://reviews.apache.org/r/4952/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1332795 13f79535-47bb-0310-9956-ffa450edef68
+
+commit a4f0b9433260f0496ab3156c904ab205538742f5
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Tue May 1 19:14:21 2012 +0000
+
+    Adds saved state indicator.
+    https://reviews.apache.org/r/4937/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1332787 13f79535-47bb-0310-9956-ffa450edef68
+
+commit b44c13cef025f28d8fe84a006bc2e9fe21df8558
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Tue May 1 19:09:46 2012 +0000
+
+    Adds image URLs to the gadget definitions + adds two more gadgets.
+    By Jeremy
+    https://reviews.apache.org/r/4948/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1332781 13f79535-47bb-0310-9956-ffa450edef68
+
+commit cfac8bcdcb8fce51abd3cfffc06fa0f9e26cec9a
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Tue May 1 09:00:31 2012 +0000
+
+    Makes the threads count for executors that handle wavelet loading and
+    lookup configurable
+    https://reviews.apache.org/r/4924/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1332579 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 038636bd140eee57854c93e1002b3ec3583d4267
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Tue May 1 08:55:06 2012 +0000
+
+    Fixes WaveId.serialize() to use Modern serializer.
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1332576 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 08f0eaa338c49a7c30cce391fbdf5dedc69957df
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Apr 28 15:20:12 2012 +0000
+
+    Avoids crash due to IAE in link annotation converter.
+    By Christian Ohler.
+    https://reviews.apache.org/r/4769/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1331785 13f79535-47bb-0310-9956-ffa450edef68
+
+commit a7e0d1f4712900b3aadaa196a1dbbae07c999e52
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Apr 28 14:50:37 2012 +0000
+
+    Adds NullPointerException protection when accessing cached deltas in
+    DeltaStoreBasedWaveletState.
+    https://reviews.apache.org/r/4923/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1331779 13f79535-47bb-0310-9956-ffa450edef68
+
+commit a98b72e3823b2fcae0a4daf64da5373ebd90e7ae
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Wed Apr 25 16:27:50 2012 +0000
+
+    Adds missing default values for configuration files + small fixes.
+    https://reviews.apache.org/r/4741/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1330397 13f79535-47bb-0310-9956-ffa450edef68
+
+commit d8a188cc4c539af689f418dceb432f0dd1d8ed9c
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Apr 21 20:14:04 2012 +0000
+
+    Updates GravatarProfilesFetcher to use HTTPS only if needed.
+    https://reviews.apache.org/r/4836/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1328732 13f79535-47bb-0310-9956-ffa450edef68
+
+commit ecc4e2b8332e9f7d3468726c707c68d8cedec054
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Apr 21 20:10:04 2012 +0000
+
+    Adds notifier servlet. https://reviews.apache.org/r/4829/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1328731 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 81bb3230a63fcdde8659ef3743bd573640d20552
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Apr 21 07:33:47 2012 +0000
+
+    Changes WaveId representation to the modern style. https://reviews.apache.org/r/4828/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1328600 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 628f94e6985d0d2de0379774906623dc2f1c3a4c
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Mon Apr 16 20:21:20 2012 +0000
+
+    Adds more gadgets: Task Board, Strategy Planning Tools and Countdown https://reviews.apache.org/r/4707
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1326784 13f79535-47bb-0310-9956-ffa450edef68
+
+commit a2b89dbba79e70f4ced011d68a578ddbf2ceda28
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Apr 7 07:43:10 2012 +0000
+
+    Handles the second part of issue WAVE-305 - cannot open new wave. https://reviews.apache.org/r/4572
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1310688 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 7ba4c54c9ffbcc8c707a4f43980471b568014ad6
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Apr 7 07:41:25 2012 +0000
+
+    Implements wave-319: Improve the 'Add gadget' popup. By wavegrove@gmail.com https://reviews.apache.org/r/3960
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1310687 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 9047ef466c9cee4b149b179fd11754832b7c4f27
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Fri Mar 30 09:07:42 2012 +0000
+
+    Allows to create a link with current selection. By Ali Lown. https://reviews.apache.org/r/4229/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1307323 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 517d8cfc3f0178566487a5787c4f7d1d1413567f
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Fri Mar 30 09:06:58 2012 +0000
+
+    Allows #fragments in links. By By Vicente J. Ruiz Jurado https://reviews.apache.org/r/4228
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1307322 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 53698c10d68c8fab73b4bbc48e97252ac0bc58ea
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Fri Mar 30 09:05:47 2012 +0000
+
+    Revert "Allows #fragments in links. By By Vicente J. Ruiz Jurado https://reviews.apache.org/r/4228"
+    The comment is incorrect. Will be resbmitted with correct comment.
+    
+    This reverts commit 67cd73cb678ed1c4894f0ff7d26d968d05884a8b.
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1307321 13f79535-47bb-0310-9956-ffa450edef68
+
+commit ef0253b92d593a02c64d1aaf7a2fe9ef49249512
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Fri Mar 16 09:50:19 2012 +0000
+
+    Fixes Wave-305 - Cannot open a new wave just after creation. By Andrew Kaplanov. https://reviews.apache.org/r/4361
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1301403 13f79535-47bb-0310-9956-ffa450edef68
+
+commit c785891d72561998089572c26e05ed27a2c915b1
+Author: Michael MacFadden <michael@apache.org>
+Date:   Thu Mar 15 13:52:23 2012 +0000
+
+    Implments a fix for WAVE-338.
+    Code Review:  https://reviews.apache.org/r/4320/
+    
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1300983 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 4344b70e0278adc9233a467de89d6e97962a0b25
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Tue Mar 13 19:58:32 2012 +0000
+
+    Fixes failing test - PerUserWaveViewSubscriberTest https://reviews.apache.org/r/4244/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1300318 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 50de41b0b55cd28924368719ffc3a9d91b20abf2
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Mar 10 18:27:11 2012 +0000
+
+    Deletes old jars
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1299249 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 484b9e39e7a7f72d28e144aa05d34db9c4ab36ee
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Mar 10 18:20:45 2012 +0000
+
+    Updates jetty and socketio to 8.1.1 by Vicente J. Ruiz Jurado. https://reviews.apache.org/r/4168/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1299247 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 387670073bd4c1365dee7d0dbec196c1b763d89d
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Mar 10 17:09:45 2012 +0000
+
+    Allows #fragments in links. By By Vicente J. Ruiz Jurado https://reviews.apache.org/r/4228
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1299236 13f79535-47bb-0310-9956-ffa450edef68
+
+commit a3ddf51a3a4afd7890129abc65502467435e9409
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Mar 10 16:39:50 2012 +0000
+
+    Sets gadget size when metadata cached. By Vicente J. Ruiz Jurado https://reviews.apache.org/r/4234/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1299230 13f79535-47bb-0310-9956-ffa450edef68
+
+commit cdee9941674e5ad5e010eed361c64c4233aebf2e
+Author: Michael MacFadden <michael@apache.org>
+Date:   Sat Feb 25 15:55:48 2012 +0000
+
+    Implementation for WAVE-317.
+    Code Review: https://reviews.apache.org/r/3882/
+    
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1293628 13f79535-47bb-0310-9956-ffa450edef68
+
+commit c376e4c055e79f23e63f2b0f891690fb7319c7c5
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Wed Feb 15 19:03:40 2012 +0000
+
+    Adds import of waves from Google Wave into WIAB. By Andrew Kaplanov https://reviews.apache.org/r/3564/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1244643 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 285e0b1da51ea0af6d1d21989c7e4e1421342f96
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Feb 11 17:48:57 2012 +0000
+
+    Fixes NPE in Robot registration. By Vicente J. Ruiz Jurado https://reviews.apache.org/r/3868/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1243113 13f79535-47bb-0310-9956-ffa450edef68
+
+commit bf77b3ac8a58199eb8a47210105bb207b58fbc6b
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Feb 11 17:47:56 2012 +0000
+
+    Fixes issue WAVE-333 - Welcome wave is not displayed after registration. https://reviews.apache.org/r/3864/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1243112 13f79535-47bb-0310-9956-ffa450edef68
+
+commit fb18917c67d264e430ae91551de9bb1025ee0110
+Author: Michael MacFadden <michael@apache.org>
+Date:   Fri Feb 10 00:16:28 2012 +0000
+
+    A proposed fix for Wave-332.  Avoids concurrent map modification by ensuring the
+    MemorySearchProvider is always operating on a copy of the Mulitmap.
+    
+    https://issues.apache.org/jira/browse/WAVE-332
+    https://reviews.apache.org/r/3826/
+    
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1242615 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 4b96939d8cf38a0ff9ffed2fbe2deef101825f17
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Wed Feb 8 20:41:52 2012 +0000
+
+    Fixes issue WAVE-328 by flushing the correct deltas versions. By Andrew Kaplanov https://reviews.apache.org/r/3771/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1242083 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 67a6a242c0b9319715f89bf9ff228427d55e3df4
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Wed Feb 8 20:21:04 2012 +0000
+
+    Speeds up GWT permutation compilation on multi-core machines. By Ali Lown https://reviews.apache.org/r/3808/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1242076 13f79535-47bb-0310-9956-ffa450edef68
+
+commit d32a834689b29fdd59cb8ad8c5b9db473961f46b
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Wed Feb 8 20:05:37 2012 +0000
+
+    Fixes Socket.IO SSL. By Ali Lown https://reviews.apache.org/r/3810/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1242063 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 7ffe4ce9795284db6cbf36197c68d77626a6b68e
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Wed Feb 8 20:04:49 2012 +0000
+
+    Fixes breakage of Socket.IO interface following IO type change. By Ali Lown  https://reviews.apache.org/r/3801/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1242062 13f79535-47bb-0310-9956-ffa450edef68
+
+commit e1f7ae43645f26db475ec54bc210ccdc372c64ac
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Tue Feb 7 22:06:22 2012 +0000
+
+    Makes focusNext go back up a wave too. By ali@lown.me.uk https://reviews.apache.org/r/3729/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1241658 13f79535-47bb-0310-9956-ffa450edef68
+
+commit b52fc9485c4ea4e617a5dc81c26dac1c64ae3f0e
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Tue Feb 7 07:04:59 2012 +0000
+
+    Fixes breakage with configuration generation
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1241364 13f79535-47bb-0310-9956-ffa450edef68
+
+commit f08a3bd60231459d5bc13b837f6d8935bcf9ed47
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Mon Feb 6 18:50:50 2012 +0000
+
+    Swaps location of 'Next' and 'Previous' blip buttons on ViewToolbar. By ali@lown.me.uk https://reviews.apache.org/r/3730/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1241108 13f79535-47bb-0310-9956-ffa450edef68
+
+commit e066039b3ef9f998184ff07c44c92496b5e5886e
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Mon Feb 6 18:45:52 2012 +0000
+
+    Adds SSL serving capabilites. By ali@lown.me.uk https://reviews.apache.org/r/3584/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1241106 13f79535-47bb-0310-9956-ffa450edef68
+
+commit adcdbe82a124f5e84961569f505d7483cf6aa562
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Fri Feb 3 17:52:39 2012 +0000
+
+    Adds a hyperlink to the WIAB icon on the client page. By ali@lown.me.uk. https://reviews.apache.org/r/3728/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1240261 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 7eb8a00594b5b33fd60647c7880b837d9bc3f9b6
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Fri Feb 3 17:18:58 2012 +0000
+
+    Sets webscocket connection timeout iddle time to infinity.
+    https://reviews.apache.org/r/3754/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1240250 13f79535-47bb-0310-9956-ffa450edef68
+
+commit fe269ac94de2ebcc40dce92dd3605cf3cab4664a
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Jan 28 19:28:41 2012 +0000
+
+    Decouples the search implementation from the waves persistence logic. https://reviews.apache.org/r/3508/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1237143 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 692c6a8358c7f0d972df7a5b0e3debad0a2ff2ae
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sun Jan 22 16:21:49 2012 +0000
+
+    Returns the buffer size back to 1MB as it was before. https://reviews.apache.org/r/3578/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1234540 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 3c4d12d7bbce87fc1b47f57b7485bb7b6b7ab4a6
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sun Jan 22 16:17:44 2012 +0000
+
+    Removes blip auto focus and adds blip navigation buttons to the wave view toolbar instead. https://reviews.apache.org/r/3577/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1234538 13f79535-47bb-0310-9956-ffa450edef68
+
+commit b5364a735ca030196a6e0fff50b82a471fa7a4e0
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Mon Jan 16 21:58:31 2012 +0000
+
+    Implement fix for WAVE-321 to prevent a complete crash when only a delta corruption issue occurs. By ali@lown.me.uk
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1232186 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 47921a6c287e1ce691aebab220dd8adf2cb06f1d
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Wed Jan 11 19:47:25 2012 +0000
+
+    Correct url to favicon on authentication page, by ali@lown.me.uk https://reviews.apache.org/r/3438/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1230205 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 075c16c05adf5fc85521578b497e959c9739e2b3
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Wed Jan 11 19:42:22 2012 +0000
+
+    Add an extra date formatting category between same day and same year, by ali@lown.me.uk https://reviews.apache.org/r/3425
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1230204 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 77457d3fe16f0deaab85ed265c98580f519bf331
+Author: Michael MacFadden <michael@apache.org>
+Date:   Sun Jan 8 01:26:41 2012 +0000
+
+    Sets the default debugging port.
+    
+    https://reviews.apache.org/r/3347/
+    
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1228763 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 21dbab5057065bf2fa105aa748337094581c8c65
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Jan 7 09:46:06 2012 +0000
+
+    Implements WAVE-313: registration disabling. By ali@lown.me.uk
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1228584 13f79535-47bb-0310-9956-ffa450edef68
+
+commit cc2f2cdede28e58e863dbadc6cf18ff14b249cd2
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sun Dec 11 18:43:22 2011 +0000
+
+    Fixes issue WAVE-306 - bad dependency from org.waveprotocol.wave to org.waveprotocol.box
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1213039 13f79535-47bb-0310-9956-ffa450edef68
+
+commit b0469283c81941a746515b34a7e4f6da6de0519a
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Dec 10 16:50:41 2011 +0000
+
+    Addresses TODO to move the thread counts from the code into server.config properties.
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1212824 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 7e2b61d2a9351102a4c572f195ec5b8defd0b776
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Dec 10 16:25:05 2011 +0000
+
+    Updates build.xml - removes artifact creation from dist + updates
+    README.
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1212820 13f79535-47bb-0310-9956-ffa450edef68
+
+commit e85a43b30761e665d977c854743d9fd422d760a7
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Wed Dec 7 17:51:21 2011 +0000
+
+    Fixes issue WAVE-142 sub/super clearing By Ali Lown. https://reviews.apache.org/r/3033/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1211570 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 9aab5378fc90ad71664fca976a5fde45f74ce861
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Nov 26 19:42:15 2011 +0000
+
+    Returns disabling of JSessionIDs in URLs redirects
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1206559 13f79535-47bb-0310-9956-ffa450edef68
+
+commit f30fae6375754c6258d6e3a367cfb07c856aa617
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Nov 26 19:27:56 2011 +0000
+
+    Adds  some files forgotten in previous commit
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1206549 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 9b3caa4f97d77762eb8bbbd0c53f70bd076bd949
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Nov 26 19:09:44 2011 +0000
+
+    Refactors the SearchService related classes to allow easier integration of alternative search provider https://reviews.apache.org/r/2882/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1206546 13f79535-47bb-0310-9956-ffa450edef68
+
+commit f7655a487e520d7db81968530b31fcc81b8e556c
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Nov 26 18:30:30 2011 +0000
+
+    Fixes several unit test failures described in issue WAVE-303. https://reviews.apache.org/r/2936/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1206536 13f79535-47bb-0310-9956-ffa450edef68
+
+commit bc4bae3e288129a7ab8223d780b91d76f6b955dd
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Nov 26 18:19:18 2011 +0000
+
+    Fixes issue WAVE-298: ActiveApiServletTest and DataApiServletTest don't compile. by jeden17@gmail.com (Antonio Bello)
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1206527 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 0a14da308d36945d55c0d4e4b36f94d281922f97
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Fri Nov 25 15:58:04 2011 +0000
+
+    Reverts back encoding fix that was accidently renmoved by 44df3b71b7aaca2480d4b8e6ed3b20ec7e70caee
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1206239 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 87610815d5667ad699aaae4261f2b693448b8486
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Fri Nov 25 15:40:43 2011 +0000
+
+    Allow other uses of HistorySupport by vjrj@ourproject.org https://reviews.apache.org/r/2913/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1206227 13f79535-47bb-0310-9956-ffa450edef68
+
+commit d8778a3044f8fce6dcb643379f023887de7edc92
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Fri Nov 25 13:56:44 2011 +0000
+
+    Remove EntryPoint and Chrome gwt theme from WebClient.gwt.xml by vjrj@ourproject.org https://reviews.apache.org/r/2900/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1206176 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 8929402ffcef5575212da904bf2de8e985b2d1ef
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Fri Nov 25 13:43:46 2011 +0000
+
+    Adds jetty jars that for some reason were not committed
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1206166 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 068dea0da39ae4106d87ab364a63cd93fa98a072
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Fri Nov 25 13:38:21 2011 +0000
+
+     Update of jetty (and socket-io-java) to 8.0.1 by vjrj@ourproject.org. https://reviews.apache.org/r/2899/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1206165 13f79535-47bb-0310-9956-ffa450edef68
+
+commit c87ab9f8435b14cc4d675dfeed2174ef3cfa4071
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Fri Nov 25 13:37:15 2011 +0000
+
+    Revert " Update of jetty (and socket-io-java) to 8.0.1 by vjrj@ourproject.org. https://reviews.apache.org/r/2899/"
+    
+    This reverts commit 68f54ab1f3c528ff744b2b95393c0f388154f90e.
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1206164 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 741c18a1aa7bc3a84ada959d7240e3cffe88c7f0
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Fri Nov 25 13:02:17 2011 +0000
+
+     Update of jetty (and socket-io-java) to 8.0.1 by vjrj@ourproject.org. https://reviews.apache.org/r/2899/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1206149 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 017fabe4ef9293ebf70a80d68b42f8759cb9a3ff
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Nov 19 15:10:55 2011 +0000
+
+    Reduces response buffer size used by implementations of AbstractWaveSocketIOServlet. issue WAVE-302. https://reviews.apache.org/r/2878/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1203987 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 750804dfee06ef3767ff123a97a0895d4a37b602
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Fri Nov 18 11:56:28 2011 +0000
+
+    Adds auto focusing on the oldest unread/newest modified blip when opening a wave. http://codereview.waveprotocol.org/610001/show
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1203614 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 4127da73a276e3f68d06347dec678c7dfa9ff66e
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Fri Nov 18 10:46:53 2011 +0000
+
+    Evicts old deltas. part 2. https://reviews.apache.org/r/2662/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1203579 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 3fa61640c7fd9608980f30d6364980ca067b51cc
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Tue Nov 1 19:04:58 2011 +0000
+
+    Improves persistence logic and addresses some old TODOs. In collaboration with sorenlassen@gmail.com
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1196213 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 54b7330952e2c600b93bc712c84e01f5d86945e4
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Sat Oct 29 08:18:10 2011 +0000
+
+    Adds .gitignore files
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1190770 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 6e2220eb9f3657174d9bad221d34bea3dd55d777
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Tue Oct 25 20:16:45 2011 +0000
+
+    Jetty updated to version 8, socketio patched and socket/socketio workaround https://reviews.apache.org/r/2533/
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1188887 13f79535-47bb-0310-9956-ffa450edef68
+
+commit edb627361a06a56a2aab5496c0d896d47231fd02
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Fri Oct 21 22:33:51 2011 +0000
+
+    Adds fotgotten file from previous commit + small fix
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1187583 13f79535-47bb-0310-9956-ffa450edef68
+
+commit ccd157b6465f270ecaddaefd2a03b0c74e687e41
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Fri Oct 21 14:37:46 2011 +0000
+
+    Adds missing jars for 1187363.
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1187368 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 950f28a69b5699892b5b16f7eff5bee5aa8cd022
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Fri Oct 21 14:33:34 2011 +0000
+
+    Adds attachments support. http://codereview.waveprotocol.org/616002/show
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1187363 13f79535-47bb-0310-9956-ffa450edef68
+
+commit bec4ef6b90b22cc105b5f6154b36e00903d39934
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Tue Oct 18 18:45:31 2011 +0000
+
+    Fixes issue Wave-187. Encoding problem (cyrillic). On behalf of vjrj.
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1185789 13f79535-47bb-0310-9956-ffa450edef68
+
+commit c987bc6104c5d4fa0dae188907514f699f95c0c6
+Author: Yuri Zelikov <yurize@apache.org>
+Date:   Tue Oct 18 18:23:57 2011 +0000
+
+    Fixes snippet display as UTF-8, issue WAVE-246. On behalf of vjrj.
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1185783 13f79535-47bb-0310-9956-ffa450edef68
+
+commit b3815a04e9114511ce962df0a70ed56841e3a003
+Author: Michael MacFadden <michael@apache.org>
+Date:   Tue Oct 11 04:48:31 2011 +0000
+
+    Initial check to svn.  From http://code.google.com/p/wave-protocol/source/ revision 6a56af40d823.
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1181624 13f79535-47bb-0310-9956-ffa450edef68
+
+commit 486093ecbef1378af57d0888576a17fd3eefeb72
+Author: Michael MacFadden <michael@apache.org>
+Date:   Wed Feb 16 03:02:00 2011 +0000
+
+    Added basic tags and branches directories.
+    
+    git-svn-id: https://svn.apache.org/repos/asf/incubator/wave/trunk@1071131 13f79535-47bb-0310-9956-ffa450edef68

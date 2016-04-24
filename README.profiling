@@ -1,0 +1,45 @@
+Wiab profiling.
+
+The basis of profiling code was taken from the Splash project (https://code.google.com/p/google-wave-splash/).
+
+Features appended to Splash profiling code:
+ 1. Current authentification session context.
+ 2. Cross-thread profiling (one request is executed in several threads simultaneously).
+ 3. Client-side profiling.
+ 4. GWT profiling.
+ 5. Loading of scope through static object (instead of custom Guice scope).
+ 6. Profiling popup dialog.
+
+Server code changes:
+ 1. Used only own-designed RequestScopeExecutor and ScheduledRequestScopeExecutor, transferring profiling context to the executed task.
+ 2. Profiling context is set in following places:
+  - RequestScopeFilter - for Servlet requests
+  - WebSocketChannel - for WebSocket requests
+
+Client code changes:
+ 1. Added GWT profiling:
+  - Added handling of event.__gwtStatsEvent
+  - Added own listener, as defined in https://code.google.com/p/gwt-debug-panel/wiki/GettingStarted.
+ 2. Used only own-designed custom executor BrowserBackedScheduler, transferring profiling context to the executed task.
+ 3. Profiling context is set in following places:
+  - Keyboard events - FocusManager.dispatch
+  - Mouse events - EventDispatcherPanel.ChangeHandlers.dispatch
+  - Client RPC requests - RemoteWaveViewService
+
+Statistics recorded on the server:
+ 1. Accumulated statistics for task calls for current session and whole program:
+  - Methods of objects, created by Guice Inject, and annotated as @Timed.
+  - Code from Timing.start() or Timing.startRequest() to Timer.stop().
+ 2. Statistics for last 100 requests with execution tree for current session and whole program:
+  - Code from Timing.startRequest() to Timer.stop().
+ 3. Statistics for static fields, annotated as @Stat.
+
+Statistics recorded on the client:
+ 1. Accumulated statistics for task calls:
+  - Code from Timing.start() or Timing.startRequest() to Timer.stop().
+ 2. Statistics for last 100 requests with execution tree:
+  - Code from Timing.startRequest() to Timer.stop().
+
+How to display statistics:
+ 1. In order to show profiling dialog in the client, press and release one-by-one Ctrl, Alt and Ctrl keys.
+ 2. To show only server statistics go to URL <wave_server_url>/speedz.

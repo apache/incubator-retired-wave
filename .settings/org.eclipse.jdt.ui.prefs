@@ -1,8 +1,0 @@
-#Fri Sep 03 16:36:23 EST 2010
-eclipse.preferences.version=1
-formatter_profile=_Wave Protocol Format
-formatter_settings_version=11
-org.eclipse.jdt.ui.ignorelowercasenames=true
-org.eclipse.jdt.ui.importorder=com.google;com;edu;freemarker;junit;net;org;java;javax;
-org.eclipse.jdt.ui.ondemandthreshold=99
-org.eclipse.jdt.ui.staticondemandthreshold=99

@@ -1,0 +1,14 @@
+// Example protobuffer definition in the Public Domain.
+
+syntax = "proto2";
+
+option java_package = "com.example";
+option java_outer_classname = "Example";
+
+package example;
+
+message Person {
+    required string name = 1;
+    required int32 id = 2;  // Unique ID number for this person.
+}
+

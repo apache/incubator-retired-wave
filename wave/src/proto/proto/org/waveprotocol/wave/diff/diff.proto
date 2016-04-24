@@ -1,0 +1,114 @@
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+//
+// The wave diff-on-open fetch service.
+//
+// Author: hearnden@google.com (David Hearnden)
+//         anorth@google.com (Alex North)
+
+syntax = "proto2";
+
+import "org/waveprotocol/box/server/rpc/rpc.proto";
+import "org/waveprotocol/wave/concurrencycontrol/clientserver.proto";
+import "org/waveprotocol/wave/federation/federation.protodevel";
+import "org/apache/wave/pst/protobuf/extensions.proto";
+
+package diff;
+
+option java_package = "org.waveprotocol.wave.diff";
+option java_outer_classname = "Diff";
+
+
+/*
+ *** Fetch service. ***
+ * Provides snapshots describing a client's view of a wave, in diff format.
+ * As a bandwidth optimization, the client may specify that it already has
+ * snapshots of some wavelets at some version (such as from a previous fetch).
+ * If the server's current version matches the version the client provides
+ * then the snapshot is omitted from the response.
+ */
+service FetchDiffService {
+  rpc Fetch(FetchDiffRequest) returns (FetchDiffResponse);
+}
+
+message FetchDiffRequest {
+  // Wave to open, URI path format.
+  required string waveId = 1;
+  // Wavelet versions the client already knows.
+  // At most one version per wavelet.
+  repeated concurrencycontrol.WaveletVersion knownWavelet = 2;
+}
+
+message FetchDiffResponse {
+  required concurrencycontrol.ResponseStatus status = 1;
+  
+  message WaveletDiff {
+    // The wavelet in view, URI path format.
+    required string waveletId = 1;
+    // Snapshot of the wavelet; omitted if the client already knew it.
+    optional WaveletDiffSnapshot snapshot = 2;
+  }
+  repeated WaveletDiff wavelet = 2;
+}
+
+/* A wavelet and associated metadata. */
+message WaveletDiffSnapshot {
+  // Wavelet's id, URI path format.
+  required string waveletId = 1;
+
+  // Participants of this wavelet.
+  repeated string participant = 2;
+  // Added participants of this wavelet;
+  repeated string addedParticipant = 21;
+  // Removed participants of this wavelet;
+  repeated string removedParticipant = 22;
+
+  // Snapshots of all the documents in the wavelet.
+  repeated DocumentDiffSnapshot document = 3;
+
+  //// Metadata ////
+  // Current version and modification timestamp of the wavelet.
+  required federation.ProtocolHashedVersion version = 4;
+  required int64 lastModifiedTime = 5 [(int52) = true];
+  // Participant and time of creation for the wavelet.
+  required string creator = 6;
+  required int64 creationTime = 7 [(int52) = true];
+}
+
+/* A document and associated metadata. */
+message DocumentDiffSnapshot {
+  // Id of the document.
+  required string documentId = 1;
+  // Operation that transforms an empty document the last-read document state.
+  optional federation.ProtocolDocumentOperation state = 2;
+
+  // Operation that transforms the last-read document state to the current state.
+  optional federation.ProtocolDocumentOperation diff = 21;
+
+  //// Metadata ////
+  // Participant who submitted the first operation to the document.
+  required string author = 3;
+  // All participants who have submitted operations to the document.
+  repeated string contributor = 4;
+  // Added participants who have submitted operations to the document.
+  repeated string addedContributor = 22;
+  // Removed participants who have submitted operations to the document.
+  repeated string removedContributor = 23;
+  // Wavelet version and timestamp when the document was last modified.
+  required int64 lastModifiedVersion = 5 [(int52) = true];
+  required int64 lastModifiedTime = 6 [(int52) = true];
+}

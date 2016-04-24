@@ -1,0 +1,247 @@
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+//
+// Google Wave Federation Protocol data structures.
+//
+// They are intended to be equivalent to the data structures in the
+// draft "Google Wave Federation Protocol Over XMPP" at
+// http://code.google.com/p/wave-protocol/source
+//
+// Author: thorogood@google.com (Sam Thorogood), soren@google.com (Soren Lassen)
+
+syntax = "proto2";
+
+package federation;
+
+import "org/apache/wave/pst/protobuf/extensions.proto";
+
+option java_package = "org.waveprotocol.wave.federation";
+option java_outer_classname = "Proto";
+
+/**
+ * An immutable list of operations for contribution to a wavelet.
+ * Specifies the contributor and the wavelet version that the
+ * operations are intended to be applied to.  The host wave server
+ * may apply the operations to the wavelet at the specified wavelet version
+ * or it may accept them at a later version after operational transformation
+ * against the operations at the intermediate wavelet versions.
+ */
+message ProtocolWaveletDelta {
+  // Wavelet version that the delta is intended to be applied to.
+  required ProtocolHashedVersion hashed_version = 1;
+
+  // Wave address of the contributor. Must be an explicit wavelet participant,
+  // and may be different from the originator of this delta.
+  required string author = 2;
+
+  // Operations included in this delta.
+  repeated ProtocolWaveletOperation operation = 3;
+
+  /*
+   * The nodes on the "overt" path from the originator through the address
+   * access graph leading up to (but excluding) the author. The path excludes
+   * any initial segments of the complete path which come before a WRITE edge
+   * in the graph. This field is empty if the author is either the originator's
+   * entry point into the address graph or is accessed by a WRITE edge.
+   *
+   * For example, "wave-discuss@acmewave.com" may be the explicit participant of
+   * a wavelet, and is set as the author of a delta. However, this group is
+   * being asked to act on behalf of "peter@initech-corp.com", who is a member
+   * of "wave-authors", which is in turn a member of "wave-discuss". In this
+   * example, the delta would be configured as such:
+   *  delta.author = "wave-discuss@acmewave.com"
+   *  delta.addressPath = ["peter@initech-corp.com", "wave-authors@acmewave.com"]
+   */
+  repeated string address_path = 4;
+}
+
+/**
+ * Describes a wavelet version and the wavelet's history hash at that version.
+ */
+message ProtocolHashedVersion {
+  required int64 version = 1 [(int52) = true];
+  required bytes history_hash = 2;
+}
+
+/**
+ * An operation within a delta. Exactly one of the following seven fields must be set
+ * for this operation to be valid.
+ */
+message ProtocolWaveletOperation {
+
+  // A document operation. Mutates the contents of the specified document.
+  message MutateDocument {
+    required string document_id = 1;
+    required ProtocolDocumentOperation document_operation = 2;
+  }
+
+  // Adds a new participant (canonicalized wave address) to the wavelet.
+  optional string add_participant = 1;
+
+  // Removes an existing participant (canonicalized wave address) from the wavelet.
+  optional string remove_participant = 2;
+
+  // Mutates a document.
+  optional MutateDocument mutate_document = 3;
+
+  // Does nothing. True if set.
+  optional bool no_op = 4;
+}
+
+/**
+ * A list of mutation components.
+ */
+message ProtocolDocumentOperation {
+
+  /**
+   * A component of a document operation.  One (and only one) of the component
+   * types must be set.
+   */
+  message Component {
+
+    message KeyValuePair {
+      required string key = 1;
+      required string value = 2;
+    }
+
+    message KeyValueUpdate {
+      required string key = 1;
+      // Absent field means that the attribute was absent/the annotation
+      // was null.
+      optional string old_value = 2;
+      // Absent field means that the attribute should be removed/the annotation
+      // should be set to null.
+      optional string new_value = 3;
+    }
+
+    message ElementStart {
+      required string type = 1;
+      // MUST NOT have two pairs with the same key.
+      repeated KeyValuePair attribute = 2;
+    }
+
+    message ReplaceAttributes {
+      // This field is set to true if and only if both oldAttributes and
+      // newAttributes are empty.  It is needed to ensure that the optional
+      // replaceAttributes component field is not dropped during serialization.
+      optional bool empty = 1;
+      // MUST NOT have two pairs with the same key.
+      repeated KeyValuePair old_attribute = 2;
+      // MUST NOT have two pairs with the same key.
+      repeated KeyValuePair new_attribute = 3;
+    }
+
+    message UpdateAttributes {
+      // This field is set to true if and only if attributeUpdates are empty.
+      // It is needed to ensure that the optional updateAttributes
+      // component field is not dropped during serialization.
+      optional bool empty = 1;
+      // MUST NOT have two updates with the same key.
+      repeated KeyValueUpdate attribute_update = 2;
+    }
+
+    message AnnotationBoundary {
+      // This field is set to true if and only if both ends and changes are
+      // empty.  It is needed to ensure that the optional annotationBoundary
+      // component field is not dropped during serialization.
+      optional bool empty = 1;
+      // MUST NOT have the same string twice.
+      repeated string end = 2;
+      // MUST NOT have two updates with the same key.  MUST NOT
+      // contain any of the strings listed in the 'end' field.
+      repeated KeyValueUpdate change = 3;
+    }
+
+    optional AnnotationBoundary annotation_boundary = 1;
+    optional string characters = 2;
+    optional ElementStart element_start = 3;
+    optional bool element_end = 4;
+    optional int32 retain_item_count = 5;
+    optional string delete_characters = 6;
+    optional ElementStart delete_element_start = 7;
+    optional bool delete_element_end = 8;
+    optional ReplaceAttributes replace_attributes = 9;
+    optional UpdateAttributes update_attributes = 10;
+  }
+
+  repeated Component component = 1;
+}
+
+/**
+ * Information generated about this delta post-applicaton. Used in
+ * ProtocolUpdate and ProtocolHistoryResponse.
+ */
+message ProtocolAppliedWaveletDelta {
+  required ProtocolSignedDelta signed_original_delta = 1;
+  optional ProtocolHashedVersion hashed_version_applied_at = 2;
+  required int32 operations_applied = 3;
+  required int64 application_timestamp = 4 [(int52) = true];
+}
+
+/**
+ * A canonicalised delta signed with a number of domain signatures.
+ */
+message ProtocolSignedDelta {
+  required bytes delta = 1;
+  repeated ProtocolSignature signature = 2;
+}
+
+/**
+ * A signature for a delta. It contains the actual bytes of the signature,
+ * an identifier of the signer (usually the hash of a certificate chain),
+ * and an enum identifying the signature algorithm used.
+ */
+message ProtocolSignature {
+
+  enum SignatureAlgorithm {
+    SHA1_RSA = 1;
+  }
+
+  required bytes signature_bytes = 1;
+  required bytes signer_id = 2;
+  required SignatureAlgorithm signature_algorithm = 3;
+}
+
+/**
+ * A certificate chain that a sender will refer to in subsequent signatures.
+ *
+ * The signer_id field in a ProtocolSignature refers to a ProtocolSignerInfo
+ * as follows: The certificates present in a ProtocolSignerInfo are encoded
+ * in PkiPath format, and then hashed using the hash algorithm indicated in the
+ * ProtocolSignerInfo.
+ */
+message ProtocolSignerInfo {
+
+  enum HashAlgorithm {
+    SHA256 = 1;
+    SHA512 = 2;
+  }
+
+  // The hash algorithm senders will use to generate an id that will refer to
+  // this certificate chain in the future
+  required HashAlgorithm hash_algorithm = 1;
+
+  // The domain that this certificate chain was issued to. Receivers of this
+  // ProtocolSignerInfo SHOULD reject the ProtocolSignerInfo if the target
+  // certificate (the first one in the list) is not issued to this domain.
+  required string domain = 2;
+
+  // The certificate chain. The target certificate (i.e., the certificate issued
+  // to the signer) is first, and the CA certificate (or one issued directly
+  // by the CA) is last.
+  repeated bytes certificate = 3;
+}

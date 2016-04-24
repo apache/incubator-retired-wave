@@ -1,0 +1,65 @@
+<!--
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ -->
+<project name="server config" basedir="../" default="prosody-config">
+  <description>Creates the server configuration file.</description>
+
+  <property name="wave_server_domain" value="local.net" />
+  <property name="xmpp_server_secret" value="opensesame" />
+  <property name="certificate_private_key" value="${wave_server_domain}.key" />
+  <property name="certificate_files" value="${wave_server_domain}.crt,sub.class1.server.ca.pem,ca.pem" />
+  <property name="certificate_domain" value="${wave_server_domain}" />
+  <property name="xmpp_component_name" value="wave" />
+  <property name="xmpp_jid" value="${xmpp_component_name}.${wave_server_domain}" />
+  <property name="xmpp_server_description" value="&quot;Wave in a Box&quot;" />
+  <property name="xmpp_server_hostname" value="${wave_server_domain}" />
+  <property name="xmpp_server_component_port" value="5275" />
+  <property name="xmpp_server_to_server_port" value="5269" />
+  <property name="xmpp_server_ping" value="wavesandbox.com" />
+  <property name="xmpp_server_ip" value="${xmpp_server_hostname}" />
+  <property name="waveserver_disable_verification" value="false" />
+  <property name="waveserver_disable_signer_verification" value="false" />
+
+
+  <target name="prosody-config"
+      description="Run to create the prosody configuration files.
+      ant -f server-config.xml prosody-config">
+      <echo>Generating ${certificate_domain}.cfg.lua</echo>
+    <copy file="${certificate_domain}.cfg.lua"
+               tofile="${certificate_domain}.cfg.lua.old"
+               overwrite="true"
+               failonerror="false" />
+    <copy file="prosody.cfg.lua.example" tofile="${certificate_domain}.cfg.lua" overwrite="true">
+      <filterchain>
+        <replacetokens>
+          <token key="BASEDIR" value="${basedir}" />
+          <token key="XMPP_SERVER_SECRET" value="${xmpp_server_secret}" />
+          <token key="CERTIFICATE_PRIVATE_KEY" value="${certificate_private_key}" />
+          <token key="CERTIFICATE_DOMAIN" value="${certificate_domain}" />
+          <token key="XMPP_JID" value="${xmpp_jid}" />
+          <token key="XMPP_SERVER_DESCRIPTION" value="${xmpp_server_description}" />
+          <token key="XMPP_SERVER_COMPONENT_PORT" value="${xmpp_server_component_port}" />
+          <token key="XMPP_SERVER_TO_SERVER_PORT" value="${xmpp_server_to_server_port}" />
+        </replacetokens>
+      </filterchain>
+    </copy>
+    <echo>Please, manually copy ${certificate_domain}.cfg.lua to your prosody configuration directory.</echo>
+    <echo>E.g. sudo cp ${certificate_domain}.cfg.lua /etc/prosody/conf.d/${certificate_domain}.cfg.lua</echo>
+    <echo>Additionally, ensure your ${certificate_domain} SRV record points to port ${xmpp_server_to_server_port}</echo>
+  </target>
+</project>

@@ -1,0 +1,50 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+
+  GXP template for the bar up the top of the page showing who you're logged in as.
+  Author: josephg@gmail.com (Joseph Gentle)
+-->
+
+<gxp:template
+    name='org.waveprotocol.box.server.gxp.TopBar'
+    xmlns='http://www.w3.org/1999/xhtml'
+    xmlns:gxp='http://google.com/2001/gxp'>
+
+  <gxp:param name='username' type='String' />
+  <gxp:param name='domain' type='String' />
+
+  <div class="topbar">
+    <a href="/"><img src="/static/logo.png" alt="logo" class="logo" /></a>
+    <div class="title">Wave in a box</div>
+    <div class="banner" id="banner"></div>
+    <div class="info">
+      <gxp:if cond='username == null'>
+        Not logged in |
+        <a href="/auth/register">Register</a> |
+        <a href="/auth/signin?r=/">Sign In</a>
+      </gxp:if>
+      <gxp:if cond='username != null'>
+        <select id="lang" class="lang" size="1"/> |
+        <gxp:eval expr='username' /><span class="domain">@<gxp:eval expr='domain' /></span> |
+        <span id='unsavedStateContainer' style="width: 60px">Saved</span> |
+        <span id="netstatus" class="offline">Offline</span> |
+        <a id="signout" href="/auth/signout?r=/">Sign out</a>
+      </gxp:if>
+    </div>
+  </div>
+</gxp:template>
