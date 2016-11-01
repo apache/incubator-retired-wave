@@ -121,14 +121,14 @@ dependencies {
     gwt(
             [group: "javax.validation", name: "validation-api", version: "1.1.0.Final"],                        // [?, ?]
             [group: "javax.validation", name: "validation-api", version: "1.1.0.Final", classifier: "sources"], // [?, ?]
-            [group: "com.google.gwt", name: "gwt-dev", version: "2.8.0-rc2"],                              // [?, ?]
-            [group: "com.google.gwt", name: "gwt-user", version: "2.8.0-rc2"],                             // [?, ?]
-            [group: "com.google.gwt", name: "gwt-codeserver", version: "2.8.0-rc2"],                       // [?, ?]
+            [group: "com.google.gwt", name: "gwt-dev", version: "2.8.0"],                              // [?, ?]
+            [group: "com.google.gwt", name: "gwt-user", version: "2.8.0"],                             // [?, ?]
+            [group: "com.google.gwt", name: "gwt-codeserver", version: "2.8.0"],                       // [?, ?]
     )
     compile (
-            [group: "com.google.gwt", name: "gwt-dev", version: "2.8.0-rc2"],                              // [?, ?]
-            [group: "com.google.gwt", name: "gwt-user", version: "2.8.0-rc2"],                             // [?, ?]
-            [group: "com.google.gwt", name: "gwt-codeserver", version: "2.8.0-rc2"],                       // [?, ?]
+            [group: "com.google.gwt", name: "gwt-dev", version: "2.8.0"],                              // [?, ?]
+            [group: "com.google.gwt", name: "gwt-user", version: "2.8.0"],                             // [?, ?]
+            [group: "com.google.gwt", name: "gwt-codeserver", version: "2.8.0"],                       // [?, ?]
             [group: "aopalliance", name: "aopalliance", version: "1.0"],                                        // [?, ?]
             [group: "cc.kune", name: "gwt-initials-avatars-shared", version: "1.0-SNAPSHOT"],                   // [?, ?]
             [group: "cc.kune", name: "gwt-initials-avatars-server", version: "1.0-SNAPSHOT"],                   // [?, ?]
@@ -222,9 +222,9 @@ dependencies {
             [group: "org.jmock", name: "jmock-junit3", version: "2.6.0"],                                       // [?, ?]
             [group: "org.jmock", name: "jmock", version: "2.6.0"],                                              // [?, ?]
             [group: "org.mockito", name: "mockito-all", version: "1.9.5"],                                      // [?, ?]
-            [group: "com.google.gwt", name: "gwt-dev", version: "2.8.0-rc2"],                              // [?, ?]
-            [group: "com.google.gwt", name: "gwt-user", version: "2.8.0-rc2"],                             // [?, ?]
-            [group: "com.google.gwt", name: "gwt-codeserver", version: "2.8.0-rc2"],                       // [?, ?]
+            [group: "com.google.gwt", name: "gwt-dev", version: "2.8.0"],                              // [?, ?]
+            [group: "com.google.gwt", name: "gwt-user", version: "2.8.0"],                             // [?, ?]
+            [group: "com.google.gwt", name: "gwt-codeserver", version: "2.8.0"],                       // [?, ?]
     )
 }
 
