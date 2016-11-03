@@ -269,9 +269,10 @@ public class SignalEventImpl implements SignalEvent {
       keySignalResult = computeKeySignalTypeResult;
 
       String keyIdentifier = getKeyIdentifier(event);
+      String key = getKey(event);
 
       logic.computeKeySignalType(keySignalResult,
-          event.getType(), getNativeKeyCode(event), getWhich(event), keyIdentifier,
+          event.getType(), getNativeKeyCode(event), getWhich(event), keyIdentifier, key,
           event.getMetaKey(), event.getCtrlKey(), event.getAltKey(), event.getShiftKey());
 
     } else {
@@ -321,6 +322,10 @@ public class SignalEventImpl implements SignalEvent {
 
   public static native String getKeyIdentifier(Event event) /*-{
     return event.keyIdentifier
+  }-*/;
+  
+  public static native String getKey(Event event) /*-{
+    return event.key;
   }-*/;
 
   /**
