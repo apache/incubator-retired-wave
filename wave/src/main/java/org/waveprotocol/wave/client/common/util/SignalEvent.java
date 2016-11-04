@@ -19,7 +19,6 @@
 
 package org.waveprotocol.wave.client.common.util;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.user.client.Event;
@@ -358,4 +357,9 @@ public interface SignalEvent {
    * See also {@link #stopPropagation()}.
    */
   public void preventDefault();
+
+  /**
+   * @return true if it is a DOMCharacterDataModified event
+   */
+  boolean isDOMCharacterEvent();
 }

@@ -293,7 +293,12 @@ public final class EditorEventHandler {
     } else if (event.isMutationEvent()) {
       selectionAffinityMaybeChanged = false;
       if (!editorInteractor.isExpectingMutationEvents()) {
-        if (DomHelper.isTextNode(event.getTarget())) {
+         
+        // Don't trust in DomHelper.isTextNode(event.getTarget())
+        // to detect DOM mutations in text because target property
+        // is inconsistent among browsers {@DOMImplWebkit#eventGetTarget}
+        if (event.isDOMCharacterEvent()) {
+          
           cachedSelection = editorInteractor.getSelectionPoints();
           if (cachedSelection != null) {
             if (!cachedSelection.isCollapsed()) {
