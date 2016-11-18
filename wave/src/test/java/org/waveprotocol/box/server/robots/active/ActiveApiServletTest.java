@@ -119,7 +119,7 @@ public class ActiveApiServletTest extends TestCase {
     String operationId = "op1";
     OperationRequest operation = new OperationRequest("wavelet.create", operationId);
     List<OperationRequest> operations = Collections.singletonList(operation);
-    when(robotSerializer.deserializeOperations(anyString())).thenReturn(operations);
+    when(robotSerializer.deserializeOperations(any())).thenReturn(operations);
     String responseValue = "response value";
     when(robotSerializer.serialize(any(), any(Type.class), any(ProtocolVersion.class))).thenReturn(
         responseValue);
