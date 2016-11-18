@@ -53,16 +53,6 @@ configurations {
     gwt
 }
 
-//
-// Workaround for validation API conflicts (GWT has not updated the dependency)
-// https://groups.google.com/forum/#!topic/google-web-toolkit/KtdRAWNotXE
-//
-configurations.gwt {
-  resolutionStrategy {
-    force 'javax.validation:validation-api:1.0.0.GA'
-  }
-}
-
 //=============================================================================
 // Source's
 //=============================================================================
@@ -110,28 +100,21 @@ repositories {
         url 'https://oauth.googlecode.com/svn/code/maven/'
     }
     maven {
-        url 'https://oss.sonatype.org/content/repositories/google-snapshots/'
-    }
-    maven {
         url 'https://oss.sonatype.org/service/local/repositories/snapshots/content/'
     }
 }
-
+configurations.gwt {
+    resolutionStrategy {
+        failOnVersionConflict()
+    }
+}
 dependencies {
-    gwt(
-            [group: "javax.validation", name: "validation-api", version: "1.1.0.Final"],                        // [?, ?]
-            [group: "javax.validation", name: "validation-api", version: "1.1.0.Final", classifier: "sources"], // [?, ?]
-            [group: "com.google.gwt", name: "gwt-dev", version: "2.8.0"],                              // [?, ?]
-            [group: "com.google.gwt", name: "gwt-user", version: "2.8.0"],                             // [?, ?]
-            [group: "com.google.gwt", name: "gwt-codeserver", version: "2.8.0"],                       // [?, ?]
-    )
     compile (
             [group: "com.google.gwt", name: "gwt-dev", version: "2.8.0"],                              // [?, ?]
             [group: "com.google.gwt", name: "gwt-user", version: "2.8.0"],                             // [?, ?]
             [group: "com.google.gwt", name: "gwt-codeserver", version: "2.8.0"],                       // [?, ?]
-            [group: "aopalliance", name: "aopalliance", version: "1.0"],                                        // [?, ?]
-            [group: "cc.kune", name: "gwt-initials-avatars-shared", version: "1.0-SNAPSHOT"],                   // [?, ?]
-            [group: "cc.kune", name: "gwt-initials-avatars-server", version: "1.0-SNAPSHOT"],                   // [?, ?]
+            //[group: "cc.kune", name: "gwt-initials-avatars-shared", version: "1.0-SNAPSHOT"],                   // [?, ?]
+            //[group: "cc.kune", name: "gwt-initials-avatars-server", version: "1.0-SNAPSHOT"],                   // [?, ?]
             [group: "commons-fileupload", name: "commons-fileupload", version: "1.2.2"],                        // [?, ?]
             [group: "commons-cli", name: "commons-cli", version: "1.2"],                                        // [?, ?]
             [group: "commons-codec", name: "commons-codec", version: "1.4"],                                    // [?, ?]
@@ -316,6 +299,8 @@ task generateGXP {
 //=============================================================================
 task compileGwt {
     description = 'Compiles the GWT sources for production'
+    FileTree inputFiles = fileTree(dir: 'generated/src/main/java', include: '**/*.java')
+    inputs.property "files", inputFiles
     doLast {
         javaexec {
             main = "com.google.gwt.dev.Compiler"
@@ -323,8 +308,7 @@ task compileGwt {
                 [
                         sourceSets.main.java.srcDirs,
                         sourceSets.main.compileClasspath,
-                        sourceSets.main.resources.srcDirs,
-                        configurations.gwt
+                        sourceSets.main.resources.srcDirs
                 ]
             }
             jvmArgs = [
@@ -353,8 +337,7 @@ task compileGwtDemo {
                 [
                         sourceSets.main.java.srcDirs,
                         sourceSets.main.compileClasspath,
-                        sourceSets.main.resources.srcDirs,
-                        configurations.gwt
+                        sourceSets.main.resources.srcDirs
                 ]
             }
             args = [
@@ -375,8 +358,7 @@ task compileGwtDev {
                 [
                         sourceSets.main.java.srcDirs,
                         sourceSets.main.compileClasspath,
-                        sourceSets.main.resources.srcDirs,
-                        configurations.gwt
+                        sourceSets.main.resources.srcDirs
                 ]
             }
             args = [
@@ -414,8 +396,7 @@ task gwtDev {
                 [
                         sourceSets.main.java.srcDirs,
                         sourceSets.main.compileClasspath,
-                        sourceSets.main.resources.srcDirs,
-                        configurations.gwt,
+                        sourceSets.main.resources.srcDirs
                 ]
             }
             args = [
