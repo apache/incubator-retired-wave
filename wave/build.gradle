@@ -50,7 +50,6 @@ compileJava {
 configurations {
     generateMessages
     generateGXP
-    gwt
 }
 
 //=============================================================================
@@ -112,6 +111,7 @@ dependencies {
             [group: "com.google.gwt", name: "gwt-codeserver", version: "2.8.0"],                                // [11/2016, 1/2018]
             [group: "com.google.gxp", name: "google-gxp", version: "0.2.4-beta"],                               // [?, ?]
             [group: "com.google.protobuf", name: "protobuf-java", version: "2.6.1"],                            // [?, ?]
+            [group: "com.google.protobuf", name: "protobuf-java", version: "2.6.1", classifier: 'sources'],     // [?, ?]
             [group: "com.googlecode.protobuf-java-format", name: "protobuf-java-format", version: "1.2"],       // [?, ?]
             [group: "com.typesafe", name: "config", version: "1.2.1"],                                          // [?, ?]
             [group: "commons-codec", name: "commons-codec", version: "1.10"],                                   // [?, ?]
@@ -120,7 +120,7 @@ dependencies {
             [group: "commons-configuration", name: "commons-configuration", version: "1.6"],                    // [?, ?]
             [group: "commons-httpclient", name: "commons-httpclient", version: "3.1"],                          // [?, ?]
             [group: "commons-lang", name: "commons-lang", version: "2.5"],                                      // [?, ?]
-            [group: "commons-fileupload", name: "commons-fileupload", version: "1.3.2"],                        // [11/2016, 1/2018]
+            [group: "commons-fileupload", name: "commons-fileupload", version: "1.3.2"],                        // [11/2016, 6/2017]
             [group: "org.antlr", name: "antlr", version: "3.2"],                                                // [?, ?]
             [group: "org.apache.velocity", name: "velocity", version: "1.6.3"],                                 // [?, ?]
             [group: "org.apache.lucene", name: "lucene-core", version: "3.5.0"],                                // [?, ?]
@@ -152,13 +152,13 @@ dependencies {
             [group: "javax.inject", name: "javax.inject", version: "1"],                                        // [?, ?]
             [group: "javax.servlet", name: "javax.servlet-api", version: "3.1.0"],                              // [?, ?]
             [group: "javax.jdo", name: "jdo2-api", version: "2.1"],                                             // [?, ?]
-            [group: "net.oauth.core", name: "oauth-provider", version: "20100527"],                             // [?, ?]
-            [group: "net.oauth.core", name: "oauth", version: "20100527"],                                      // [?, ?]
-            [group: "net.oauth.core", name: "oauth-consumer", version: "20100527"],                             // [?, ?]
+            [group: "net.oauth.core", name: "oauth-provider", version: "20100527"],                             // [11/2016, depreciate]
+            [group: "net.oauth.core", name: "oauth", version: "20100527"],                                      // [11/2016, depreciate]
+            [group: "net.oauth.core", name: "oauth-consumer", version: "20100527"],                             // [11/2016, depreciate]
     )
     compile fileTree(dir: '../pst/build/libs', include: '**/*.jar')                                             // [?, ?]
     generateGXP (
-        [group: "com.google.gxp", name: "google-gxp", version: "0.2.4-beta"]                                    // [?, ?]
+        [group: "com.google.gxp", name: "google-gxp", version: "0.2.4-beta"]                                    // [11/2016, depreciate]
     )
     protoCompile (
         [group: "com.google.protobuf", name: "protobuf-java", version: "2.6.1"],                                // [?, ?]
@@ -168,12 +168,12 @@ dependencies {
          fileTree(dir: '../pst/build/libs', include: '**/*.jar')                                                // [?, ?]
     )
     testCompile(
-            [group: 'junit', name: 'junit', version: '4.12'],                                                   // [?, ?]
-            [group: "org.hamcrest", name: "hamcrest-junit", version: "2.0.0.0"],                                      // [?, ?]
+            [group: 'junit', name: 'junit', version: '4.12'],                                                   // [11/2016, 1/2018]
+            [group: "org.hamcrest", name: "hamcrest-junit", version: "2.0.0.0"],                                // [11/2016, 1/2018]
             // Todo: change to mockito
-            [group: "org.jmock", name: "jmock-junit3", version: "2.6.0"],                                       // [?, ?]
-            [group: "org.jmock", name: "jmock", version: "2.6.0"],                                              // [?, ?]
-            [group: "org.mockito", name: "mockito-core", version: "2.2.21"],                                      // [?, ?]
+            [group: "org.jmock", name: "jmock-junit3", version: "2.6.0"],                                       // [11/2016, depreciate]
+            [group: "org.jmock", name: "jmock", version: "2.6.0"],                                              // [11/2016, depreciate]
+            [group: "org.mockito", name: "mockito-core", version: "2.2.21"],                                    // [11/2016, 1/2018]
     )
 }
 
@@ -293,7 +293,6 @@ task compileGwt {
 }
 
 compileGwt.mustRunAfter compileJava
-run.dependsOn compileGwt
 
 task compileGwtDemo {
     description = 'Compiles the GWT sources for Demo'
@@ -332,7 +331,7 @@ task compileGwtDev {
                     "-style", "PRETTY",
                     "-draftCompile",
                     "-ea",
-                    "-strict",
+                    //"-strict",
                     "org.waveprotocol.box.webclient.WebClientDev"
             ]
         }
@@ -340,7 +339,7 @@ task compileGwtDev {
 }
 
 
-
+run.dependsOn compileGwtDev
 compileJava.dependsOn = [generateMessages, generateGXP]
 
 /* Gwt Dev Tasks */
