@@ -57,3 +57,6 @@ wave/config/wave.conf
 
 ### Backup files
 *~
+
+### Server running
+**/*.log.*
