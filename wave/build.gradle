@@ -266,8 +266,8 @@ task generateGXP {
 task compileGwt {
     description = 'Compiles the GWT sources for production'
     FileTree inputFiles = fileTree(dir: 'generated/src/main/java', include: '**/*.java')
-    inputs.property "files", inputFiles
-    outputs.dir "${project.buildDir}"
+    //inputs.property "files", inputFiles
+    //outputs.dir "${project.buildDir}"
     doLast {
         javaexec {
             main = "com.google.gwt.dev.Compiler"
