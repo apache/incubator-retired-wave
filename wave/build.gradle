@@ -21,6 +21,7 @@
 plugins {
     id 'java'
     id 'application'
+    id 'com.github.johnrengelman.shadow' version '1.2.4'
 }
 apply plugin: 'com.google.protobuf'
 
@@ -121,7 +122,6 @@ dependencies {
             [group: "commons-httpclient", name: "commons-httpclient", version: "3.1"],                          // [?, ?]
             [group: "commons-lang", name: "commons-lang", version: "2.5"],                                      // [?, ?]
             [group: "commons-fileupload", name: "commons-fileupload", version: "1.3.2"],                        // [11/2016, 6/2017]
-            [group: "org.antlr", name: "antlr", version: "3.2"],                                                // [?, ?]
             [group: "org.apache.velocity", name: "velocity", version: "1.6.3"],                                 // [?, ?]
             [group: "org.apache.lucene", name: "lucene-core", version: "3.5.0"],                                // [?, ?]
             [group: "org.atmosphere", name: "atmosphere-guice", version: "0.8.3"],                              // [?, ?]
@@ -263,8 +263,6 @@ task generateGXP {
 task compileGwt {
     description = 'Compiles the GWT sources for production'
     FileTree inputFiles = fileTree(dir: 'generated/src/main/java', include: '**/*.java')
-    //inputs.property "files", inputFiles
-    //outputs.dir "${project.buildDir}"
     doLast {
         javaexec {
             main = "com.google.gwt.dev.Compiler"
@@ -336,7 +334,7 @@ task compileGwtDev {
 }
 
 
-run.dependsOn compileGwtDev
+run.dependsOn compileGwt
 compileJava.dependsOn = [generateMessages, generateGXP]
 
 /* Gwt Dev Tasks */
@@ -465,20 +463,12 @@ testMongo.mustRunAfter compileJava, test
 testLarge.mustRunAfter test
 
 //=============================================================================
-// Custom UberJar Implementation
-// Author Note: this custom implementation should be replaced by the shadow
-//              plugin as shown in the pst project.
+// Dist's
 //=============================================================================
-task extractApi(type: Copy) {
-    from (configurations.compile.collect { zipTree(it) }) {
-        //Note: readonly files which get overwritten crash windows.
-        exclude "LICENSE"
-    } into "$buildDir/api"
-}
 
-extractApi.mustRunAfter compileJava
-
-jar {
+shadowJar {
+    baseName = 'wave'
+    classifier = ''
     manifest {
         attributes "Specification-Vendor": vendor,
                 "Specification-Title": title,
@@ -489,52 +479,6 @@ jar {
                 "Built-By": "No one in particular",
                 "Main-Class": mainClassName
     }
-    from "$buildDir/api"
-    include "META-INF/services/*"
-    include "com/mongodb/**/*"
-    include "org/slf4j/**/*"
-    include "org/atmosphere/**/*"
-    include "com/google/common/**/*"
-    include "com/google/gson/**/*"
-    include "com/google/gxp/**/*"
-    include "com/google/gwt/core/server/**/*"
-    include "com/google/gwt/core/shared/**/*"
-    include "com/google/gwt/logging/**/*"
-    include "com/google/gwt/user/server/**/*"
-    include "com/google/gwt/user/client/rpc/**/*"
-    include "com/google/inject/**/*"
-    include "com/google/protobuf/**/*"
-    include "com/google/wave/**/*"
-    include "com/typesafe/**/*"
-    include "gnu/inet/**/*"
-    include "javax/inject/**/*"
-    include "javax/servlet/**/*"
-    include "javax/xml/**/*"
-    include "net/oauth/**/*"
-    include "org/aopalliance/**/*"
-    include "org/apache/commons/cli/**/*"
-    include "org/apache/commons/codec/**/*"
-    include "org/apache/commons/collections/**/*"
-    include "org/apache/commons/configuration/**/*"
-    include "org/apache/commons/fileupload/**/*"
-    include "org/apache/commons/httpclient/**/*"
-    include "org/apache/commons/lang/**/*"
-    include "org/apache/commons/logging/**/*"
-    include "org/apache/lucene/**/*"
-    include "org/apache/commons/io/**/*"
-    include "org/apache/xerces/**/*"
-    include "org/apache/wave/**/*"
-    include "org/bson/**/*"
-    include "org/dom4j/**/*"
-    include "org/eclipse/**/*"
-    include "org/jdom/**/*"
-    include "org/jivesoftware/**/*"
-    include "org/joda/time/**/*"
-    include "org/json/**/*"
-    include "org/waveprotocol/**/*"
-    include "org/xmlpull/**/*"
-    include "org/xmpp/**/*"
-    include "cc/kune/initials/**/*"
     exclude "org/waveprotocol/box/webclient/**/*"
     exclude "org/waveprotocol/box/consoleclient/**/*"
     exclude "org/waveprotocol/box/expimp/**/*"
@@ -560,8 +504,7 @@ jar {
     exclude "org/waveprotocol/wave/client/widget/**/*"
     exclude "com/google/api/client/**/*"
 }
-
-jar.dependsOn compileJava, compileGwt, extractApi
+shadowJar.dependsOn compileJava, compileGwt
 
 //=============================================================================
 // Binary Distribution
@@ -581,7 +524,7 @@ task createPropertiesFile(type: Copy) {
 task createDistBinZip(type: Zip) {
     baseName = binName
     destinationDir = file('../distributions')
-    from(jar) {
+    from(shadowJar) {
         into 'apache-wave/bin'
     }
     from('dist') {
@@ -612,7 +555,7 @@ task createDistBinTar(type: Tar) {
     extension = 'tar.gz'
     baseName = binName
     destinationDir = file('../distributions')
-    from(jar) {
+    from(shadowJar) {
         into 'apache-wave/bin'
     }
     from('dist') {
@@ -638,8 +581,8 @@ task createDistBinTar(type: Tar) {
     }
 }
 
-createDistBinZip.dependsOn jar, createPropertiesFile
-createDistBinTar.dependsOn jar, createPropertiesFile
+createDistBinZip.dependsOn shadowJar, createPropertiesFile
+createDistBinTar.dependsOn shadowJar, createPropertiesFile
 
 //=============================================================================
 // Distribution's
