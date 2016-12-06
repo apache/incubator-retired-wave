@@ -409,7 +409,7 @@ task gwtDev {
     }
     doLast {
         javaexec {
-            main = "com.google.gwt.dev.DevMode"
+            main = "com.google.gwt.dev.codeserver.CodeServer"
             classpath {
                 [
                         sourceSets.main.java.srcDirs,
@@ -419,10 +419,11 @@ task gwtDev {
                 ]
             }
             args = [
-                    "-noserver",
                     "-bindAddress", "127.0.0.1",
-                    "-startupUrl", "http://localhost:9898",
+		    "-style", "PRETTY",
                     "-logLevel", "DEBUG",
+                    "-noprecompile",
+                    "-noincremental",
                     "org.waveprotocol.box.webclient.WebClientDev",
             ]
         }
