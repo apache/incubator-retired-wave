@@ -20,6 +20,7 @@
 package org.waveprotocol.wave.client.common.util;
 
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.EventTarget;
 
 import java.util.EnumSet;
 
@@ -92,6 +93,12 @@ public class FakeSignalEvent extends SignalEventImpl {
     @Override
     public void stopPropagation() {
       propagationStopped = true;
+    }
+
+    @Override
+    public EventTarget getEventTarget() {
+      // TODO Auto-generated method stub
+      return null;
     }
   }
 

@@ -24,6 +24,7 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.user.client.Event;
 
 import org.waveprotocol.wave.client.common.util.SignalEvent.KeySignalType;
+import org.waveprotocol.wave.client.editor.EditorStaticDeps;
 import org.waveprotocol.wave.model.util.CollectionUtils;
 import org.waveprotocol.wave.model.util.ReadableStringMap.ProcV;
 import org.waveprotocol.wave.model.util.StringMap;
@@ -71,6 +72,39 @@ public final class SignalKeyLogic {
       }
     });
   }
+  
+  /**
+   * KeyboardEvent.key values for navigation
+   * See https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values
+   */
+  private static final Set<String> NAVIGATION_KEY_VALUES = new HashSet<String>();
+  static {
+    NAVIGATION_KEY_VALUES.add("ArrowDown");
+    NAVIGATION_KEY_VALUES.add("ArrowLeft");
+    NAVIGATION_KEY_VALUES.add("ArrowRight");
+    NAVIGATION_KEY_VALUES.add("ArrowUp");
+    NAVIGATION_KEY_VALUES.add("End");
+    NAVIGATION_KEY_VALUES.add("Home");
+    NAVIGATION_KEY_VALUES.add("PageDown");
+    NAVIGATION_KEY_VALUES.add("PageUp");
+  }
+  
+  /**
+   * KeyboardEvent.key values for deletion
+   * See https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values
+   */
+  private static final Set<String> DELETE_KEY_VALUES = new HashSet<String>();
+  static {
+    DELETE_KEY_VALUES.add("Backspace");
+    DELETE_KEY_VALUES.add("Delete");
+  }
+  
+  /**
+   * KeyboardEvent.key special values we consider input
+   * See https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values
+   */
+  private static final String TAB_KEY_VALUE = "Tab";
+
 
   public enum UserAgentType {
     WEBKIT,
@@ -115,10 +149,12 @@ public final class SignalKeyLogic {
     return commandIsCtrl;
   }
 
+  
+  
   public void computeKeySignalType(
       Result result,
       String typeName,
-      int keyCode, int which, String keyIdentifier,
+      int keyCode, int which, String keyIdentifier, String key, 
       boolean metaKey, boolean ctrlKey, boolean altKey, boolean shiftKey) {
 
     boolean ret = true;
@@ -143,48 +179,31 @@ public final class SignalKeyLogic {
       computedKeyCode = KeyCodes.KEY_ENTER;
     }
 
+    // Some trace logging very useful to debug
+    EditorStaticDeps.logger.trace().log(
+        "KEY SIGNAL IN PROCESS identifier/key = " + (keyIdentifier == null ? key : "?") + " code = " + computedKeyCode
+            + " type = "
+            + (typeInt == Event.ONKEYDOWN ? "KeyDown" : "KeyPress") + (ctrlKey ? " CTRL" : "")
+            + (shiftKey ? " SHIFT" : "") + (altKey ? " ALT" : ""));
+
     // For non-firefox browsers, we only get keydown events for IME, no keypress
     boolean isIME = computedKeyCode == IME_CODE;
 
     boolean commandKey = commandIsCtrl ? ctrlKey : metaKey;
 
+
     switch (userAgent) {
       case WEBKIT:
-        // This is a bit tricky because there are significant differences
-        // between safari 3.0 and safari 3.1...
-
-        // We could probably actually almost use the same code that we use for IE
-        // for safari 3.1, because with 3.1 the webkit folks made a big shift to
-        // get the events to be in line with IE for compatibility. 3.0 events
-        // are a lot more similar to FF, but different enough to need special
-        // handling. However, it seems that using more advanced features like
-        // keyIdentifier for safaris is probably better and more future-proof,
-        // as well as being compatible between the two, so for now we're not
-        // using IE logic for safari 3.1
-
-        // Weird special large keycode numbers for safari 3.0, where it gives
-        // us keypress events (though they happen after the dom is changed,
-        // for some things like delete. So not too useful). The number
-        // 63200 is known as the cutoff mark.
-        if (typeInt == Event.ONKEYDOWN && computedKeyCode > 63200) {
-          result.type = null;
-          return;
-        } else if (typeInt == Event.ONKEYPRESS) {
-          // Skip keypress for tab and escape, because they are the only non-input keys
-          // that don't have keycodes above 63200. This is to prevent them from being treated
-          // as INPUT in the || = keypress below. See (X) below
-          if (computedKeyCode == KeyCodes.KEY_ESCAPE
-              || computedKeyCode == KeyCodes.KEY_TAB) {
-            result.type = null;
-            return;
-          }
-        }
-
         // boolean isPossiblyCtrlInput = typeInt == Event.ONKEYDOWN && ret.getCtrlKey();
         boolean isActuallyCtrlInput = false;
 
+        // Keep this for older Webkit versions (Chrome < v54) where normal typing
+        // is detected with keyIdentifier containing U+ prefix 
         boolean startsWithUPlus = keyIdentifier != null && keyIdentifier.startsWith("U+");
-
+        
+        // Mix older way to detect normal typing (keyIdentifier) with new one (key)
+        boolean normalTypingKeydown = startsWithUPlus || (key != null && !"undefined".equals(key) && !metaKey && !ctrlKey && !altKey);
+        
         // Need to use identifier for the delete key because the keycode conflicts
         // with the keycode for the full stop.
         if (isIME) {
@@ -192,26 +211,52 @@ public final class SignalKeyLogic {
           // but those are basically useless as the event is basically still an IME input
           // event (e.g. keyIdentifier might say "Up", but it's certainly not navigation,
           // it's just the user selecting from the IME dialog).
-          type = KeySignalType.INPUT;
-        } else if (DELETE_KEY_IDENTIFIER.equals(keyIdentifier) ||
-            computedKeyCode == KeyCodes.KEY_BACKSPACE) {
-
+          type = KeySignalType.INPUT;         
+        } else if (computedKeyCode == KeyCodes.KEY_BACKSPACE) {
+          type = KeySignalType.DELETE;  
+          
+        } else if (keyIdentifier != null && DELETE_KEY_IDENTIFIER.equals(keyIdentifier) && typeInt == Event.ONKEYDOWN) {           
+          // WAVE-407 Avoid missing the '.' char (KEYPRESS + CODE 46)
+          // ensuring it's a KEYDOWN event with a DELETE_KEY_IDENTIFIER
           type = KeySignalType.DELETE;
-        } else if (NAVIGATION_KEY_IDENTIFIERS.containsKey(keyIdentifier)) {
+         
+        } else if (keyIdentifier != null && NAVIGATION_KEY_IDENTIFIERS.containsKey(keyIdentifier) && typeInt == Event.ONKEYDOWN) {
+          // WAVE-407 Avoid missing chars with NAVIGATION_KEY_IDENTIFIERS but
+          // represeting a SHIFT + key char (! " · ...). Navigation events come
+          // with KEYDOWN, not with KEYPRESS
           type = KeySignalType.NAVIGATION;
-        // Escape, backspace and context-menu-key (U+0010) are, to my knowledge,
-        // the only non-navigation keys that
-        // have a "U+..." keyIdentifier, so we handle them explicitly.
-        // (Backspace was handled earlier).
-        } else if (computedKeyCode == KeyCodes.KEY_ESCAPE || "U+0010".equals(keyIdentifier)) {
+                    
+        } else if (key != null && NAVIGATION_KEY_VALUES.contains(key) && typeInt == Event.ONKEYDOWN) {        
+          // Starting chrome v54 KeyboardEvent.keyIdentifier is replaced by KeyboardEvent.key
+          type = KeySignalType.NAVIGATION;
+
+        } else if (key != null && DELETE_KEY_VALUES.contains(key) && typeInt == Event.ONKEYDOWN) {          
+          // Starting chrome v54 KeyboardEvent.keyIdentifier is replaced by KeyboardEvent.key
+          type = KeySignalType.DELETE;
+
+        } else if (computedKeyCode == KeyCodes.KEY_ESCAPE || "U+0010".equals(keyIdentifier)) {          
+          // Escape, backspace and context-menu-key (U+0010) are, to my knowledge,
+          // the only non-navigation keys that
+          // have a "U+..." keyIdentifier, so we handle them explicitly.
+          // (Backspace was handled earlier).
           type = KeySignalType.NOEFFECT;
-        } else if (
-            computedKeyCode < 63200 && // if it's not a safari 3.0 non-input key (See (X) above)
-            (typeInt == Event.ONKEYPRESS ||  // if it's a regular keypress
-                  startsWithUPlus || computedKeyCode == KeyCodes.KEY_ENTER)) {
+          
+        } else if (key != null && TAB_KEY_VALUE.equals(key) && typeInt == Event.ONKEYDOWN) {     
+          // ** EXPERIMENTAL ** 
+          // use tabs as input
+          // Starting chrome v54 KeyboardEvent.keyIdentifier is replaced by KeyboardEvent.key
           type = KeySignalType.INPUT;
-          isActuallyCtrlInput = ctrlKey
-              || (commandComboDoesntGiveKeypress && commandKey);
+
+        } else if (computedKeyCode == KeyCodes.KEY_TAB) {
+          // ** EXPERIMENTAL ** 
+          // use tabs as input          
+          type = KeySignalType.INPUT;
+          
+        } else if (typeInt == Event.ONKEYPRESS ||  // if it's a regular keypress        
+                  normalTypingKeydown || 
+                  computedKeyCode == KeyCodes.KEY_ENTER) {
+          type = KeySignalType.INPUT;
+          isActuallyCtrlInput = ctrlKey || (commandComboDoesntGiveKeypress && commandKey);
         } else {
           type = KeySignalType.NOEFFECT;
         }
@@ -224,7 +269,7 @@ public final class SignalKeyLogic {
           }
           // HACK(danilatos): Don't actually nullify isActuallyCtrlInput for key press.
           // We get that for AltGr combos on non-mac computers.
-        } else if (isIME || keyCode == KeyCodes.KEY_TAB) {
+        } else if (isIME || computedKeyCode == KeyCodes.KEY_TAB) {
           ret = typeInt == Event.ONKEYDOWN;
         } else {
           ret = maybeNullWebkitIE(ret, typeInt, type);
