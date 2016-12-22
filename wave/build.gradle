@@ -325,7 +325,7 @@ task compileGwtDev {
                     "-style", "PRETTY",
                     "-draftCompile",
                     "-ea",
-                    //"-strict",
+                    "-strict",
                     "org.waveprotocol.box.webclient.WebClientDev"
             ]
         }
