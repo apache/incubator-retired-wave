@@ -22,18 +22,22 @@ buildscript {
     repositories {
         mavenCentral()
     }
-    dependencies {
-        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.0'
-    }
+    //dependencies {
+    //    classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.0'
+    //}
 }
 plugins {
     id "org.nosphere.apache.rat" version "0.2.0"
 }
 allprojects {
-    apply plugin: 'eclipse';
-    apply plugin: 'idea';
+    apply plugin: 'eclipse'
+    apply plugin: 'idea'
     apply plugin: 'jacoco'
     group = 'apache-wave'
+}
+
+tasks.withType(Tar) {
+    compression = Compression.BZIP2
 }
 
 //=============================================================================
@@ -105,8 +109,6 @@ task createDistSourceZip(type: Zip) {
 }
 
 task createDistSourceTar(type: Tar) {
-    compression = Compression.GZIP
-    extension = 'tar.gz'
     baseName = srcName
     destinationDir = file('distributions')
     from('./') {
@@ -130,7 +132,7 @@ createDistSource.dependsOn createDistSourceZip, createDistSourceTar, ":pst:creat
 //=============================================================================
 // Distribution's
 //=============================================================================
-task createDist() {
+task createDist(type: Copy) {
     doFirst {
         println ''
         println '--------------------------------------------------------'
@@ -139,6 +141,9 @@ task createDist() {
         println '--------------------------------------------------------'
         println ''
     }
+    from('wave/build/distributions') {
+    }
+    into 'distributions'
 }
 
-createDist.dependsOn createDistSource, ":wave:createDistBin", ":pst:createDist"
+createDist.dependsOn createDistSource, ":wave:assembleDist", ":pst:createDist"

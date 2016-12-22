@@ -21,9 +21,8 @@
 plugins {
     id 'java'
     id 'application'
-    id 'com.github.johnrengelman.shadow' version '1.2.4'
+    id "com.google.protobuf" version "0.8.0"
 }
-apply plugin: 'com.google.protobuf'
 
 //=============================================================================
 // Project Level Settings
@@ -467,7 +466,7 @@ testLarge.mustRunAfter test
 // Dist's
 //=============================================================================
 
-shadowJar {
+jar {
     baseName = 'wave'
     classifier = ''
     manifest {
@@ -505,100 +504,39 @@ shadowJar {
     exclude "org/waveprotocol/wave/client/widget/**/*"
     exclude "com/google/api/client/**/*"
 }
-shadowJar.dependsOn compileJava, compileGwt
+jar.dependsOn compileJava, compileGwt
 
 //=============================================================================
 // Binary Distribution
 //=============================================================================
-
-def binName = this.group + "-bin"
-
-task createPropertiesFile(type: Copy) {
-    from 'src/main/configs'
-    include 'wave.conf'
-    into 'config'
-    expand([
-            version: version
-    ])
+tasks.withType(Tar) {
+    compression = Compression.BZIP2
 }
 
-task createDistBinZip(type: Zip) {
-    baseName = binName
-    destinationDir = file('../distributions')
-    from(shadowJar) {
-        into 'apache-wave/bin'
-    }
-    from('dist') {
-        into 'apache-wave'
-    }
-    from('config') {
-        into 'apache-wave/config'
-    }
-    from('war') {
-        into 'apache-wave/war'
-    }
-    from('../THANKS') {
-        into 'apache-wave'
-    }
-    from('../RELEASE-NOTES') {
-        into 'apache-wave'
-    }
-    from('../KEYS') {
-        into 'apache-wave'
-    }
-    from('../DISCLAIMER') {
-        into 'apache-wave'
+distributions {
+    main {
+        contents {
+            from('config') {
+              into 'config'
+            }
+            from('war') {
+                into 'war'
+            }
+            from('../THANKS') {
+                into ''
+            }
+            from('../RELEASE-NOTES') {
+                into ''
+            }
+            from('../KEYS') {
+                into ''
+            }
+            from('../DISCLAIMER') {
+                into ''
+            }
+        }
     }
 }
-
-task createDistBinTar(type: Tar) {
-    compression = Compression.GZIP
-    extension = 'tar.gz'
-    baseName = binName
-    destinationDir = file('../distributions')
-    from(shadowJar) {
-        into 'apache-wave/bin'
-    }
-    from('dist') {
-        into 'apache-wave'
-    }
-    from('config') {
-        into 'apache-wave/config'
-    }
-    from('war') {
-        into 'apache-wave/war'
-    }
-    from('../THANKS') {
-        into 'apache-wave'
-    }
-    from('../RELEASE-NOTES') {
-        into 'apache-wave'
-    }
-    from('../KEYS') {
-        into 'apache-wave'
-    }
-    from('../DISCLAIMER') {
-        into 'apache-wave'
-    }
-}
-
-createDistBinZip.dependsOn shadowJar, createPropertiesFile
-createDistBinTar.dependsOn shadowJar, createPropertiesFile
-
-//=============================================================================
-// Distribution's
-//=============================================================================
-task createDistBin() {
-    doFirst {
-        println ''
-        println '--------------------------------------------------------'
-        println '                 Creating Deployment                    '
-        println '--------------------------------------------------------'
-        println ''
-    }
-}
-
-createDistBin.dependsOn createDistBinZip, createDistBinTar
 
 // Additional Clean
 clean {
