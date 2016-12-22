@@ -92,10 +92,9 @@ public class SignalEventImpl implements SignalEvent {
     return KEY_EVENTS.contains(event.getType());
   }
 
-  //TODO: check requirements if seperate logic is still needed.
-  private static final UserAgentType currentUserAgent = UserAgentType.GECKO;
-  //    (UserAgent.isWebkit() ? UserAgentType.WEBKIT : (
-  //        UserAgent.isFirefox() ? UserAgentType.GECKO : UserAgentType.IE));
+  private static final UserAgentType currentUserAgent =
+          (UserAgent.isWebkit() ? UserAgentType.WEBKIT : (
+                  UserAgent.isFirefox() ? UserAgentType.GECKO : UserAgentType.IE));
   private static final OperatingSystem currentOs =
       (UserAgent.isWin() ? OperatingSystem.WINDOWS : (
           UserAgent.isMac() ? OperatingSystem.MAC : OperatingSystem.LINUX));
