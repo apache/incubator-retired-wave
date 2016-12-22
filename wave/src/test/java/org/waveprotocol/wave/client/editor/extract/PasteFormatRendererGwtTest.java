@@ -87,7 +87,7 @@ public class PasteFormatRendererGwtTest extends GWTTestCase {
     testHelper("<body><line/>before<line t=\"li\"/>one<line t=\"li\"/>two<line/>after</body>",
         "before<br><ul><li>one</li><li>two</li></ul>after<br>");
     testHelper("<body><line t=\"li\"/><input>hello</input> world<line/>after</body>",
-    "<ul><li><span>hello</span> world</li></ul>after<br>");
+    "<ul><li><span contentEditable=\"true\" style=\"white-space: pre-wrap;\" class=\"SWCNL\">hello</span> world</li></ul>after<br>");
   }
 
   private void testHelper(String content, String expectedResult) {

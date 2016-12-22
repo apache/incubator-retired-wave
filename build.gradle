@@ -22,9 +22,6 @@ buildscript {
     repositories {
         mavenCentral()
     }
-    //dependencies {
-    //    classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.0'
-    //}
 }
 plugins {
     id "org.nosphere.apache.rat" version "0.2.0"

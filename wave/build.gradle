@@ -414,7 +414,7 @@ task testGwt(type: Test) {
     }
 }
 
-testGwt.dependsOn compileGwtDev
+testGwt.dependsOn compileGwt
 
 task testMongo(type: Test) {
     include "**/server/persistence/mongodb/**/*Test*"

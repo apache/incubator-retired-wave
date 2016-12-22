@@ -241,9 +241,10 @@ public class FakeTimerService implements TimerService {
     Iterator<TimedTask> iterator = tasks.iterator();
     boolean found = false;
     while (iterator.hasNext()) {
-      if (iterator.next().getTask().equals(incrementalTask)) {
+      TimedTask current = iterator.next();
+      if (current.getTask().equals(incrementalTask)) {
         if (remove) {
-          iterator.remove();
+          tasks.remove(current);
           found = true;
         } else {
          return true;
