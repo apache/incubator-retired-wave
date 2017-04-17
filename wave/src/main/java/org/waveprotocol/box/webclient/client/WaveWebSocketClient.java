@@ -114,11 +114,10 @@ public class WaveWebSocketClient implements WaveSocket.WaveSocketCallback {
   private final RepeatingCommand reconnectCommand = new RepeatingCommand() {
     @Override
     public boolean execute() {
-      if (!connectedAtLeastOnce && !websocketNotAvailable && connectTry > MAX_INITIAL_FAILURES) {
-        // Let's try to use websocket alternative, seems that websocket it's not working
-        // (we are under a proxy or similar)
-        socket = WaveSocketFactory.create(true, urlBase, WaveWebSocketClient.this);
+      if (connectTry > MAX_INITIAL_FAILURES) {
+    	  return false;
       }
+      
       connectTry++;
       if (connected == ConnectState.DISCONNECTED) {
         LOG.info("Attemping to reconnect");
@@ -128,16 +127,19 @@ public class WaveWebSocketClient implements WaveSocket.WaveSocketCallback {
       return true;
     }
   };
-  private final boolean websocketNotAvailable;
+
   private boolean connectedAtLeastOnce = false;
   private long connectTry = 0;
   private final String urlBase;
 
   public WaveWebSocketClient(boolean websocketNotAvailable, String urlBase) {
-    this.websocketNotAvailable = websocketNotAvailable;
     this.urlBase = urlBase;
     submitRequestCallbacks = CollectionUtils.createIntMap();
-    socket = WaveSocketFactory.create(websocketNotAvailable, urlBase, this);
+    if (websocketNotAvailable) {
+    	ClientEvents.get().fireEvent(new NetworkStatusEvent(ConnectionStatus.NEVER_CONNECTED));
+    	throw new RuntimeException("Websocket is not available");
+    }
+    socket = WaveSocketFactory.create(urlBase, this);
   }
 
   /**
