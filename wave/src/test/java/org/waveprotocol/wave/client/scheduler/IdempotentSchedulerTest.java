@@ -19,17 +19,17 @@
 
 package org.waveprotocol.wave.client.scheduler;
 
+import junit.framework.TestCase;
 import org.waveprotocol.wave.client.scheduler.Scheduler.IncrementalTask;
 
-import org.jmock.Expectations;
-import org.jmock.integration.junit3.MockObjectTestCase;
+import static org.mockito.Mockito.*;
 
 /**
  * Test case for IdempotentScheduler.
  *
  */
 
-public class IdempotentSchedulerTest extends MockObjectTestCase {
+public class IdempotentSchedulerTest extends TestCase {
 
   // Mocks.
   private IncrementalTask task;
@@ -49,84 +49,57 @@ public class IdempotentSchedulerTest extends MockObjectTestCase {
   }
 
   public void testSchedulesItselfAsTheTask() {
-    checking(new Expectations() {{
-        oneOf(timer).isScheduled(with(is));
-        will(returnValue(false));
-        oneOf(timer).scheduleRepeating(is, delay, delay);
-    }});
-
     is.schedule();
+
+    verify(timer, times(1)).isScheduled(is);
+    verify(timer, times(1)).scheduleRepeating(is, delay, delay);
   }
 
   public void testCancelsItselfAsTheTask() {
-    checking(new Expectations() {{
-      oneOf(timer).isScheduled(with(is));
-      will(returnValue(true));
-      oneOf(timer).cancel(is);
-    }});
-
+    when(timer.isScheduled(is)).thenReturn(true);
     is.cancel();
+    verify(timer, times(1)).cancel(is);
   }
   public void testSchedulerExecutesTask() {
-    checking(new Expectations() {{
-      oneOf(task).execute();
-    }});
-
     is.execute();
+    verify(task, times(1)).execute();
   }
 
   public void testMultipleScheduleCallsScheduleExactlyOnce() {
-    checking(new Expectations() {{
-      oneOf(timer).isScheduled(with(is));
-      will(returnValue(false));
-      oneOf(timer).scheduleRepeating(is, delay, delay);
-      oneOf(timer).isScheduled(with(is));
-      will(returnValue(true));
-    }});
+    when(timer.isScheduled(is)).thenReturn(true, false);
 
     is.schedule();
     is.schedule();
+
+    verify(timer, times(2)).isScheduled(is);
+    verify(timer, times(1)).scheduleRepeating(is, delay, delay);
   }
 
   public void testCancelWillNotCancelIfNotScheduled() {
-    checking(new Expectations() {{
-      oneOf(timer).isScheduled(with(is));
-      will(returnValue(false));
-    }});
-
+    when(timer.isScheduled(is)).thenReturn(false);
     is.cancel();
+    verify(timer, never()).cancel(is);
   }
 
   public void testWillRescheduleAfterTaskCompletion() {
-    checking(new Expectations() {{
-      oneOf(timer).isScheduled(with(is));
-      will(returnValue(false));
-      oneOf(timer).scheduleRepeating(is, delay, delay);
-      oneOf(task).execute();
-      will(returnValue(false));  // Indicates termination
-      oneOf(timer).isScheduled(with(is));
-      will(returnValue(false));
-      oneOf(timer).scheduleRepeating(is, delay, delay);
-    }});
+    when(timer.isScheduled(is)).thenReturn(false);
+    when(task.execute()).thenReturn(false);
 
     is.schedule();
     is.execute();  // Simulates call by timer.
     is.schedule();
+
+    verify(timer, times(2)).scheduleRepeating(is, delay, delay);
   }
 
   public void testWillRescheduleAfterCancel() {
-    checking(new Expectations() {{
-      oneOf(timer).isScheduled(with(is)); will(returnValue(false));
-      oneOf(timer).scheduleRepeating(is, delay, delay);
-      oneOf(timer).isScheduled(with(is)); will(returnValue(true));
-      oneOf(timer).cancel(is);
-      oneOf(timer).isScheduled(with(is));
-      will(returnValue(false));
-      oneOf(timer).scheduleRepeating(is, delay, delay);
-    }});
+    when(timer.isScheduled(is)).thenReturn(false, true, false);
 
     is.schedule();
     is.cancel();
     is.schedule();
+
+    verify(timer, times(1)).cancel(is);
+    verify(timer, times(2)).scheduleRepeating(is, delay, delay);
   }
 }

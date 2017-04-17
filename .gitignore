@@ -34,6 +34,7 @@ war/WEB-INF
 *.project
 *.classpath
 */.settings/
+.metadata/
 
 ### Gradle
 .gradle
@@ -57,3 +58,6 @@ wave/config/wave.conf
 
 ### Backup files
 *~
+
+### Server running
+**/*.log.*

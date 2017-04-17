@@ -29,6 +29,7 @@
 <inherits name="org.waveprotocol.wave.client.common.scrub.Scrub" />
 <inherits name="org.waveprotocol.wave.client.common.util.Util" />
 <inherits name="org.waveprotocol.wave.client.debug.logger.Logger" />
+<inherits name="org.waveprotocol.wave.client.doodad.Doodad" />
 <inherits name="org.waveprotocol.wave.client.editor.constants.Constants" />
 <inherits name="org.waveprotocol.wave.client.editor.content.paragraph.constants.Constants" />
 <inherits name="org.waveprotocol.wave.client.editor.selection.html.Html" />

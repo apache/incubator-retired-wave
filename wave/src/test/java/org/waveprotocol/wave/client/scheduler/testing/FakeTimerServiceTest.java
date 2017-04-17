@@ -19,20 +19,19 @@
 
 package org.waveprotocol.wave.client.scheduler.testing;
 
+import junit.framework.TestCase;
+import org.mockito.InOrder;
 import org.waveprotocol.wave.client.scheduler.Scheduler.IncrementalTask;
 import org.waveprotocol.wave.client.scheduler.Scheduler.Task;
 
-import org.jmock.integration.junit3.MockObjectTestCase;
-import org.jmock.Expectations;
-import org.jmock.Sequence;
+import static org.mockito.Mockito.*;
 
 /**
  * The FakeTimerService is a complicated enough fake that it deserves its own
  * tests. (Normally I wouldn't test fakes.)
  *
  */
-
-public class FakeTimerServiceTest extends MockObjectTestCase {
+public class FakeTimerServiceTest extends TestCase {
   private Task oneoff;
   private IncrementalTask repeating;
   private FakeTimerService timer;
@@ -43,6 +42,7 @@ public class FakeTimerServiceTest extends MockObjectTestCase {
 
     oneoff = mock(Task.class, "oneoff");
     repeating = mock(IncrementalTask.class, "repeating");
+    when(repeating.execute()).thenReturn(true);
     timer = new FakeTimerService();
   }
 
@@ -50,31 +50,22 @@ public class FakeTimerServiceTest extends MockObjectTestCase {
     timer.scheduleDelayed(oneoff, 500);
     timer.scheduleRepeating(repeating, 0, 1000);
 
-    checking(new Expectations() {{
-      one(oneoff).execute();
-      exactly(2).of(repeating).execute();
-      will(returnValue(true));
-    }});
     timer.tick(1000);
     timer.tick(500);
     timer.tick(499);
-    checking(new Expectations() {{
-      one(repeating).execute();
-      will(returnValue(true));
-    }});
+    verify(oneoff, times(1)).execute();
+    verify(repeating, times(2)).execute();
+
     timer.tick(1);
     timer.tick(1);
     timer.tick(1);
-    checking(new Expectations() {{
-      one(repeating).execute();
-      will(returnValue(true));
-    }});
+    verify(repeating, times(3)).execute();
+
     timer.tick(999);
-    checking(new Expectations() {{
-      exactly(3).of(repeating).execute();
-      will(returnValue(true));
-    }});
+    verify(repeating, times(4)).execute();
+
     timer.tick(3000);
+    verify(repeating, times(7)).execute();
   }
 
   public void testCancel() {
@@ -83,22 +74,17 @@ public class FakeTimerServiceTest extends MockObjectTestCase {
     timer.scheduleRepeating(repeating, 0, 1000);
     timer.cancel(repeating);
 
-    checking(new Expectations() {{
-      never(repeating).execute();
-      never(oneoff).execute();
-    }});
-
     timer.tick(10 * 1000);
+
+    verify(oneoff, never()).execute();
+    verify(repeating, never()).execute();
   }
 
   public void testScheduleWillExecuteImmediatelyOnAnyTick() {
     timer.schedule(oneoff);
 
-    checking(new Expectations() {{
-      one(oneoff).execute();
-    }});
-
     timer.tick(0);
+    verify(oneoff, times(1)).execute();
   }
 
     /** Tests that scheduling a task with negative start time throws an exception. */
@@ -134,14 +120,12 @@ public class FakeTimerServiceTest extends MockObjectTestCase {
   public void testInterval0() {
     timer.scheduleRepeating(repeating, 500, 0);
     timer.tick(499);
-    checking(new Expectations() {{
-      exactly(5).of(repeating).execute();
-      will(returnValue(true));
-      one(repeating).execute();
-      will(returnValue(false));
-      never(repeating).execute();
-    }});
+
+    verify(repeating, never()).execute();
+    when(repeating.execute()).thenReturn(true, true, true, true, false);
+
     timer.tick(1);
+    verify(repeating, times(5)).execute();
   }
 
   /**
@@ -153,42 +137,39 @@ public class FakeTimerServiceTest extends MockObjectTestCase {
     final IncrementalTask[] tasks = new IncrementalTask[taskCount];
     for (int i = 0; i < taskCount; i++) {
       tasks[i] = mock(IncrementalTask.class, "repeating_" + i);
+      if (i==0) {
+        when(tasks[i].execute()).thenReturn(true, false);
+      } else {
+        when(tasks[i].execute()).thenReturn(false);
+      }
       timer.scheduleRepeating(tasks[i], 1, 0);
     }
-    final Sequence seq = sequence("callOrder");
-    checking(new Expectations() {{
-      for (IncrementalTask task : tasks) {
-        one(task).execute();
-        will(returnValue(true));
-        inSequence(seq);
-      }
-      for (IncrementalTask task : tasks) {
-        one(task).execute();
-        will(returnValue(false));
-        inSequence(seq);
 
-        never(task).execute();
-      }
-    }});
+    InOrder inOrder = inOrder((Object[]) tasks);
+
     timer.tick(1);
+
+    for (int i = 0; i < taskCount; i++) {
+      inOrder.verify(tasks[i]).execute();
+    }
+    inOrder.verify(tasks[0]).execute();
+
+    verify(tasks[0], times(2)).execute();
   }
 
   public void testReschedulingCancelsFirst() {
     timer.scheduleDelayed(oneoff, 500);
 
-    checking(new Expectations() {{
-      never(oneoff).execute();
-    }});
-
     timer.tick(499);
-    timer.scheduleDelayed(oneoff, 1000);
-    timer.tick(2);
+    verify(oneoff, never()).execute();
 
-    checking(new Expectations() {{
-      one(oneoff).execute();
-    }});
+    timer.scheduleDelayed(oneoff, 1000);
+
+    timer.tick(2);
+    verify(oneoff, never()).execute();
 
     timer.tick(1000);
+    verify(oneoff, times(1)).execute();
   }
 
   /**
@@ -200,11 +181,10 @@ public class FakeTimerServiceTest extends MockObjectTestCase {
     timer.scheduleDelayed(oneoff, time);
     final Task anotherTask = mock(Task.class, "another_task");
     timer.scheduleDelayed(anotherTask, time);
-    checking(new Expectations() {{
-      one(oneoff).execute();
-      one(anotherTask).execute();
-    }});
+
     timer.tick(time);
+    verify(oneoff, times(1)).execute();
+    verify(anotherTask, times(1)).execute();
   }
 
   /** Tests that multiple processes can be run at the same time. */
@@ -214,19 +194,12 @@ public class FakeTimerServiceTest extends MockObjectTestCase {
     timer.scheduleRepeating(repeating, 0, time);
     timer.scheduleRepeating(anotherTask, time, time);
 
-    checking(new Expectations() {{
-      one(repeating).execute();
-      will(returnValue(true));
-    }});
     timer.tick(0);
+    verify(repeating, times(1)).execute();
 
-    checking(new Expectations() {{
-      one(repeating).execute();
-      will(returnValue(true));
-      one(anotherTask).execute();
-      will(returnValue(true));
-    }});
     timer.tick(time);
+    verify(repeating, times(2)).execute();
+    verify(anotherTask, times(1)).execute();
   }
 
   /**
@@ -235,12 +208,11 @@ public class FakeTimerServiceTest extends MockObjectTestCase {
    */
   public void testRepeatedTaskMakesUpForMissedExecutions() {
     timer.scheduleRepeating(repeating, 5, 10);
+
     timer.tick(4);
-    checking(new Expectations() {{
-      exactly(10).of(repeating).execute();
-      will(returnValue(true));
-    }});
+    verify(repeating, never()).execute();
     timer.tick(99);
+    verify(repeating, times(10)).execute();
   }
 
   /**
@@ -249,14 +221,12 @@ public class FakeTimerServiceTest extends MockObjectTestCase {
    */
   public void testIncrementalTaskIsCanceledIfItReturnsFalse() {
     timer.scheduleRepeating(repeating, 0, 1);
-    checking(new Expectations() {{
-      exactly(10).of(repeating).execute();
-      will(returnValue(true));
-      one(repeating).execute();
-      will(returnValue(false));
-      never(repeating).execute();
-    }});
-    timer.tick(1000);
+    when(repeating.execute()).thenReturn(true, true, true, true, false);
+
+    timer.tick(4);
+    verify(repeating, times(5)).execute();
+    timer.tick(100);
+    verify(repeating, times(5)).execute();
   }
 
   /**
@@ -267,9 +237,7 @@ public class FakeTimerServiceTest extends MockObjectTestCase {
    */
   public void testNormalTaskIsRunOnlyOnce() {
     timer.schedule(oneoff);
-    checking(new Expectations() {{
-      one(oneoff).execute();
-    }});
     timer.tick(1000);
+    verify(oneoff, times(1)).execute();
   }
 }

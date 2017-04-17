@@ -458,7 +458,7 @@ public class BlipRobotTest extends TestCase {
 
     Blip expectedBlip = new Blip("blip1", Arrays.asList("blip2", "blip3"),
         "\nhello world!\n another line", Arrays.asList("robot@test.com", "user@test.com"),
-        "user@test.com", 1000l, 123l, null, null, Arrays.asList(new Annotation("key", "val", 2, 3)),
+        "user@test.com", 1000l, 123l, null, "<some string>", Arrays.asList(new Annotation("key", "val", 2, 3)),
         elements, new ArrayList<String>(), wavelet);
 
     Blip actualBlip = Blip.deserialize(wavelet.getOperationQueue(), wavelet,

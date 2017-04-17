@@ -185,7 +185,7 @@ public class AuthenticationServletTest extends TestCase {
     // Servlet control flow forces us to set these return values first and
     // verify the logged in user was set afterwards.
     if (expectSuccess) {
-      when(manager.getLoggedInUser(Mockito.any(HttpSession.class))).thenReturn(USER);
+      when(manager.getLoggedInUser(Mockito.any())).thenReturn(USER);
       when(session.getAttribute("user")).thenReturn(USER);
     }
     servlet.doPost(req, resp);

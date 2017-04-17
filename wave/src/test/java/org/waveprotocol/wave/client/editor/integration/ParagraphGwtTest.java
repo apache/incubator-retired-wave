@@ -84,7 +84,7 @@ public class ParagraphGwtTest extends ElementTestBase {
 //    testTaller("<p></p><p></p>", "<p></p>", minHeight);
 //    testTaller("<p></p><p></p><p></p>", "<p></p><p></p>", minHeight);
 
-    testEqualHeight(format("<p></p>"), format("<p>aXj</p>"));
+    testEqualHeight(format("<p>a</p>"), format("<p>aXj</p>"));
 //    testEqualHeight("<p></p><p></p>", "<p>aXj</p><p>aXjADFSG</p>");
 
     testContentWrap("<p>|</p>");

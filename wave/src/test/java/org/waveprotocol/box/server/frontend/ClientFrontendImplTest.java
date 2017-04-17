@@ -330,8 +330,7 @@ public class ClientFrontendImplTest extends TestCase {
 
   private static List<TransformedWaveletDelta> isDeltasStartingAt(final long version) {
     return argThat(new ArgumentMatcher<List<TransformedWaveletDelta>>() {
-      @Override
-      public boolean matches(Object sequence) {
+      public boolean matches(List<TransformedWaveletDelta> sequence) {
         if (sequence != null) {
           DeltaSequence s = (DeltaSequence) sequence;
           return (s.size() > 0) && (s.getStartVersion() == version);

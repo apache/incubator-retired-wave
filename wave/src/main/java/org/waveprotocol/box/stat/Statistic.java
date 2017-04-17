@@ -18,6 +18,7 @@
  */
 package org.waveprotocol.box.stat;
 
+import com.google.common.annotations.GwtIncompatible;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
@@ -73,6 +74,7 @@ public class Statistic {
     public abstract String getValue();
   }
 
+  @GwtIncompatible("Uses Reflection")
   private static class FieldEntry extends Entry {
     final Field field;
     final Object ref;
@@ -104,6 +106,7 @@ public class Statistic {
    *
    * @param clazz the class type to track.
    */
+  @GwtIncompatible("Uses getDeclaredFields / Reflection")
   public static void trackClass(Class<?> clazz) {
     for (Field field : clazz.getDeclaredFields()) {
       Stat stat = field.getAnnotation(Stat.class);

@@ -204,7 +204,7 @@ public class RobotTest extends TestCase {
     EventMessageBundle messages = new EventMessageBundle(ROBOT_NAME.toEmailAddress(), "");
     messages.addEvent(new DocumentChangedEvent(null, null, ALEX.getAddress(), 0L, "b+1234"));
     when(eventGenerator.generateEvents(
-        any(WaveletAndDeltas.class), anyMap(), any(EventDataConverter.class))).thenReturn(messages);
+        any(), anyMap(), any())).thenReturn(messages);
 
     OperationRequest op = new OperationRequest("wavelet.fetch", "op1");
     List<OperationRequest> ops = Collections.singletonList(op);

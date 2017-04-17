@@ -29,6 +29,7 @@
 <inherits name="org.waveprotocol.wave.client.widget.button.Button" />
 <inherits name="org.waveprotocol.wave.model.conversation.Conversation" />
 <inherits name="org.waveprotocol.wave.util.escapers.Escapers" />
+<inherits name="org.waveprotocol.box.webclient.WebClient"/>
 
 <source path=""/>
 
