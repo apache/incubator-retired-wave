@@ -44,7 +44,13 @@ public final class InitialsAvatarsServlet extends HttpServlet {
 
   @Inject
   public InitialsAvatarsServlet() throws IOException {
-    DEFAULT = ImageIO.read(Resources.getResource("org/apache/wave/box/server/rpc/InitialsAvatarDefault.jpg"));
+    try {
+      DEFAULT = ImageIO.read(Resources.getResource("static/images/avatar/unknown.jpg"));
+    } catch (Exception e) {
+      LOG.warning("Default Avatar image could not be loaded from disc. " + e.toString());
+      DEFAULT = ImageIO.read(Resources.getResource(
+              "org/apache/wave/box/server/rpc/avatar/unknown.jpg"));
+    }
   }
 
   /**
