@@ -44,7 +44,9 @@ software:
 The nightly binaries can be downloaded from https://builds.apache.org/view/S-Z/view/Wave/job/wave-artifacts/lastSuccessfulBuild/artifact/.
 The latest "dev" releases can be downloaded from: https://dist.apache.org/repos/dist/dev/incubator/wave/.
 The latest officially released binaries can be downloaded from: https://dist.apache.org/repos/dist/release/incubator/wave/.
-Extract the archive and execute run-server.sh for Linux/Mac or run-server.bat for Windows.
+
+Extract the archive and execute ./bin/wave for Linux/Mac or bin\wave.bat for Windows.
+
 The web client will be accessible by default at http://localhost:9898/.
 
 ## Setup with Vagrant
