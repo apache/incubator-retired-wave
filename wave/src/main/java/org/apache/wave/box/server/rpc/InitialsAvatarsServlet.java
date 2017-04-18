@@ -34,6 +34,8 @@ import java.io.IOException;
 
 /**
  * A servlet for fetching the users Initials Avatar.
+ *
+ * @author wisebaldone@apache.org (Evan Hughes)
  */
 @Singleton
 public final class InitialsAvatarsServlet extends HttpServlet {
