@@ -21,6 +21,7 @@
 war/WEB-INF
 *.old
 .DS_Store
+.helper
 
 ### IntelliJ Idea
 .idea
