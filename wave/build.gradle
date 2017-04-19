@@ -100,6 +100,9 @@ configurations.compile {
     resolutionStrategy {
         //failOnVersionConflict()
     }
+    maven {
+        url 'https://maven.atlassian.com/3rdparty/'
+    }
 }
 dependencies {
     compile (
@@ -151,9 +154,9 @@ dependencies {
             [group: "javax.inject", name: "javax.inject", version: "1"],                                        // [?, ?]
             [group: "javax.servlet", name: "javax.servlet-api", version: "3.1.0"],                              // [?, ?]
             [group: "javax.jdo", name: "jdo2-api", version: "2.1"],                                             // [?, ?]
-            [group: "net.oauth.core", name: "oauth-provider", version: "20100527"],                             // [11/2016, depreciate]
-            [group: "net.oauth.core", name: "oauth", version: "20100527"],                                      // [11/2016, depreciate]
-            [group: "net.oauth.core", name: "oauth-consumer", version: "20100527"],                             // [11/2016, depreciate]
+            [group: "net.oauth.core", name: "oauth-provider", version: "20100601-atlassian-2"],                             // [11/2016, depreciate]
+            [group: "net.oauth.core", name: "oauth", version: "20100601-atlassian-2"],                                      // [11/2016, depreciate]
+            [group: "net.oauth.core", name: "oauth-consumer", version: "20100601-atlassian-2"],                             // [11/2016, depreciate]
     )
     compile fileTree(dir: '../pst/build/libs', include: '**/*.jar')                                             // [?, ?]
     generateGXP (
@@ -351,7 +354,7 @@ task gwtDev {
     }
     doLast {
         javaexec {
-            main = "com.google.gwt.dev.codeserver.CodeServer"
+            main = "com.google.gwt.dev.DevMode"
             classpath {
                 [
                         sourceSets.main.java.srcDirs,
@@ -360,11 +363,10 @@ task gwtDev {
                 ]
             }
             args = [
+                    "-noserver",
                     "-bindAddress", "127.0.0.1",
-		    "-style", "PRETTY",
+                    "-startupUrl", "http://localhost:9898",
                     "-logLevel", "DEBUG",
-                    "-noprecompile",
-                    "-noincremental",
                     "org.waveprotocol.box.webclient.WebClientDev",
             ]
         }
