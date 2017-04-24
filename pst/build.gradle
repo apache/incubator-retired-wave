@@ -23,6 +23,8 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '1.2.3'
     id 'com.google.protobuf' version '0.8.0'
 }
+apply plugin: 'checkstyle'
+apply plugin: 'com.google.protobuf'
 
 //=============================================================================
 // Project Level Settings
@@ -91,6 +93,16 @@ dependencies {
 
     testCompile group: 'junit', name: 'junit', version: '4.12'                    // [1/2016, 1/2017]
 }
+
+//=============================================================================
+// CheckStyle Config
+//=============================================================================
+checkstyle {
+    toolVersion = "7.6.1"
+    configFile = file("/google_checks.xml")
+}
+
+checkstyleMain.source = "src/main/java" // only checks the manually written java
 
 //=============================================================================
 // Protobuf Config

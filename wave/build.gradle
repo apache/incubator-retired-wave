@@ -23,6 +23,8 @@ plugins {
     id 'application'
     id "com.google.protobuf" version "0.8.0"
 }
+apply plugin: 'com.google.protobuf'
+apply plugin: 'checkstyle'
 
 //=============================================================================
 // Project Level Settings
@@ -191,6 +193,15 @@ dependencies {
             [group: "org.mockito", name: "mockito-core", version: "2.2.21"],                                    // [11/2016, 1/2018]
     )
 }
+//=============================================================================
+// CheckStyle Config
+//=============================================================================
+checkstyle {
+    toolVersion = "7.6.1"
+    configFile = file("/google_checks.xml")
+}
+
+checkstyleMain.source = "src/main/java" // only checks the manually written java
 
 //=============================================================================
 // Protobuf Config
