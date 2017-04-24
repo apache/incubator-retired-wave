@@ -23,6 +23,7 @@ plugins {
     id 'application'
 }
 apply plugin: 'com.google.protobuf'
+apply plugin: 'checkstyle'
 
 //=============================================================================
 // Project Level Settings
@@ -230,6 +231,15 @@ dependencies {
             [group: "com.google.gwt", name: "gwt-codeserver", version: "2.8.0"],                       // [?, ?]
     )
 }
+//=============================================================================
+// CheckStyle Config
+//=============================================================================
+checkstyle {
+    toolVersion = "7.6.1"
+    configFile = file("/google_checks.xml")
+}
+
+checkstyleMain.source = "src/main/java" // only checks the manually written java
 
 //=============================================================================
 // Protobuf Config
