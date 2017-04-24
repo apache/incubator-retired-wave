@@ -25,4 +25,5 @@
   <!-- DTO deps below. -->
   <inherits name="org.waveprotocol.wave.communication.Communication"/>
   <source path="" excludes="gson/** proto/**"/>
+  <source path="" excludes="**/SearchProto.java"/>
 </module>

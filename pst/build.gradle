@@ -21,8 +21,8 @@
 plugins {
     id 'java'
     id 'com.github.johnrengelman.shadow' version '1.2.3'
+    id 'com.google.protobuf' version '0.8.0'
 }
-apply plugin: 'com.google.protobuf'
 
 //=============================================================================
 // Project Level Settings
@@ -44,6 +44,10 @@ jar {
                 "Built-By": "No one in particular",
                 "Main-Class": "org.apache.wave.pst.PstMain"
     }
+}
+
+tasks.withType(Tar) {
+    compression = Compression.BZIP2
 }
 
 //=============================================================================
@@ -126,8 +130,6 @@ def srcExcludes = [
 ]
 
 task createDistSourceTar(type: Tar) {
-    compression = Compression.GZIP
-    extension = 'tar.gz'
     baseName = srcName
     destinationDir = file('../distributions')
     from('./') {
@@ -165,8 +167,6 @@ createDistSource.dependsOn createDistSourceTar, createDistSourceZip
 def binName = this.group + "-" + this.name + "-bin"
 
 task createDistBinTar(type: Tar) {
-    compression = Compression.GZIP
-    extension = 'tar.gz'
     baseName = binName
     destinationDir = file('../distributions')
     from(shadowJar) {

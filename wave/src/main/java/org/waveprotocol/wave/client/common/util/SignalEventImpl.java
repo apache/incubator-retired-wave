@@ -93,8 +93,8 @@ public class SignalEventImpl implements SignalEvent {
   }
 
   private static final UserAgentType currentUserAgent =
-      (UserAgent.isWebkit() ? UserAgentType.WEBKIT : (
-          UserAgent.isFirefox() ? UserAgentType.GECKO : UserAgentType.IE));
+          (UserAgent.isWebkit() ? UserAgentType.WEBKIT : (
+                  UserAgent.isFirefox() ? UserAgentType.GECKO : UserAgentType.IE));
   private static final OperatingSystem currentOs =
       (UserAgent.isWin() ? OperatingSystem.WINDOWS : (
           UserAgent.isMac() ? OperatingSystem.MAC : OperatingSystem.LINUX));

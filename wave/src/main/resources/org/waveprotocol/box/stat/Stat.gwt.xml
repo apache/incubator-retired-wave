@@ -12,5 +12,6 @@
 <!-- limitations under the License.                                         -->
 
 <module>
+    <inherits name="com.google.common.collect.Collect"/>
     <source path=""/>
 </module>

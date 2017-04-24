@@ -19,21 +19,21 @@
 
 package org.waveprotocol.wave.client.scheduler.knobs;
 
+import junit.framework.TestCase;
 import org.waveprotocol.wave.client.scheduler.Scheduler.Priority;
 import org.waveprotocol.wave.client.scheduler.Scheduler.Schedulable;
-
-import org.jmock.Expectations;
-import org.jmock.integration.junit3.MockObjectTestCase;
 import org.waveprotocol.wave.model.util.ReadableStringSet;
 
 import java.util.Collection;
+
+import static org.mockito.Mockito.*;
 
 /**
  * Tests the controller components for the scheduler.
  *
  */
 
-public class ControllerTest extends MockObjectTestCase {
+public class ControllerTest extends TestCase {
 
   /**
    * Stub implementation of a per-level UI control.  Used both as a dummy and a
@@ -107,54 +107,20 @@ public class ControllerTest extends MockObjectTestCase {
     knobView = mock(KnobView.class);
     knobsView = mock(KnobsView.class);
     stubView = new StubLevelView();
+    for (Priority p : Priority.values()) {
+      when(knobsView.create(p)).thenReturn(p.equals(Priority.MEDIUM) ? stubView : new StubLevelView());
+    }
   }
-
-  /**
-   * Tells jmock to accept the things that happen to the mock level-view
-   * when it gets injected into a level presenter.
-   */
-  private void allowKnobViewSetup() {
-    /// Sigh, Jmock = tight coupling with impl details :(
-    checking(new Expectations() {{
-      // Stuff that happens in constructor
-      one(knobView).init(with(any(KnobPresenter.class)));
-      one(knobView).enable();
-      one(knobView).showCount(0);
-      one(knobView).hideJobs();
-    }});
-  }
-
-  /**
-   * Tells jmock to accept the things that happen to the mock knob-view
-   * when it gets injected into a presenter.  Also injects {@link #stubView} as
-   * the per-level view of the MEDIUM priority level.
-   */
-  private void allowKnobsViewSetup() {
-    checking(new Expectations() {{
-      for (Priority p : Priority.values()) {
-        one(knobsView).create(p);
-            will(returnValue(p.equals(Priority.MEDIUM) ? stubView : new StubLevelView()));
-       }
-    }});
-  }
-
-  //
-  // Tests below.
-  //
 
   public void testLevelPresenterInitialStateAndClicking() {
-    allowKnobViewSetup();
     KnobPresenter presenter = new KnobPresenter(knobView);
 
-    checking(new Expectations() {{
-      one(knobView).disable();
-    }});
     presenter.onClicked();
+    verify(knobView, times(1)).disable();
 
-    checking(new Expectations() {{
-      one(knobView).enable();
-    }});
+
     presenter.onClicked();
+    verify(knobView, times(2)).enable(); // is enabled by default
   }
 
   public void testLevelEnabledAndDisabled() {
@@ -167,12 +133,10 @@ public class ControllerTest extends MockObjectTestCase {
   }
 
   public void testKnobsAddLevelForEachPriority() {
-    allowKnobsViewSetup();
     KnobsPresenter presenter = new KnobsPresenter(knobsView);
   }
 
   public void testClickingOnLevelTogglesRunnability() {
-    allowKnobsViewSetup();
     KnobsPresenter presenter = new KnobsPresenter(knobsView);
 
     assertNotNull(stubView.getListener());
@@ -184,7 +148,6 @@ public class ControllerTest extends MockObjectTestCase {
   }
 
   public void testUpdatingMediumJobCountUpdatesView() {
-    allowKnobsViewSetup();
     KnobsPresenter presenter = new KnobsPresenter(knobsView);
 
     Schedulable a = new Schedulable(){};

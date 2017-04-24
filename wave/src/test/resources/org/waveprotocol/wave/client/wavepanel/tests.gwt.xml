@@ -22,7 +22,11 @@
 
 <module>
   <inherits name="com.google.gwt.user.User"/>
-   
+  <inherits name="org.waveprotocol.wave.model.util.Util"/>
+  <inherits name="org.waveprotocol.wave.client.common.safehtml.SafeHtml"/>
+  <inherits name="org.waveprotocol.wave.client.uibuilder.UiBuilder"/>
+  <inherits name="org.waveprotocol.box.stat.Stat"/>
+
   <source path=""/>
     
 </module>
