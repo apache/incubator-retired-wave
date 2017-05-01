@@ -36,6 +36,7 @@ import org.waveprotocol.wave.model.operation.wave.TransformedWaveletDelta;
 import org.waveprotocol.wave.model.version.HashedVersion;
 import org.waveprotocol.wave.util.logging.Log;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -154,7 +155,15 @@ final class WaveViewSubscription {
     // Forward any queued deltas.
     List<TransformedWaveletDelta> filteredDeltas =  filterOwnDeltas(state.heldBackDeltas, state);
     if (!filteredDeltas.isEmpty()) {
-      sendUpdate(waveletName, filteredDeltas, null);
+      //
+      // Workaround for WAVE-446 (pablojan@apache.org)
+      //	
+      for (TransformedWaveletDelta delta: filteredDeltas) {
+        List<TransformedWaveletDelta> singleDeltaList = new ArrayList<TransformedWaveletDelta>(1);
+    	singleDeltaList.add(delta);
+        sendUpdate(waveletName, singleDeltaList, null);
+	  }
+
     }
     state.heldBackDeltas.clear();
   }
