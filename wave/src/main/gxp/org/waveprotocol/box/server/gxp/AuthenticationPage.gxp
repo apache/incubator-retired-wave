@@ -38,178 +38,90 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link type="text/css" rel="stylesheet" href="/static/auth.css" />
   <link rel="shortcut icon" href="/static/favicon.ico" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,900italic,900,700italic,700,500,500italic,400italic,300italic,300,100italic,100"/>
   <title>Wave in a Box login</title>
   <call:AnalyticsFragment expr:account='analyticsAccount'/>
   </head>
   <body onload="init()">
-  <table width="100%" border="0" align="center" cellpadding="0"
-    cellspacing="0" style="margin-top: 15px">
-    <tr>
-      <td valign="top" style="padding-left: 20px; padding-right: 10px">
-      <img src="/static/logo.png" border="0" width="45px" height="30"
-        align="left" vspace="10" alt='Wave in a Box logo' /></td>
-      <td width="95%" bgcolor="#ffffff">
-      <table width="100%" align="right" cellspacing="0" dir="ltr">
-        <tr>
-          <td class="bubble"
-            style='font-family: arial; text-align: left; font-weight: bold; padding-right: 10px;'
-            dir="ltr"><b>Welcome to Wave in a Box </b> @<gxp:eval
-            expr='domain' /></td>
-        </tr>
-      </table>
-      </td>
-    </tr>
-  </table>
-  <table border="0" width="100%" cellpadding="1" cellspacing="1"
-    style="margin-top: 10px;">
-    <tr>
-      <td valign="top">
-      <table>
-        <td>
-        <div style="margin: 0 75px 0 25px;">
-          <span style="font-weight: bold; font-size: larger">
-           Apache Wave lets you communicate and collaborate in real time
-          </span>
-          <p>
-            <b>Wave is equal parts conversation and document.</b>
-            People can communicate and work together with richly formatted text,
-            gadgets, robots and more. 
-          </p>
-          <p>
-            <b>Wave is shared.</b> Any participant can reply anywhere in the message,
-            edit the content and add participants at any point in the process.
-          </p>
-          <p>
-            <b>Wave is live.</b> 
-            With live transmission as you type, participants on a wave can have faster
-            conversations, see edits and interact with extensions in real-time. 
-          </p>
-        <div>
-        <br />
-        <a href="/static/wiab_screenshot.jpg" target="_blank" title="Click to enlarge">
-          <img src="/static/wiab_screenshot_small.jpg"
-            style="float: right; align: right; margin: 0 25px 0 35px;" alt="WIAB client."/>
-        </a>
-        <p style="width: 60%;">
-          <ul>
-            <li>
-              Apache Wave is a rich, distributed, real-time collaboration platform,
-              which allows users to work together in new and exciting ways.
-            </li>
-            <li>
-              <a href="http://incubator.apache.org/wave/" target="_blank">
-                "Wave in a Box" (WIAB)
-              </a>
-              project is a stand alone wave server and rich web client that can
-              serve as an Apache Wave reference implementation.
-            </li>
-            <li>
-              This project lets developers and
-              enterprise users run wave servers and host waves on their own hardware.
-            </li>
+      <div id="header">
+      <img src="/static/logo-big.png"  alt='Wave in a Box logo' />
+          <span class="bubble"><b>Welcome to Wave in a Box </b> @<gxp:eval
+            expr='domain' /> </span>
+             <br />
+           <a id="signinbutton" href="#wiab_loginform">Sign in</a>
+       </div>
+             <br />  <br />
+       <a href="/static/wiab_screenshot.jpg" target="_blank" title="Click to enlarge">
+       <img src="/static/wiab_screenshot.jpg" alt="WIAB client."/></a>
+            <div class="margin">
+            <br />
+                <span style="font-size: larger">
+                Apache Wave lets you communicate and collaborate in real time
+                </span>
+                <p>
+                    <b>Wave is equal parts conversation and document.</b>
+                     People can communicate and work together with richly formatted text,
+                     gadgets, robots and more. 
+                </p>
+                <p>
+                    <b>Wave is shared.</b> Any participant can reply anywhere in the message,
+                    edit the content and add participants at any point in the process.
+                </p>
+                <p>
+                    <b>Wave is live.</b> With live transmission as you type, participants on a wave can have faster
+                    conversations, see edits and interact with extensions in real-time. 
+                </p>
+                <br />
+                <ul>
+                <li>
+                    Apache Wave is a rich, distributed, real-time collaboration platform,
+                    which allows users to work together in new and exciting ways.
+                </li>
+                <li>
+                    <a href="http://incubator.apache.org/wave/" target="_blank">
+                       "Wave in a Box" (WIAB)
+                    </a>
+                    project is a stand alone wave server and rich web client that can
+                    serve as an Apache Wave reference implementation.
+                </li>
+                <li>
+                    This project lets developers and
+                    enterprise users run wave servers and host waves on their own hardware.
+                </li>
           </ul>
-        </p>
-        </div>
-        </div>
-        </td>
-      </table>
-      </td>
-      <td valign="top" align="center" style="padding-right: 30px">
-      <gxp:if cond='disableLoginPage == true'>
-      HTTP Authentication disabled by Administrator. Install and use your certificate instead.
-      </gxp:if>
-      <gxp:if cond='disableLoginPage == false'>
-      <form id="wiab_loginform" action="" method="post">
-      <table class="form-noindent" style="padding: 1;" border="0"
-        align="right">
-        <tr>
-          <td valign="top" style="text-align: center" class="loginBox"
-            width="260px">
-          <table align="center" border="0" cellpadding="1"
-            cellspacing="0" style="margin: auto;">
-            <tr>
-              <td class="smallfont" colspan="2" align="center">Sign
-              in
-              <h2>Wave in a Box</h2>
-              </td>
-            </tr>
-            <tr>
-              <td colspan="2" align="center"></td>
-            </tr>
-            <tr>
-              <td>
-              <div align="right"><span class="wiab le lbl">
-              Username: </span></div>
-              </td>
-              <td><input type="text" name="address" id="address"
-                size="22" value="" class='wiab le val' /></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td align="right"
-                style="color: #444444; font-size: 75%; overflow: hidden; padding-top: 0px"
-                dir="ltr">@<gxp:eval expr='domain' /></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td align="right"></td>
-            </tr>
-            <tr class="enabled">
-              <td align="right"><span class="wiab le lbl">
-              Password: </span></td>
-              <td><input type="password" name="password"
-                id="password" size="22" class="wiab le val" /></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td align="center"
-                style="font-size: 75%; overflow: hidden;" width="40px"><label
-                id="messageLbl" style="display: none;"></label></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td align="left"><input type="submit"
+       </div>
+       <gxp:if cond='disableLoginPage == false'>
+       <form id="wiab_loginform" action="" method="post">
+              <h2>Sign in</h2>
+              Username:<br />
+              
+              <input type="text" name="address" id="address"
+                size="22" value="" class='wiab le val' /><br />
+                
+                @<gxp:eval expr='domain' /><br />
+                
+                <input type="password" name="password"
+                id="password" size="22" class="wiab le val" /><br />
+                
+                <input type="submit"
                 class="wiab le button" name="signIn" id="signIn"
-                value="Sign in" /></td>
-            </tr>
-          </table>
-          <table align="center" border="0" cellpadding="0"
-            cellspacing="0">
-            <tr>
-              <td colspan="2" height="20" align="center" valign="bottom">
-              <div
-                style="font-size: 12px; margin-left: 15px; margin-top: 5px; background-color: d3d4d6; text-align: center;">
-              Don't have a Wave in a Box @<gxp:eval expr='domain' />
-              account?</div>
-              <div><span> <a
+                value="Sign in" /><br />
+                
+                Don't have a Wave in a Box @<gxp:eval expr='domain' />
+                account? <a
                 style="color: #0066cc; margin-left: 15px;"
-                href="/auth/register">Register a new account</a> </span></div>
-              </td>
-            </tr>
-          </table>
-          </td>
-        </tr>
-      </table>
-      </form>
-      </gxp:if>
-      </td>
-    </tr>
-  </table>
-  <table width="100%" border="0" align="center" cellpadding="0"
-    cellspacing="0" style="margin-top: 10px">
-    <tr>
-      <td width="95%" bgcolor="#ffffff">
-      <table width="100%" align="right" cellspacing="0"
-        bgcolor="#C3D9FF" dir="ltr">
-        <tr>
-          <td class="bubble"
+                href="/auth/register">Register a new account</a> 
+            </form>
+            </gxp:if>
+          <gxp:if cond='disableLoginPage == true'>
+                HTTP Authentication disabled by Administrator. Install and use your certificate instead.
+          </gxp:if>
+      
+      
+      
+          <span class="bubble"
             style='font-family: arial; text-align: left; font-weight: bold; padding-right: 10px;'
-            dir="ltr"></td>
-        </tr>
-      </table>
-      </td>
-    </tr>
-  </table>
+            dir="ltr"></span>
   <br />
   <br />
   <script type="text/javascript">
