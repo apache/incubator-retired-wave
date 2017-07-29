@@ -16,121 +16,90 @@
  * specific language governing permissions and limitations
  * under the License.
 */
-body {
-	background-color: #ffffff margin-top : 2;
+
+#signIn {
+	margin: 10px;
 }
 
 body {
-	font-family: arial, sans-serif;
+	background-color: #FFF;
+	margin: 0;
+}
+
+#header {
+	background-color: #f0f0ff;
+	padding-bottom: 27px;
+}
+
+body {
+	font-family: 'Helvetica Neue', 'Roboto', Arial, sans-serif;
+	background-color: #FFF;
+}
+
+img[src="/static/wiab_screenshot.jpg"] {
+	width: 50%;
+
 }
 
 #wiab_loginform {
-	margin: 0;
-}
-
-#wiab_loginbox_td {
-	padding-right: 10px; 
-}
-
-.form-noindent {
-	border: #0066cc 2px solid;
-	background-color: white;
+	text-align: center;
+	border-radius: 10px;
+	padding: 10px;
+	width: 325px;
+	background-color: #f0f0ff;
+	width: 46.5%;
+	margin: 10px
 }
 
 .bubble {
-	background-color: #62c4fb;
+	position:absolute;
+	left:0;
+	right:0;
+	margin-left:auto;
+	margin-right:auto;
+	width: 283px;
 }
 
-.tl {
-	font-size: 1px;
-	padding: 0;
-	width: 4;
-	text-align: left;
-	vertical-align: top
+img[src="/static/logo-big.png"]{
+	display: block;
+	margin: 0 auto;
+	width: 100px;
+}
+.margin {
+	padding: 10px;
+	background-color: #f0f0ff;
+	margin-right: 10px;
+	border-radius: 10px;
+	width: 45%;
+	display: block;
+	float: right;
 }
 
-.tr {
-	font-size: 1px;
-	padding: 0;
-	width: 2;
-	text-align: right;
-	vertical-align: top
+#signinbutton {
+	padding: 15px;
+	background-color: #0066cc;
+	color: #FFF;
+	border-radius: 25px;
+	text-decoration: none;
+	float: right;
+	margin-right: 10px;
+	box-shadow: 2px 2px 5px #888888;
 }
 
-.bl {
-	font-size: 1px;
-	padding: 0;
-	width: 4;
-	text-align: left;
-	vertical-align: bottom
+@media screen and (max-width: 760px) {
+	img[src="/static/wiab_screenshot.jpg"] {
+		width: 100%;
+	}
+	.margin {
+		width: 97%;
+		float: none;
+	}
+	#wiab_loginform {
+		float: none;
+		margin: 0;
+		width: 97%
+	}
+	body {
+		overflow-x: hidden;
+	}
 }
-
-.br {
-	font-size: 1px;
-	padding: 0;
-	width: 4;
-	text-align: right;
-	vertical-align: bottom
-}
-
-.loginBox {
-	padding: 5px 5px 20px;
-	margin: 0;
-	text-align: center;
-	background-color: #d3d4d6;
-}
-
-.loginBox td {
-	padding-bottom: 5px;
-}
-
-.loginBox td.smallfont {
-	font-size: 80%;
-}
-
-.loginBox h2 {
-	margin: 0;
-	font-weight: bold;
-	font-size: 120%;
-}
-
-.loginBox table {
-	margin: 0;
-	text-align: left;
-}
-
-.loginBox p {
-	text-align: left;
-}
-
-.alBox {
-	padding: 5px 10px;
-	margin: 0;
-}
-
-.alBox h4 {
-	margin: 0;
-	font-size: 80%;
-}
-
-.wiab.le.lbl {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: smaller;
-}
-
-.wiab.le.val {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: smaller;
-}
-
-.wiab.le.button {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: smaller;
-}
-
-.icon {
-  float: left;
-  margin-right: 5px;
-  width: 28px;
-}
-
