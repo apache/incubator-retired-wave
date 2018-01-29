@@ -115,8 +115,8 @@ dependencies {
             [group: "com.google.gwt", name: "gwt-user", version: "2.8.0"],                                      // [11/2016, 1/2018]
             [group: "com.google.gwt", name: "gwt-codeserver", version: "2.8.0"],                                // [11/2016, 1/2018]
             [group: "com.google.gxp", name: "google-gxp", version: "0.2.4-beta"],                               // [?, ?]
-            [group: "com.google.protobuf", name: "protobuf-java", version: "2.6.1"],                            // [?, ?]
-            [group: "com.google.protobuf", name: "protobuf-java", version: "2.6.1", classifier: 'sources'],     // [?, ?]
+            [group: "com.google.protobuf", name: "protobuf-java", version: "3.2.0"],                            // [?, ?]
+            [group: "com.google.protobuf", name: "protobuf-java", version: "3.2.0", classifier: 'sources'],     // [?, ?]
             [group: "com.googlecode.protobuf-java-format", name: "protobuf-java-format", version: "1.2"],       // [?, ?]
             [group: "com.typesafe", name: "config", version: "1.2.1"],                                          // [?, ?]
             [group: "commons-codec", name: "commons-codec", version: "1.10"],                                   // [?, ?]
@@ -136,7 +136,6 @@ dependencies {
             [group: "com.google.inject.extensions", name: "guice-assistedinject", version: "3.0"],              // [?, ?]
             [group: "com.google.inject.extensions", name: "guice-servlet", version: "3.0"],                     // [?, ?]
             [group: "com.google.inject", name: "guice", version: "3.0"],                                        // [?, ?]
-            [group: "com.google.protobuf", name: "protobuf-java", version: "2.6.1"],                            // [?, ?]
             [group: "com.google.inject", name: "guice", version:"4.1.0"],					// [?, ?]
             [group: "com.google.inject.extensions", name: "guice-servlet", version:"4.1.0"],			// [?, ?]
             [group: "com.googlecode.protobuf-java-format", name: "protobuf-java-format", version: "1.2"],       // [?, ?]
@@ -181,7 +180,7 @@ dependencies {
         [group: "com.google.gxp", name: "google-gxp", version: "0.2.4-beta"]                                    // [11/2016, depreciate]
     )
     protoCompile (
-        [group: "com.google.protobuf", name: "protobuf-java", version: "2.6.1"],                                // [?, ?]
+        [group: "com.google.protobuf", name: "protobuf-java", version: "3.2.0"],                                // [?, ?]
         fileTree(dir: '../pst/build/libs', include: '**/*.jar')                                                 // [?, ?]
     )
     generateMessages (
@@ -208,7 +207,7 @@ checkstyleMain.source = "src/main/java" // only checks the manually written java
 //=============================================================================
 protobuf {
     protoc {
-        artifact = 'com.google.protobuf:protoc:2.6.1'
+        artifact = 'com.google.protobuf:protoc:3.2.0'
     }
     generatedFilesBaseDir = "$projectDir/generated"
 }
