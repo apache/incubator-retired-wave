@@ -36,7 +36,9 @@ import org.waveprotocol.wave.model.operation.wave.TransformedWaveletDelta;
 import org.waveprotocol.wave.model.version.HashedVersion;
 import org.waveprotocol.wave.util.logging.Log;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
@@ -153,10 +155,27 @@ final class WaveViewSubscription {
 
     // Forward any queued deltas.
     List<TransformedWaveletDelta> filteredDeltas =  filterOwnDeltas(state.heldBackDeltas, state);
-    if (!filteredDeltas.isEmpty()) {
-      sendUpdate(waveletName, filteredDeltas, null);
-    }
+    splitDeltasAndSendUpdate(waveletName, filteredDeltas);
     state.heldBackDeltas.clear();
+  }
+  
+  /**
+   * Sent each delta in a separated message to the client.
+   * <p><br>
+   * Workaround for WAVE-446:
+   * Wave's client fails if a non contiguous list of deltas is sent at once.
+   * <p>
+   * 
+   * @param waveletName the wavelet's name
+   * @param deltas list of deltas to be forwarded
+   */
+  protected void splitDeltasAndSendUpdate(WaveletName waveletName, List<TransformedWaveletDelta> deltas) {
+    if (!deltas.isEmpty()) {	  
+      for (TransformedWaveletDelta delta : deltas) {
+	    List<TransformedWaveletDelta> singletonDeltaList = Collections.singletonList(delta);
+		sendUpdate(waveletName, singletonDeltaList, null);
+      }	  
+    }
   }
 
   /**
