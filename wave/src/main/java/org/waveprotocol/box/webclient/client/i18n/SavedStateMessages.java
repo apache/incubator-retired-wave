@@ -29,6 +29,6 @@ public interface SavedStateMessages extends Messages {
   @DefaultMessage("Saved")
   String saved();
 
-  @DefaultMessage("Unsaved...")
-  String unsaved();
+  @DefaultMessage("Saving")
+  String saving();
 }

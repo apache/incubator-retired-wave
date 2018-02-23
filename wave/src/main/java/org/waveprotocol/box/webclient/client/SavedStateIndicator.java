@@ -40,7 +40,7 @@ public class SavedStateIndicator implements UnsavedDataListener {
 
   private enum SavedState {
     SAVED(messages.saved()),
-    UNSAVED(messages.unsaved());
+    SAVING(messages.saving());
 
     final String message;
 
@@ -64,11 +64,11 @@ public class SavedStateIndicator implements UnsavedDataListener {
   private SavedState visibleSavedState = SavedState.SAVED;
   private SavedState currentSavedState = null;
 
-  private static final String UNSAVED_HTML =
-      "<span style='color: red; text-align: center;'>" + SavedState.UNSAVED.message
+  private static final String SAVING_HTML =
+      "<span> " + SavedState.SAVING.message
           + "</span>";
   private static final String SAVED_HTML =
-      "<span style='color: green; text-align: center;'>" + SavedState.SAVED.message
+      "<span> " + SavedState.SAVED.message
           + "</span>";
 
   public SavedStateIndicator(Element element) {
@@ -81,7 +81,7 @@ public class SavedStateIndicator implements UnsavedDataListener {
     maybeUpdateDisplay();
   }
 
-  public void unsaved() {
+  public void saving() {
     maybeUpdateDisplay();
   }
 
@@ -91,7 +91,7 @@ public class SavedStateIndicator implements UnsavedDataListener {
         case SAVED:
           scheduler.scheduleDelayed(updateTask, UPDATE_DELAY_MS);
           break;
-        case UNSAVED:
+        case SAVING:
           updateDisplay();
           break;
         default:
@@ -108,15 +108,15 @@ public class SavedStateIndicator implements UnsavedDataListener {
 
   private void updateDisplay() {
     visibleSavedState = currentSavedState;
-    String innerHtml = visibleSavedState == SavedState.SAVED ? SAVED_HTML : UNSAVED_HTML;
+    String innerHtml = visibleSavedState == SavedState.SAVED ? SAVED_HTML : SAVING_HTML;
     element.setInnerHTML(innerHtml);
   }
 
   @Override
   public void onUpdate(UnsavedDataInfo unsavedDataInfo) {
     if (unsavedDataInfo.estimateUnacknowledgedSize() != 0) {
-      currentSavedState = SavedState.UNSAVED;
-      unsaved();
+      currentSavedState = SavedState.SAVING;
+      saving();
     } else {
       currentSavedState = SavedState.SAVED;
       saved();
@@ -128,7 +128,7 @@ public class SavedStateIndicator implements UnsavedDataListener {
     if (everythingCommitted) {
       saved();
     } else {
-      unsaved();
+      saving();
     }
   }
 }

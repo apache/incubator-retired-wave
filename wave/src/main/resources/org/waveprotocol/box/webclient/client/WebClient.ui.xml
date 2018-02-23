@@ -28,7 +28,7 @@
     xmlns:f='urn:import:org.waveprotocol.box.webclient.widget.frame'
     xmlns:w='urn:import:org.waveprotocol.wave.client.widget.common'>
   <ui:style type="org.waveprotocol.box.webclient.client.WebClient.Style">
-    @def rootBackground #f0f0ff;
+    @def rootBackground #FAFAFA;
     @def gap 10px;
     .root {
       background: rootBackground;

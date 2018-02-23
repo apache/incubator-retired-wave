@@ -24,13 +24,18 @@
     name='org.waveprotocol.box.server.gxp.TopBar'
     xmlns='http://www.w3.org/1999/xhtml'
     xmlns:gxp='http://google.com/2001/gxp'>
-
   <gxp:param name='username' type='String' />
   <gxp:param name='domain' type='String' />
-
+  <span id="hiddenTitleText"></span>
+  <a href="/" class="logoContainer"><img src="/static/logo.png" alt="logo" class="logo" /></a>
+  <div id="dialog">
+      <span>
+        <span id="language">Language</span>: <select id="lang" class="lang" size="1"/>
+        <br/><br/>
+        <gxp:eval expr='username' /><span class="domain">@<gxp:eval expr='domain' /></span> <a id="signout" href="/auth/signout?r=/">Sign out</a>
+      </span>
+  </div>
   <div class="topbar">
-    <a href="/"><img src="/static/logo.png" alt="logo" class="logo" /></a>
-    <div class="title">Wave in a box</div>
     <div class="banner" id="banner"></div>
     <div class="info">
       <gxp:if cond='username == null'>
@@ -38,12 +43,15 @@
         <a href="/auth/register">Register</a> |
         <a href="/auth/signin?r=/">Sign In</a>
       </gxp:if>
+      <span id="status">
+        <span id="netstatus"></span> | <span id="unsavedStateContainer"></span>
+      </span>
       <gxp:if cond='username != null'>
-        <select id="lang" class="lang" size="1"/> |
-        <gxp:eval expr='username' /><span class="domain">@<gxp:eval expr='domain' /></span> |
-        <span id='unsavedStateContainer' style="width: 60px">Saved</span> |
-        <span id="netstatus" class="offline">Offline</span> |
-        <a id="signout" href="/auth/signout?r=/">Sign out</a>
+      
+        <span class="username"><gxp:eval expr='username' /><span class="domain">@<gxp:eval expr='domain' /></span></span><img src="/static/images/SettingsCog.png" id="SettingsCog" alt="Settings"/><!--<span class="domain">@<gxp:eval expr='domain' /></span>-->
+        <!--<span id='unsavedStateContainer' style="width: 60px">Saved</span> |
+        <span id="netstatus" class="offline">Offline</span> |-->
+        
       </gxp:if>
     </div>
   </div>

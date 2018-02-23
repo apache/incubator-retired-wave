@@ -44,6 +44,7 @@ import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.UIObject;
 
 import org.waveprotocol.box.webclient.client.i18n.WebClientMessages;
+import org.waveprotocol.box.webclient.client.i18n.SavedStateMessages;
 import org.waveprotocol.box.webclient.profile.RemoteProfileManagerImpl;
 import org.waveprotocol.box.webclient.search.RemoteSearchService;
 import org.waveprotocol.box.webclient.search.Search;
@@ -107,6 +108,7 @@ public class WebClient implements EntryPoint {
   private static final Binder BINDER = GWT.create(Binder.class);
 
   private static final WebClientMessages messages = GWT.create(WebClientMessages.class);
+  private static final SavedStateMessages statemessages = GWT.create(SavedStateMessages.class);
 
   static Log LOG = Log.get(WebClient.class);
   // Use of GWT logging is only intended for sending exception reports to the
@@ -256,7 +258,9 @@ public class WebClient implements EntryPoint {
     UIObject.setVisible(waveFrame.getElement(), false);
 
     Document.get().getElementById("signout").setInnerText(messages.signout());
-
+    Document.get().getElementById("hiddenTitleText").setInnerText(messages.settings());
+    Document.get().getElementById("language").setInnerText(messages.language());
+    Document.get().getElementById("unsavedStateContainer").setInnerHTML("<span> " + statemessages.saved() + "</span>");
     // Handles opening waves.
     ClientEvents.get().addWaveSelectionEventHandler(new WaveSelectionEventHandler() {
       @Override
